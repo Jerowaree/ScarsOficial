@@ -1,0 +1,333 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model auditoria {
+  id_auditoria     BigInt           @id @default(autoincrement())
+  entidad          String           @db.VarChar(100)
+  id_entidad       String           @db.VarChar(50)
+  accion           auditoria_accion
+  antes            String?          @db.LongText
+  despues          String?          @db.LongText
+  actor_usuario_id Int?
+  ip               String?          @db.VarChar(45)
+  user_agent       String?          @db.VarChar(255)
+  creado_en        DateTime?        @default(now()) @db.DateTime(0)
+  usuarios         usuarios?        @relation(fields: [actor_usuario_id], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "auditoria_ibfk_1")
+
+  @@index([entidad, id_entidad], map: "idx_aud_entidad")
+  @@index([actor_usuario_id, creado_en], map: "idx_aud_usuario")
+}
+
+model clientes {
+  id_cliente           Int                    @id @default(autoincrement())
+  codigo               String                 @unique(map: "codigo") @db.VarChar(10)
+  nombres              String                 @db.VarChar(100)
+  apellidos            String                 @db.VarChar(100)
+  dni                  String?                @db.VarChar(8)
+  ruc                  String?                @db.VarChar(11)
+  genero               clientes_genero?
+  correo               String?                @db.VarChar(150)
+  celular              String?                @db.VarChar(15)
+  direccion            String?                @db.VarChar(200)
+  fecha_nacimiento     DateTime?              @db.Date
+  fecha_registro       DateTime?              @default(now()) @db.DateTime(0)
+  servicios_activos    servicios_activos[]
+  servicios_concluidos servicios_concluidos[]
+  vehiculos            vehiculos[]
+}
+
+model detalle_servicio_activo {
+  id_detalle           Int                @id @default(autoincrement())
+  id_servicio_activo   Int
+  id_servicio_catalogo Int
+  servicios_activos    servicios_activos  @relation(fields: [id_servicio_activo], references: [id_servicio_activo], onUpdate: Restrict, map: "detalle_servicio_activo_ibfk_1")
+  servicios_catalogo   servicios_catalogo @relation(fields: [id_servicio_catalogo], references: [id_servicio], onUpdate: Restrict, map: "detalle_servicio_activo_ibfk_2")
+
+  @@unique([id_servicio_activo, id_servicio_catalogo], map: "uk_activo_servicio")
+  @@index([id_servicio_catalogo], map: "id_servicio_catalogo")
+}
+
+model empleados {
+  id_empleado Int                @id @default(autoincrement())
+  codigo      String             @unique(map: "codigo") @db.VarChar(10)
+  nombres     String             @db.VarChar(100)
+  apellidos   String             @db.VarChar(100)
+  dni         String?            @db.VarChar(8)
+  correo      String?            @db.VarChar(150)
+  celular     String?            @db.VarChar(15)
+  cargo       String?            @db.VarChar(100)
+  sueldo      Decimal?           @db.Decimal(10, 2)
+  horario     empleados_horario? @default(Ma_ana)
+  estado      empleados_estado?  @default(Activo)
+  id_usuario  Int?
+  usuarios    usuarios?          @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "empleados_ibfk_1")
+
+  @@index([id_usuario], map: "id_usuario")
+}
+
+model login_bloqueos {
+  id_usuario      Int      @id
+  bloqueado_hasta DateTime @db.DateTime(0)
+  usuarios        usuarios @relation(fields: [id_usuario], references: [id_usuario], onUpdate: Restrict, map: "login_bloqueos_ibfk_1")
+}
+
+model login_intentos {
+  id_intento     BigInt    @id @default(autoincrement())
+  id_usuario     Int?
+  correo_intento String?   @db.VarChar(150)
+  exitoso        Boolean
+  ip             String?   @db.VarChar(45)
+  user_agent     String?   @db.VarChar(255)
+  creado_en      DateTime? @default(now()) @db.DateTime(0)
+  usuarios       usuarios? @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "login_intentos_ibfk_1")
+
+  @@index([correo_intento, creado_en], map: "idx_login_correo")
+  @@index([id_usuario, creado_en], map: "idx_login_user")
+}
+
+model permisos {
+  id_permiso   Int            @id @default(autoincrement())
+  codigo       String         @unique(map: "codigo") @db.VarChar(100)
+  descripcion  String?        @db.VarChar(200)
+  rol_permisos rol_permisos[]
+}
+
+model rol_permisos {
+  id_rol     Int
+  id_permiso Int
+  roles      roles    @relation(fields: [id_rol], references: [id_rol], onUpdate: Restrict, map: "rol_permisos_ibfk_1")
+  permisos   permisos @relation(fields: [id_permiso], references: [id_permiso], onUpdate: Restrict, map: "rol_permisos_ibfk_2")
+
+  @@id([id_rol, id_permiso])
+  @@index([id_permiso], map: "id_permiso")
+}
+
+model roles {
+  id_rol        Int             @id @default(autoincrement())
+  nombre        String          @unique(map: "nombre") @db.VarChar(50)
+  rol_permisos  rol_permisos[]
+  usuario_roles usuario_roles[]
+}
+
+model servicios_activos {
+  id_servicio_activo                              Int                               @id @default(autoincrement())
+  id_cliente                                      Int
+  id_vehiculo                                     Int
+  numero_seguimiento                              String                            @unique(map: "numero_seguimiento") @db.VarChar(20)
+  cliente_nombre                                  String                            @db.VarChar(150)
+  placa                                           String                            @db.VarChar(10)
+  tipo                                            servicios_activos_tipo
+  proceso                                         servicios_activos_proceso?        @default(Recepci_n_del_veh_culo)
+  fecha                                           DateTime                          @db.Date
+  observaciones                                   String?                           @db.Text
+  evidencia_tipo                                  servicios_activos_evidencia_tipo?
+  evidencia_url                                   String?                           @db.VarChar(255)
+  estado                                          servicios_activos_estado?         @default(En_curso)
+  created_by                                      Int?
+  updated_by                                      Int?
+  created_at                                      DateTime?                         @default(now()) @db.DateTime(0)
+  updated_at                                      DateTime?                         @db.DateTime(0)
+  detalle_servicio_activo                         detalle_servicio_activo[]
+  clientes                                        clientes                          @relation(fields: [id_cliente], references: [id_cliente], onUpdate: Restrict, map: "servicios_activos_ibfk_1")
+  vehiculos                                       vehiculos                         @relation(fields: [id_vehiculo], references: [id_vehiculo], onUpdate: Restrict, map: "servicios_activos_ibfk_2")
+  usuarios_servicios_activos_created_byTousuarios usuarios?                         @relation("servicios_activos_created_byTousuarios", fields: [created_by], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "servicios_activos_ibfk_3")
+  usuarios_servicios_activos_updated_byTousuarios usuarios?                         @relation("servicios_activos_updated_byTousuarios", fields: [updated_by], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "servicios_activos_ibfk_4")
+
+  @@index([created_by], map: "created_by")
+  @@index([id_vehiculo], map: "id_vehiculo")
+  @@index([id_cliente, fecha], map: "idx_activos_cliente_fecha")
+  @@index([placa], map: "idx_activos_placa")
+  @@index([updated_by], map: "updated_by")
+}
+
+model servicios_catalogo {
+  id_servicio             Int                            @id @default(autoincrement())
+  nombre                  String                         @db.VarChar(100)
+  descripcion             String?                        @db.Text
+  precio                  Decimal                        @db.Decimal(10, 2)
+  estado                  servicios_catalogo_estado?     @default(Activo)
+  creado_en               DateTime?                      @default(now()) @db.DateTime(0)
+  actualizado_en          DateTime?                      @default(now()) @db.DateTime(0)
+  detalle_servicio_activo detalle_servicio_activo[]
+}
+
+model servicios_concluidos {
+  id_concluido   Int                          @id @default(autoincrement())
+  id_cliente     Int
+  id_vehiculo    Int
+  cliente_nombre String                       @db.VarChar(150)
+  placa          String                       @db.VarChar(10)
+  tipo           servicios_concluidos_tipo
+  fecha          DateTime                     @db.Date
+  servicios_json String                       @db.LongText
+  observaciones  String?                      @db.Text
+  estado         servicios_concluidos_estado? @default(Finalizado)
+  clientes       clientes                     @relation(fields: [id_cliente], references: [id_cliente], onUpdate: Restrict, map: "servicios_concluidos_ibfk_1")
+  vehiculos      vehiculos                    @relation(fields: [id_vehiculo], references: [id_vehiculo], onUpdate: Restrict, map: "servicios_concluidos_ibfk_2")
+
+  @@index([id_vehiculo], map: "id_vehiculo")
+  @@index([id_cliente, fecha], map: "idx_concl_cliente_fecha")
+  @@index([placa], map: "idx_concl_placa")
+}
+
+model sesiones {
+  id_sesion     BigInt    @id @default(autoincrement())
+  id_usuario    Int
+  refresh_token String    @db.VarChar(255)
+  ip            String?   @db.VarChar(45)
+  user_agent    String?   @db.VarChar(255)
+  expira_en     DateTime  @db.DateTime(0)
+  creada_en     DateTime? @default(now()) @db.DateTime(0)
+  revocada_en   DateTime? @db.DateTime(0)
+  usuarios      usuarios  @relation(fields: [id_usuario], references: [id_usuario], onUpdate: Restrict, map: "sesiones_ibfk_1")
+
+  @@index([id_usuario, expira_en], map: "idx_ses_usuario")
+}
+
+model solicitudes {
+  id_solicitud  Int      @id @default(autoincrement())
+  nombre        String   @db.VarChar(150)
+  correo        String   @db.VarChar(150)
+  modelo        String?  @db.VarChar(100)
+  anio          Int?
+  numero        String   @db.VarChar(20)
+  mensaje       String?  @db.VarChar(255)
+  detalle       String?  @db.Text
+  creado_en     DateTime @default(now()) @db.DateTime(0)
+}
+
+
+model usuario_roles {
+  id_usuario Int
+  id_rol     Int
+  usuarios   usuarios @relation(fields: [id_usuario], references: [id_usuario], onUpdate: Restrict, map: "usuario_roles_ibfk_1")
+  roles      roles    @relation(fields: [id_rol], references: [id_rol], onUpdate: Restrict, map: "usuario_roles_ibfk_2")
+
+  @@id([id_usuario, id_rol])
+  @@index([id_rol], map: "id_rol")
+}
+
+model usuarios {
+  id_usuario                                               Int                 @id @default(autoincrement())
+  nombre_usuario                                           String              @db.VarChar(100)
+  correo                                                   String              @unique(map: "correo") @db.VarChar(150)
+  contrasena                                               String              @db.VarChar(255)
+  estado                                                   usuarios_estado?    @default(activo)
+  fecha_creacion                                           DateTime?           @default(now()) @db.DateTime(0)
+  auditoria                                                auditoria[]
+  empleados                                                empleados[]
+  login_bloqueos                                           login_bloqueos?
+  login_intentos                                           login_intentos[]
+  servicios_activos_servicios_activos_created_byTousuarios servicios_activos[] @relation("servicios_activos_created_byTousuarios")
+  servicios_activos_servicios_activos_updated_byTousuarios servicios_activos[] @relation("servicios_activos_updated_byTousuarios")
+  sesiones                                                 sesiones[]
+  usuario_roles                                            usuario_roles[]
+}
+
+model vehiculos {
+  id_vehiculo          Int                    @id @default(autoincrement())
+  id_cliente           Int
+  placa                String                 @unique(map: "placa") @db.VarChar(10)
+  tipo                 vehiculos_tipo
+  color                String?                @db.VarChar(50)
+  marca                String?                @db.VarChar(50)
+  modelo               String?                @db.VarChar(50)
+  anio                 Int?                   @db.Year
+  observaciones        String?                @db.Text
+  servicios_activos    servicios_activos[]
+  servicios_concluidos servicios_concluidos[]
+  clientes             clientes               @relation(fields: [id_cliente], references: [id_cliente], onUpdate: Restrict, map: "vehiculos_ibfk_1")
+
+  @@index([id_cliente], map: "id_cliente")
+}
+
+enum auditoria_accion {
+  INSERT
+  UPDATE
+  DELETE
+}
+
+enum vehiculos_tipo {
+  Automovil @map("Automóvil")
+  Moto
+}
+
+enum servicios_catalogo_tipo_media {
+  imagen
+  video
+}
+
+enum usuarios_estado {
+  activo
+  inactivo
+}
+
+enum servicios_concluidos_tipo {
+  Automovil @map("Automóvil")
+  Moto
+}
+
+enum clientes_genero {
+  Masculino
+  Femenino
+  No_especificado @map("No especificado")
+}
+
+enum servicios_activos_tipo {
+  Automovil @map("Automóvil")
+  Moto
+}
+
+enum servicios_catalogo_estado {
+  Activo
+  No_Activo @map("No Activo")
+}
+
+enum servicios_activos_proceso {
+  Recepci_n_del_veh_culo   @map("Recepción del vehículo")
+  Diagn_stico_t_cnico      @map("Diagnóstico técnico")
+  Evaluaci_n_y_presupuesto @map("Evaluación y presupuesto")
+  Aprobaci_n_del_cliente   @map("Aprobación del cliente")
+  En_espera_de_suministro  @map("En espera de suministro")
+  Ejecuci_n_del_servicio   @map("Ejecución del servicio")
+  Control_de_calidad       @map("Control de calidad")
+  Entrega_del_veh_culo     @map("Entrega del vehículo")
+  Cierre_del_servicio      @map("Cierre del servicio")
+}
+
+enum solicitudes_estado {
+  En_espera @map("En espera")
+  Atendido
+}
+
+enum empleados_horario {
+  Ma_ana         @map("Mañana")
+  Tarde
+  Ma_ana_y_Tarde @map("Mañana y Tarde")
+}
+
+enum servicios_concluidos_estado {
+  Finalizado
+}
+
+enum empleados_estado {
+  Activo
+  Inactivo
+}
+
+enum servicios_activos_evidencia_tipo {
+  imagen
+  video
+}
+
+enum servicios_activos_estado {
+  En_curso   @map("En curso")
+  Finalizado
+  Cancelado
+}

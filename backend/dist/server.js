@@ -1,0 +1,31 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+// src/server.ts
+require("dotenv/config");
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
+const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
+const clientes_routes_1 = __importDefault(require("./routes/clientes.routes"));
+const vehiculos_routes_1 = __importDefault(require("./routes/vehiculos.routes"));
+const serviciosCatalogo_routes_1 = __importDefault(require("./routes/serviciosCatalogo.routes"));
+const serviciosActivos_routes_1 = __importDefault(require("./routes/serviciosActivos.routes"));
+const solicitudes_routes_1 = __importDefault(require("./routes/solicitudes.routes"));
+const auditoria_routes_1 = __importDefault(require("./routes/auditoria.routes"));
+const empleados_routes_1 = __importDefault(require("./routes/empleados.routes"));
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use("/uploads", express_1.default.static(path_1.default.resolve(process.env.UPLOAD_DIR || "./uploads")));
+app.use("/api/auth", auth_routes_1.default);
+app.use("/api/clientes", clientes_routes_1.default);
+app.use("/api/vehiculos", vehiculos_routes_1.default);
+app.use("/api/servicios/catalogo", serviciosCatalogo_routes_1.default);
+app.use("/api/servicios/activos", serviciosActivos_routes_1.default);
+app.use("/api/solicitudes", solicitudes_routes_1.default);
+app.use("/api/auditoria", auditoria_routes_1.default);
+app.use("/api/empleados", empleados_routes_1.default);
+app.listen(process.env.PORT || 4000, () => console.log(`API on :${process.env.PORT || 4000}`));
