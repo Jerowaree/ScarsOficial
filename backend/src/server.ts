@@ -13,6 +13,7 @@ import solicitudesRoutes from "./routes/solicitudes.routes";
 import auditoriaRoutes from "./routes/auditoria.routes";
 import empleadosRoutes from "./routes/empleados.routes";
 import seguimientoRoutes from "./routes/seguimiento.routes";
+import chatbotRoutes from "./routes/chatbot.routes";
 
 const app = express();
 app.use(cors());
@@ -29,6 +30,7 @@ app.use("/api/solicitudes", solicitudesRoutes);
 app.use("/api/auditoria", auditoriaRoutes);
 app.use("/api/empleados", empleadosRoutes);
 app.use("/api/seguimiento", seguimientoRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 
 app.listen(process.env.PORT || 4000, () =>
   console.log(`API on :${process.env.PORT || 4000}`)

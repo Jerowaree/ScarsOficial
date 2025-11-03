@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import Header from "./components/header/header.jsx";
 import Footer from "./components/footer/Footer.jsx";
+import Chatbot from "./components/Chatbot/Chatbot.jsx";
 
 // Secciones del home
 import Hero from "./components/Hero/Hero.jsx";
@@ -26,6 +27,7 @@ function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <Chatbot />
     </>
   );
 }
