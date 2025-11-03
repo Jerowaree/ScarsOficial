@@ -1,0 +1,486 @@
+/* Base */
+.clientes-container { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  min-height: 100%; /* Cambié de height a min-height */
+  background: #1e293b; 
+  color: #e2e8f0; 
+  overflow-y: auto; /* Cambié de hidden a auto para permitir scroll */
+  overflow-x: hidden; /* Evitar scroll horizontal */
+  padding: 20px;
+}
+
+.clientes-header { 
+  display: flex; 
+  gap: 10px; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 16px 0; 
+  margin-bottom: 20px;
+}
+
+.clientes-header h1 { 
+  color: #fff; 
+  font-size: 1.8rem; 
+  margin: 0;
+}
+
+/* Botones */
+.btn-primary { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+  background: #22c55e; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 16px; 
+  font-weight: 600; 
+  cursor: pointer; 
+  transition: background 0.2s;
+}
+
+.btn-primary:hover { 
+  background: #16a34a; 
+}
+
+.btn-secondary { 
+  background: #64748b; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 16px; 
+  font-weight: 600; 
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover { 
+  background: #475569; 
+}
+
+.btn-danger { 
+  background: #ef4444; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 16px; 
+  font-weight: 600; 
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover { 
+  background: #dc2626; 
+}
+
+.btn-filter {
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  background: #3b82f6; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 16px; 
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-filter:hover { 
+  background: #2563eb; 
+}
+
+.btn-filter.active {
+  background: #1d4ed8;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.btn-close:hover { 
+  color: #fff; 
+  background: #334155;
+}
+
+/* Search and Filters */
+.clientes-filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #0f172a;
+  border: 1px solid #3b82f6;
+  border-radius: 8px;
+  padding: 10px 16px;
+  flex: 1;
+  max-width: 500px;
+}
+
+.search-box svg {
+  color: #3b82f6;
+  margin-right: 12px;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e2e8f0;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+.filters-panel {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 150px;
+}
+
+.filter-group label {
+  color: #93c5fd;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.filter-group select {
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
+/* Form */
+.clientes-form {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: visible; /* Cambié de hidden a visible para evitar recortes */
+  max-height: none; /* Asegurar que no hay límite de altura */
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #1e293b;
+  border-bottom: 1px solid #334155;
+}
+
+.form-header h2 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.clientes-form form {
+  padding: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.form-section h3 {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #334155;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  color: #93c5fd;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
+.form-group input.readonly {
+  background: #334155;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #334155;
+}
+
+/* Table */
+.clientes-table {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  overflow: hidden;
+  flex: 1;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.clientes-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.clientes-table th,
+.clientes-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+}
+
+.clientes-table th {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.clientes-table tr:hover {
+  background: #1e3a8a;
+}
+
+.vehiculo-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vehiculo-info svg {
+  color: #22c55e;
+}
+
+.vehiculo-info small {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.no-vehiculo {
+  color: #64748b;
+  font-style: italic;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-edit:hover {
+  background: #2563eb;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: #0f172a;
+  border: 1px solid #3b82f6;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px; /* Aumenté el ancho */
+  max-height: 85vh; /* Reduje un poco la altura máxima */
+  padding: 20px; /* Reduje el padding */
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.25);
+  animation: fadeIn 0.2s ease-in-out;
+  overflow-y: auto; /* Cambié de scroll a auto para mejor UX */
+  overflow-x: hidden;
+}
+
+.modal h3 {
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0 0 16px 0;
+}
+
+.modal p {
+  color: #e2e8f0;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .clientes-container {
+    padding: 15px;
+  }
+  
+  .clientes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .clientes-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-box {
+    max-width: none;
+  }
+  
+  .filters-panel {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .clientes-table {
+    overflow-x: auto;
+  }
+  
+  .clientes-table table {
+    min-width: 600px;
+  }
+}

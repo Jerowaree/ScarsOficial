@@ -1,0 +1,82 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Reset específico para rutas de admin - ELIMINA el padding-top del header */
+.admin-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* Reset para rutas de admin */
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor general del dashboard */
+.admin-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #0f172a; /* color base del fondo */
+  margin: 0;
+  padding: 0;
+}
+
+/* Sidebar fijo y separado del contenido */
+.sidebar {
+  flex: 0 0 260px; /* ancho reservado */
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 50;
+}
+
+/* Zona derecha de contenido */
+.admin-content {
+  flex: 1;
+  min-width: 0; /* evita empujes del sidebar */
+  min-height: 0;
+  overflow-y: auto; /* PERMITE scroll vertical */
+  overflow-x: hidden; /* evita scroll horizontal */
+  background: #1e293b;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ajuste responsivo general */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .admin-shell {
+    flex-direction: column;
+  }
+
+  .admin-content {
+    flex: 1;
+    width: 100%;
+  }
+}

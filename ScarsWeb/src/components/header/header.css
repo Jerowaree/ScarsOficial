@@ -1,0 +1,225 @@
+/* ===== Header base ===== */
+.site-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+.header-row{
+  display:flex; align-items:center; justify-content:space-between;
+  height:var(--header-h);
+}
+.brand{ cursor:pointer }
+.brand img{ height:42px; width:auto }
+
+/* ===== Navegación ===== */
+.nav{ position:relative; display:flex; align-items:center; gap:22px }
+.nav-link{
+  background:none; border:none; cursor:pointer; padding:10px 8px;
+  font-weight:900; letter-spacing:.6px; color:var(--navy); position:relative;
+  text-transform: uppercase;
+  font-size: clamp(17px, 1.75vw, 18px);
+}
+.nav-link:hover{ color: var(--primary) }
+.nav-link:focus-visible{
+  outline: 2px solid var(--primary); outline-offset: 2px; border-radius:6px;
+}
+.nav-link.active{ color:var(--primary) }
+.nav-link.active::after{
+  content:""; position:absolute; left:0; right:0;
+  bottom:-6px; height:3px; background:var(--primary); border-radius:999px;
+}
+
+/* ===== CTA CONTACTO (pill real y sin interferencias globales) ===== */
+/* ===== CTA CONTACTO con el mismo estilo que .hero__cta ===== */
+.nav-cta{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* tamaño y forma (SIN height fija) */
+  padding: 16px 30px;       /* igual que el hero */
+  border-radius: 18px;      /* el mismo redondeo que pediste */
+  border: 0;
+
+  /* color y texto */
+  background: var(--primary, #E61B5B);
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: clamp(14px, 1.45vw, 18px);
+
+  /* sombra */
+  box-shadow: 0 12px 30px rgba(230, 27, 91, .35);
+
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+}
+.nav-cta:hover{ transform: translateY(-1px); background: var(--primary-2); }
+.nav-cta:active{ transform: translateY(0); }
+.nav-cta:focus-visible{ outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* ===== MENÚ HAMBURGUESA ===== */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  width: 24px;
+  height: 18px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: var(--navy);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hamburger span:nth-child(1) {
+  margin-bottom: 4px;
+}
+
+.hamburger span:nth-child(2) {
+  margin-bottom: 4px;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* ===== NAVEGACIÓN MÓVIL ===== */
+@media (max-width: 920px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    padding: 20px 0;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .nav-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .nav-link {
+    display: block;
+    padding: 16px 24px;
+    font-size: 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    background: rgba(226, 28, 91, 0.05);
+    padding-left: 32px;
+  }
+  
+  .nav-link.active {
+    background: rgba(226, 28, 91, 0.1);
+    color: var(--primary);
+    font-weight: 900;
+  }
+  
+  .nav-link.active::after {
+    display: none;
+  }
+  
+  .nav-cta {
+    margin: 16px 24px 0;
+    padding: 16px 24px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 12px;
+  }
+  
+  .nav-car {
+    display: none;
+  }
+}
+
+/* ===== OVERLAY MÓVIL ===== */
+.mobile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===== Carrito rosa debajo del activo ===== */
+.nav-car{
+  position:absolute;
+  top: calc(100% - 8px);           /* pegado al subrayado */
+  transform: translateX(-50%);
+  width: 28px; height: 28px;
+  fill: var(--primary);
+  pointer-events:none;
+  transition:left 260ms ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+  display: none; /* Oculto por defecto */
+}
+
+/* Mostrar carrito solo en desktop */
+@media (min-width: 921px) {
+  .nav-car {
+    display: block;
+  }
+}
+
+/* Responsive - reglas movidas arriba */

@@ -1,0 +1,14 @@
+.car-track{
+  position:fixed; left:0; right:0; pointer-events:none; z-index:9999;
+}
+.car-track__line{
+  position:absolute; left:4%; right:4%; bottom:0; height:3px;
+  background:rgba(0,0,0,.18); border-radius:999px;
+}
+.car-track__car{
+  position:absolute; bottom:6px; width:clamp(30px,6vw,50px);
+  transform:translateX(-50%); user-select:none;
+}
+@media (prefers-reduced-motion:no-preference){
+  .car-track__car{ transition:left 300ms ease }
+}

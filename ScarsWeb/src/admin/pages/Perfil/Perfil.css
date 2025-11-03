@@ -1,0 +1,146 @@
+.perfil-container {
+  padding: 20px;
+  background: #1e293b;
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+.perfil-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.perfil-header h1 {
+  color: #fff;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #22c55e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background: #16a34a;
+}
+
+.btn-secondary {
+  background: #64748b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #475569;
+}
+
+.perfil-card {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 800px;
+}
+
+.perfil-avatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.perfil-avatar svg {
+  width: 80px;
+  height: 80px;
+  color: #3b82f6;
+  background: #1e293b;
+  padding: 16px;
+  border-radius: 50%;
+  border: 2px solid #3b82f6;
+}
+
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #93c5fd;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-group input {
+  background: #1e293b;
+  color: #fff;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #60a5fa;
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
+.form-group input:disabled {
+  background: #334155;
+  color: #94a3b8;
+  cursor: not-allowed;
+  border-color: #475569;
+}
+
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 15px;
+  }
+  
+  .perfil-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .perfil-card {
+    padding: 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

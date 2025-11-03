@@ -1,0 +1,212 @@
+/* === CONTENEDOR GENERAL === */
+.solicitudes-container { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  height: 100%; 
+  background: #0f1a2a; 
+  color: #e2e8f0; 
+}
+
+/* === HEADER === */
+.solicitudes-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 14px 20px; 
+  gap: 10px; 
+  flex-wrap: wrap; 
+}
+
+.solicitudes-header h1 {
+  color: #e2e8f0;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.actions { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  flex-wrap: wrap; 
+}
+
+.actions input { 
+  background: #0b1426; 
+  border: 1px solid #3b82f6; 
+  color: #fff; 
+  border-radius: 8px; 
+  padding: 8px 12px; 
+  min-width: 280px;
+  outline: none;
+}
+
+.actions input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.actions svg {
+  color: #93c5fd;
+}
+
+/* === TABLA === */
+.table-wrapper { 
+  flex: 1; 
+  background: #0b1426; 
+  border: 1px solid #334155; 
+  border-radius: 12px; 
+  margin: 0 20px 20px; 
+  overflow: auto; 
+}
+
+.solicitudes-table { 
+  border-collapse: separate; 
+  border-spacing: 0; 
+  width: max-content; 
+  min-width: 100%; 
+  font-size: 0.95rem; 
+}
+
+.solicitudes-table th, 
+.solicitudes-table td { 
+  padding: 12px 16px; 
+  border-bottom: 1px solid #334155; 
+  text-align: left; 
+  vertical-align: middle; 
+  background: #0b1426; 
+}
+
+.solicitudes-table th { 
+  background: #3b82f6; 
+  color: #fff; 
+  font-weight: 700; 
+  position: sticky; 
+  top: 0; 
+  z-index: 2; 
+  white-space: nowrap;
+}
+
+.solicitudes-table tbody tr:hover { 
+  background: #1e293b; 
+}
+
+.solicitudes-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* === CELDAS === */
+.cell-view { 
+  display: inline-flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+.cell-view svg {
+  color: #93c5fd;
+  flex-shrink: 0;
+}
+
+.message-cell {
+  max-width: 300px;
+}
+
+.message-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #cbd5e1;
+}
+
+.mono { 
+  font-family: ui-monospace, Menlo, Consolas, monospace; 
+  font-size: 0.9rem;
+  color: #93c5fd;
+}
+
+.link-email {
+  color: #60a5fa;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.link-email:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+/* === ESTADOS === */
+.loading-state,
+.error-state,
+.no-data-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #cbd5e1;
+  gap: 16px;
+}
+
+.loading-state {
+  color: #93c5fd;
+}
+
+.error-state {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  margin: 20px;
+  padding: 20px;
+}
+
+.no-data-state {
+  color: #64748b;
+}
+
+.no-data-state svg {
+  opacity: 0.5;
+}
+
+.no-data-state p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .solicitudes-header { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 12px; 
+  }
+  
+  .actions { 
+    justify-content: center; 
+  }
+  
+  .actions input { 
+    min-width: 200px; 
+    width: 100%;
+  }
+
+  .table-wrapper {
+    margin: 0 10px 10px;
+    border-radius: 8px;
+  }
+
+  .solicitudes-table {
+    font-size: 0.85rem;
+  }
+
+  .solicitudes-table th,
+  .solicitudes-table td {
+    padding: 8px 10px;
+  }
+
+  .message-cell {
+    max-width: 200px;
+  }
+}

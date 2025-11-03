@@ -1,0 +1,15 @@
+:root{
+  --primary:#E21C5B;
+  --primary-2:#C7154D;
+  --navy:#121E4B;
+  --ink:#1A2033;
+  --muted:#6B7280;
+  --surface:#ffffff;
+  --border:#E5E7EB;
+
+  --container:1200px;
+  --radius:16px;
+  --btn-radius:26px;   
+  --header-h:86px;     
+  --shadow:0 14px 32px rgba(0,0,0,.10);
+}

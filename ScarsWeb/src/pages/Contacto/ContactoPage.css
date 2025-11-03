@@ -1,0 +1,853 @@
+/* NAMESPACED: todas las clases empiezan con ct- para evitar colisiones */
+
+
+.ct-page-hero{
+  background: var(--navy);
+  color: #fff;
+  text-align: right;
+  min-height: 300px;
+  height: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 40px;
+  padding-right: 15%;
+}
+
+.ct-hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.ct-title-section {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.ct-contact-circles {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Clase específica para reducir aún más el espacio */
+.ct-contact-circles-compact {
+  gap: 0px !important;
+  margin: 0;
+  padding: 0;
+}
+
+.ct-contact-circles-compact .ct-contact-item {
+  margin: 0;
+  padding: 0;
+}
+
+.ct-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.ct-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  min-width: max-content;
+}
+
+.ct-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  box-shadow: 0 4px 15px rgba(226, 28, 91, 0.3);
+  transition: all 0.3s ease;
+}
+
+.ct-icon {
+  font-size: 16px;
+  color: #fff;
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+.ct-label {
+  font-weight: 900;
+  font-size: 14px;
+  color: #fff;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.ct-value {
+  font-weight: 600;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Responsive design para pantallas medianas */
+@media (min-width: 768px) {
+  .ct-title-section {
+    gap: 80px;
+  }
+  
+  .ct-contact-circles {
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  .ct-contact-circles-compact {
+    gap: -8px !important;
+  }
+  
+  .ct-contact-item {
+    gap: 15px;
+  }
+  
+  .ct-circle {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .ct-icon {
+    font-size: 22px;
+  }
+  
+  .ct-label {
+    font-size: 18px;
+  }
+  
+  .ct-value {
+    font-size: 16px;
+  }
+}
+
+/* Responsive design para pantallas grandes */
+@media (min-width: 1200px) {
+  .ct-title-section {
+    gap: 150px;
+  }
+  
+  .ct-contact-circles {
+    gap: 5px;
+  }
+  
+  .ct-contact-circles-compact {
+    gap: -8px !important;
+  }
+  
+  .ct-contact-item {
+    gap: 25px;
+  }
+  
+  .ct-circle {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .ct-icon {
+    font-size: 36px;
+  }
+  
+  .ct-label {
+    font-size: 24px;
+  }
+  
+  .ct-value {
+    font-size: 20px;
+  }
+}
+
+/* Responsive design para pantallas extra grandes */
+@media (min-width: 1600px) {
+  .ct-title-section {
+    gap: 200px;
+  }
+  
+  .ct-contact-circles {
+    gap: 8px;
+  }
+  
+  .ct-contact-circles-compact {
+    gap: -8px !important;
+  }
+  
+  .ct-contact-item {
+    gap: 20px;
+  }
+  
+  .ct-circle {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .ct-icon {
+    font-size: 44px;
+  }
+  
+  .ct-label {
+    font-size: 28px;
+  }
+  
+  .ct-value {
+    font-size: 24px;
+  }
+}
+.ct-page-hero h2 {
+  display: flex;
+  flex-direction: column; /* apila uno debajo del otro */
+  align-items: flex-start; /* alineado a la izquierda */
+  gap: 0px; /* espacio entre los elementos */
+  font-size: clamp(30px, 5.5vw, 80px);
+  justify-content: center;
+}
+
+.ct-page-hero h2 span {
+  display: block;
+  position: relative;
+}
+
+.ct-page-hero h2 span:first-child {
+  padding-bottom: 6px; /* pequeño espacio */
+  border-bottom: 5.5px solid var(--primary); /* la línea roja */
+  
+}
+.ct-page-hero h2 span:nth-child(2){
+  margin-bottom: 30px;
+}
+
+
+
+
+
+
+.ct-page-carrusel{
+  background: var(--surface);
+  padding: 40px 0;
+  height: 30vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.ct-carrusel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.ct-carrusel-track {
+  display: flex;
+  height: 100%;
+  width: calc(200% + 40px); /* Para las imágenes duplicadas */
+  animation: infiniteScroll 18s linear infinite;
+}
+
+@keyframes infiniteScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ct-carrusel-slide {
+  min-width: calc(16.666% - 20px); /* 6 imágenes por fila */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  padding: 30px;
+}
+
+.ct-carrusel-img {
+  width: 100%;
+  height: 100%;
+  max-width: 250px;
+  max-height: 160px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Tamaños específicos para Jeep, Nissan y Toyota - AUMENTADOS */
+.ct-carrusel-img:nth-child(3),
+.ct-carrusel-img:nth-child(9) {
+  max-width: 400px;
+  max-height: 250px;
+}
+
+.ct-carrusel-img:nth-child(4),
+.ct-carrusel-img:nth-child(10) {
+  max-width: 400px;
+  max-height: 250px;
+}
+
+.ct-carrusel-img:nth-child(6),
+.ct-carrusel-img:nth-child(12) {
+  max-width: 400px;
+  max-height: 250px;
+}
+
+.ct-carrusel-img:hover {
+  transform: scale(1.1);
+}
+
+
+
+/* Responsive design para el carrusel deslizante */
+@media (max-width: 768px) {
+  .ct-page-carrusel {
+    height: 25vh;
+    padding: 20px 0;
+  }
+  
+  .ct-carrusel-container {
+    padding: 0 15px;
+  }
+  
+  .ct-carrusel-slide {
+    min-width: calc(25% - 15px); /* 4 imágenes por fila en tablet */
+    margin: 0 7px;
+    padding: 25px;
+  }
+  
+  .ct-carrusel-img {
+    max-width: 200px;
+    max-height: 130px;
+  }
+  
+  /* Tamaños específicos para Jeep, Nissan y Toyota en tablet - AUMENTADOS */
+  .ct-carrusel-img:nth-child(3),
+  .ct-carrusel-img:nth-child(9) {
+    max-width: 320px;
+    max-height: 200px;
+  }
+
+  .ct-carrusel-img:nth-child(4),
+  .ct-carrusel-img:nth-child(10) {
+    max-width: 320px;
+    max-height: 200px;
+  }
+
+  .ct-carrusel-img:nth-child(6),
+  .ct-carrusel-img:nth-child(12) {
+    max-width: 320px;
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ct-page-carrusel {
+    height: 20vh;
+    padding: 15px 0;
+  }
+  
+  .ct-carrusel-container {
+    padding: 0 10px;
+  }
+  
+  .ct-carrusel-slide {
+    min-width: calc(33.333% - 10px); /* 3 imágenes por fila en móvil */
+    margin: 0 5px;
+    padding: 20px;
+  }
+  
+  .ct-carrusel-img {
+    max-width: 160px;
+    max-height: 100px;
+  }
+  
+  /* Tamaños específicos para Jeep, Nissan y Toyota en móvil - AUMENTADOS */
+  .ct-carrusel-img:nth-child(3),
+  .ct-carrusel-img:nth-child(9) {
+    max-width: 250px;
+    max-height: 160px;
+  }
+
+  .ct-carrusel-img:nth-child(4),
+  .ct-carrusel-img:nth-child(10) {
+    max-width: 250px;
+    max-height: 160px;
+  }
+
+  .ct-carrusel-img:nth-child(6),
+  .ct-carrusel-img:nth-child(12) {
+    max-width: 250px;
+    max-height: 160px;
+  }
+}
+
+
+.ct-page {
+  min-height: auto;
+  background: var(--navy);
+  color: #fff;
+  padding: 40px 0 28px;
+}
+
+.ct-seguimiento-section {
+  width: 100vw;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 56px 0;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+}
+
+.ct-seguimiento-section .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ct-title{
+  margin: 0 0 22px;
+  line-height: 1.05;
+}
+.ct-title span{
+  display:block;
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: clamp(26px, 3.6vw, 48px);
+}
+
+/* formulario */
+.ct-form{ 
+  margin-top: 8px; 
+  margin-bottom: 2.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ct-grid{
+  display: grid;
+  gap: 24px 32px;
+  grid-template-columns: 1fr; /* mobile */
+}
+@media (min-width: 700px){
+  .ct-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1100px){
+  .ct-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.ct-field{
+  display:flex; flex-direction:column;
+}
+.ct-field > span{
+  font-weight: 700; opacity:.9; margin-bottom: 6px;
+}
+
+/* inputs subrayados */
+.ct-field input,
+.ct-field textarea{
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-bottom: 3px solid rgba(255,255,255,.45);
+  outline: none;
+  padding: 10px 0 8px;
+  font-size: 1rem;
+}
+.ct-field input:focus,
+.ct-field textarea:focus{
+  border-bottom-color: var(--primary);
+}
+.ct-area{ margin-top: 6px; grid-column: 1 / -1; }
+
+.ct-actions{ margin-top: 20px; }
+
+.ct-btn{
+  background: var(--primary);
+  color:#fff;
+  border:0;
+  padding: 16px 42px;
+  border-radius: 28px;
+  font-weight: 900;
+  letter-spacing: .5px;
+  cursor:pointer;
+  box-shadow: 0 10px 30px rgba(226,28,91,.35);
+}
+.ct-btn:hover{ transform: translateY(-1px); }
+
+/* ===== INFORMACIÓN DE CONTACTO ===== */
+.ct-contact-info {
+  margin: 40px 0;
+  padding: 32px 0;
+}
+
+.ct-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.ct-info-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+
+.ct-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.ct-info-icon {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(226, 28, 91, 0.1);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.ct-info-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.ct-info-content p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.ct-info-content a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.ct-info-content a:hover {
+  color: var(--primary-2);
+  text-decoration: underline;
+}
+
+/* ===== MAPA DE UBICACIÓN ===== */
+.ct-map-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  padding: 60px 0;
+  margin-top: 40px;
+}
+
+.ct-map-title {
+  text-align: center;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 900;
+  color: var(--navy);
+  margin: 0 0 32px 0;
+  position: relative;
+}
+
+.ct-map-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.ct-map-container {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+
+.ct-map-info {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ct-map-info p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.ct-map-info strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ===== RESPONSIVIDAD MEJORADA ===== */
+@media (max-width: 768px) {
+  /* Hero section responsive */
+  .ct-page-hero {
+    padding: 40px 0;
+  }
+  
+  /* Contenedor del formulario responsive */
+  .ct-page {
+    padding: 32px 0 20px;
+  }
+  
+  .ct-title-section {
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .ct-contact-circles {
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .ct-contact-item {
+    gap: 8px;
+  }
+  
+  .ct-circle {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .ct-icon {
+    font-size: 16px;
+  }
+  
+  /* Formulario responsive */
+  .ct-grid {
+    gap: 16px 20px;
+  }
+  
+  .ct-field {
+    padding: 8px 12px;
+  }
+  
+  .ct-actions {
+    margin-top: 16px;
+  }
+  
+  /* Información de contacto responsive */
+  .ct-info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .ct-info-card {
+    padding: 20px;
+  }
+  
+  /* Mapa responsive */
+  .ct-map-section {
+    padding: 40px 0;
+  }
+  
+  .ct-map-container {
+    margin: 0 16px 24px 16px;
+  }
+  
+  .ct-map-title {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Mobile muy pequeño */
+  .ct-page-hero {
+    padding: 20px;
+    justify-content: center;
+  }
+  
+  .ct-page-hero h2 {
+    display: none;
+  }
+
+  .ct-contact-circles {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  /* Contenedor del formulario mobile */
+  .ct-page {
+    padding: 28px 0 16px;
+  }
+  
+  .ct-title-section {
+    gap: 20px;
+  }
+  
+  .ct-contact-circles {
+    gap: 4px;
+  }
+  
+  .ct-contact-item {
+    gap: 6px;
+  }
+  
+  .ct-circle {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .ct-icon {
+    font-size: 14px;
+  }
+  
+  .ct-grid {
+    gap: 12px 16px;
+  }
+  
+  .ct-field {
+    padding: 6px 10px;
+  }
+  
+  .ct-info-card {
+    padding: 16px;
+  }
+  
+  .ct-map-section {
+    padding: 30px 0;
+  }
+}
+
+/* === TOAST NOTIFICATIONS === */
+.ct-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-out 3.7s forwards;
+  backdrop-filter: blur(10px);
+}
+
+.ct-toast-success {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ct-toast-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ct-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.ct-toast-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.ct-toast-message {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.ct-toast-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.ct-toast-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .ct-toast {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+    max-width: none;
+  }
+}

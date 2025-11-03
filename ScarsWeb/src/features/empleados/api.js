@@ -1,0 +1,57 @@
+// src/features/empleados/api.js
+import api from "@/api/axios";
+import { ENDPOINTS } from "@/api/endpoints";
+
+// Map horario UI <-> DB
+const toDBHorario = (h) => {
+  if (!h) return undefined;
+  if (h === "Mañana") return "Ma_ana";
+  if (h === "Mañana y Tarde") return "Ma_ana_y_Tarde";
+  if (h === "Tarde") return "Tarde";
+  return undefined;
+};
+const fromDBHorario = (h) => {
+  if (h === "Ma_ana") return "Mañana";
+  if (h === "Ma_ana_y_Tarde") return "Mañana y Tarde";
+  if (h === "Tarde") return "Tarde";
+  return null;
+};
+
+// 🔹 Listar
+export async function listEmpleados(q) {
+  const res = await api.get(ENDPOINTS.empleados, { params: { q } });
+  return res.data.map((e) => ({
+    ...e,
+    sueldo: e.sueldo ?? null,
+    horario: fromDBHorario(e.horario),
+  }));
+}
+
+// 🔹 Crear
+export async function createEmpleado(data) {
+  const payload = { ...data };
+  if ("horario" in payload) payload.horario = toDBHorario(payload.horario);
+  if ("sueldo" in payload) {
+    payload.sueldo = payload.sueldo === "" ? null : payload.sueldo;
+  }
+  const res = await api.post(ENDPOINTS.empleados, payload);
+  const e = res.data;
+  return { ...e, horario: fromDBHorario(e.horario) };
+}
+
+// 🔹 Actualizar
+export async function updateEmpleado(id, data) {
+  const payload = { ...data };
+  if ("horario" in payload) payload.horario = toDBHorario(payload.horario);
+  if ("sueldo" in payload) {
+    payload.sueldo = payload.sueldo === "" ? null : payload.sueldo;
+  }
+  const res = await api.put(`${ENDPOINTS.empleados}/${id}`, payload);
+  const e = res.data;
+  return { ...e, horario: fromDBHorario(e.horario) };
+}
+
+// 🔹 Eliminar
+export async function deleteEmpleado(id) {
+  await api.delete(`${ENDPOINTS.empleados}/${id}`);
+}
