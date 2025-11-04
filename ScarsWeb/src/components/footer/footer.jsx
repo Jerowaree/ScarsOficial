@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="footer-card">
           {/* Col 1: marca (imagen) */}
           <div className="footer-col footer-brand">
-            <img src={brand} alt="SCARS Taller Mecánico" className="brand-img" />
+            <img src={brand} alt="SCARS Taller Mecánico - Piura" className="brand-img" width="200" height="auto" loading="lazy" />
             <p className="rights">Scars © Todos los Derechos Reservados</p>
           </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./ContactoPage.css";
 import { enviarSolicitudContacto } from "../../features/contacto/api";
+import { useSEO } from "../../hooks/useSEO";
 
 
 // Importar logos de marcas de autos
@@ -12,6 +13,8 @@ import suzuki from "../../assets/galeria/suzuki.png";
 import toyota from "../../assets/galeria/toyota.svg";
 
 export default function ContactoPage(){
+  useSEO("contacto");
+  
   const [form, setForm] = useState({
     nombre: "", modelo: "", anio: "", correo: "", telefono: "", mensaje: ""
   });

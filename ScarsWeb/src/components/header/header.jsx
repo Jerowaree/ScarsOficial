@@ -130,7 +130,7 @@ export default function Header() {
             role="button"
             aria-label="SCARS inicio"
           >
-            <img src={logo} alt="SCARS" />
+            <img src={logo} alt="SCARS - Taller Mecánico Especializado en Pintura Automotriz" width="120" height="42" />
           </div>
 
           <button 

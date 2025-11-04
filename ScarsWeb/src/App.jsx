@@ -1,5 +1,6 @@
 import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useSEO } from "./hooks/useSEO";
 
 import Header from "./components/header/header.jsx";
 import Footer from "./components/footer/Footer.jsx";
@@ -32,6 +33,7 @@ function Layout() {
 
 function Home() {
   const { hash } = useLocation();
+  useSEO("home");
   
   useEffect(() => {
     if (!hash) return;

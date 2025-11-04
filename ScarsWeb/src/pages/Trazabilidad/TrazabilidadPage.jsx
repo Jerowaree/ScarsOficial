@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import "./TrazabilidadPage.css";
 import { getSeguimientoByCode } from "../../features/seguimiento/api";
+import { useSEO } from "../../hooks/useSEO";
 
 
 import g1 from "../../assets/galeria/PoloScars1.png";
@@ -51,6 +52,7 @@ const MERCHANDISING_DATA = [
 ];
 
 export default function TrazabilidadPage() {
+  useSEO("trazabilidad");
   const IMGS = useMemo(() => [g1, g2, g3, g4, g5, g6], []);
   const [playing, setPlaying] = useState(true);
   const [codigo, setCodigo] = useState("");
