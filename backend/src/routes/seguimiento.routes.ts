@@ -1,26 +1,15 @@
-// src/routes/seguimiento.routes.ts
 import { Router } from "express";
 import { prisma } from "../db/prisma";
 import cors from 'cors';
 
 const r = Router();
 
-// Habilitar CORS específicamente para esta ruta
 r.use(cors());
 
-// Endpoint de prueba para verificar que la ruta funciona
-r.get("/test", (req, res) => {
-  res.json({ message: "Ruta de seguimiento funcionando correctamente" });
-});
-
-// Endpoint público para consulta de seguimiento
 r.get("/consulta/:codigo", async (req, res) => {
-  console.log('Consultando código:', req.params.codigo);
   const codigo = req.params.codigo;
 
   try {
-    console.log('Iniciando búsqueda en la base de datos...');
-    // Primero intentamos una búsqueda exacta
     let servicio = await prisma.servicios_activos.findFirst({
       where: {
         numero_seguimiento: codigo
@@ -91,19 +80,8 @@ r.get("/consulta/:codigo", async (req, res) => {
     }
 
     if (!servicio) {
-      // Obtener un conteo total de servicios para debug
-      const totalServicios = await prisma.servicios_activos.count();
-      const ejemplo = await prisma.servicios_activos.findFirst({
-        select: { numero_seguimiento: true }
-      });
-
       return res.status(404).json({
-        message: "No se encontró ningún servicio con ese código de seguimiento.",
-        debug: {
-          codigoBuscado: codigo,
-          totalServiciosActivos: totalServicios,
-          ejemploCodigo: ejemplo?.numero_seguimiento
-        }
+        message: "No se encontró ningún servicio con ese código de seguimiento."
       });
     }
 

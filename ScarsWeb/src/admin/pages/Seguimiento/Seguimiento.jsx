@@ -328,12 +328,12 @@ export default function Seguimiento() {
       const payload = {
         codigoCliente: String(nuevo.codigoCliente || ""),
         placa: nuevo.placa,
-        tipo: nuevo.tipo, // Incluir el tipo seleccionado
-        fecha: nuevo.fecha, // Backend convierte a Date ISO
+        tipo: nuevo.tipo,
+        fecha: nuevo.fecha,
         serviciosIds: nuevo.servicios,
         observaciones: nuevo.detalles || "",
       };
-      console.log("[Seguimiento] POST payload", payload);
+      
       const res = await fetch(`${API_URL}/servicios/activos`, {
         method: 'POST',
         headers: {
@@ -354,11 +354,9 @@ export default function Seguimiento() {
             message = text || message;
           }
         } catch {}
-        console.error("[Seguimiento] POST error", message);
         throw new Error(message);
       }
       const created = await res.json();
-      console.log("[Seguimiento] POST created", created);
       setActivos((prev) => [
         ...prev,
         {

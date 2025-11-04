@@ -15,43 +15,37 @@ export default function Header() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  // Menú: anclas del home + rutas
   const links = [
     { id: "inicio", label: "INICIO", type: "anchor" },
     { id: "nosotros", label: "NOSOTROS", type: "anchor" },
     { id: "servicios", label: "SERVICIOS", type: "anchor" },
-    { id: "trazabilidad", label: "SEGUIMIENTO", type: "route", to: "/trazabilidad " },
+    { id: "trazabilidad", label: "SEGUIMIENTO", type: "route", to: "/trazabilidad" },
   ];
 
-  // >>> AQUÍ el cambio importante: usar hash para anclas <<<
   const go = (item) => {
     if (item.type === "route") {
       navigate(item.to);
-      setIsMobileMenuOpen(false); // Cerrar menú móvil
+      setIsMobileMenuOpen(false);
       return;
     }
-    // Si estamos en Home, desplazamos y actualizamos hash
+    
     if (pathname === "/") {
       const el = document.getElementById(item.id);
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
-        // actualizar hash sin recargar
         window.history.replaceState({}, "", `#${item.id}`);
       }
-      setIsMobileMenuOpen(false); // Cerrar menú móvil
+      setIsMobileMenuOpen(false);
       return;
     }
-    // Si NO estamos en Home, navegamos a /#id
+    
     navigate({ pathname: "/", hash: `#${item.id}` });
-    setIsMobileMenuOpen(false); // Cerrar menú móvil
+    setIsMobileMenuOpen(false);
   };
 
-  // Función para alternar menú móvil
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
-  // Detectar cambios de tamaño de pantalla
   useEffect(() => {
     const handleResize = () => {
       const desktop = window.innerWidth > 920;
@@ -75,7 +69,7 @@ export default function Header() {
 
     if (isMobileMenuOpen) {
       document.addEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'hidden'; // Prevenir scroll del body
+      document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -86,12 +80,9 @@ export default function Header() {
     };
   }, [isMobileMenuOpen]);
 
-  // Activo: si estamos en otras rutas, forzamos 'galeria' o 'contacto'
   useEffect(() => {
     if (pathname === "/trazabilidad") { setActive("trazabilidad"); return; }
     if (pathname === "/contacto") { setActive("contacto"); return; }
-
-    // Home: elegir por cercanía bajo el header
     const updateActive = () => {
       const headerH = document.querySelector(".site-header")?.offsetHeight || 86;
       const refY = headerH + 6;
@@ -115,7 +106,6 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Colocar el carrito bajo el link activo (solo en desktop y en home)
   useEffect(() => {
     if (!isDesktop || pathname !== "/") {
       setCarLeft(0);
@@ -143,7 +133,6 @@ export default function Header() {
             <img src={logo} alt="SCARS" />
           </div>
 
-          {/* Botón hamburguesa para móvil */}
           <button 
             className="mobile-menu-toggle"
             onClick={toggleMobileMenu}
@@ -169,7 +158,6 @@ export default function Header() {
               </button>
             ))}
 
-            {/* CONTACTO como ruta */}
             <button
               ref={(el) => (linkRefs.current["contacto"] = el)}
               className={`nav-cta ${active === "contacto" ? "active" : ""}`}
@@ -177,14 +165,10 @@ export default function Header() {
             >
               CONTACTO
             </button>
-
-            
-            
           </nav>
         </div>
       </header>
 
-      {/* Overlay para móvil */}
       {isMobileMenuOpen && (
         <div 
           className="mobile-overlay"
