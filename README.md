@@ -267,7 +267,4 @@ Cambia el puerto en el archivo `.env` del backend o en `vite.config.js` del fron
 - Recharts
 - Lucide React
 
-## 📄 Licencia
-
-ISC
 
