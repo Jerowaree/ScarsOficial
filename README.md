@@ -9,7 +9,7 @@ Sistema completo de gestión para taller automotriz con panel administrativo y p
 - **MySQL** >= 8.0
 - **Git**
 
-## 🚀 Instalación
+##  Instalación
 
 ### 1. Clonar el repositorio
 
@@ -97,7 +97,7 @@ npx prisma migrate dev
 npm run seed
 ```
 
-## 📊 Schema de Prisma
+##  Schema de Prisma
 
 El schema de la base de datos está definido en `backend/prisma/schema.prisma`.
 
@@ -139,7 +139,7 @@ npx prisma migrate dev --name nombre_de_la_migracion
 npx prisma migrate status
 ```
 
-## ▶️ Ejecutar el Proyecto
+##  Ejecutar el Proyecto
 
 ### Backend
 
@@ -173,7 +173,7 @@ npm run preview
 
 El frontend estará disponible en: `http://localhost:5173` (o el puerto que Vite asigne)
 
-## 📝 Scripts Disponibles
+##  Scripts Disponibles
 
 ### Backend
 
@@ -214,7 +214,7 @@ ScarsVersion/
     └── public/             # Archivos estáticos
 ```
 
-## 🔑 Características Principales
+##  Características Principales
 
 - ✅ Sistema de autenticación con JWT
 - ✅ Panel administrativo completo
@@ -226,7 +226,7 @@ ScarsVersion/
 - ✅ Chatbot con OpenAI (opcional)
 - ✅ Portal público con seguimiento de servicios
 
-## 🐛 Solución de Problemas
+##  Solución de Problemas
 
 ### Error de conexión a la base de datos
 
@@ -249,7 +249,7 @@ npx prisma migrate deploy
 
 Cambia el puerto en el archivo `.env` del backend o en `vite.config.js` del frontend.
 
-## 📚 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 ### Backend
 - Node.js + Express
