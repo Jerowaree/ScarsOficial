@@ -4,6 +4,7 @@ import { prisma } from "../db/prisma";
 import { auth } from "../middlewares/auth";
 import { requirePerm } from "../middlewares/requirePerm";
 import { Prisma } from "@prisma/client";
+import { z } from "zod";
 
 const r = Router();
 
@@ -22,21 +23,36 @@ const fromDBHorario = (h?: string | null) => {
   return null;
 };
 
+const EmpleadoSchema = z.object({
+  nombres: z.string().min(1, "Nombres requeridos"),
+  apellidos: z.string().min(1, "Apellidos requeridos"),
+  dni: z.string().max(8).optional().nullable(),
+  correo: z.string().email("Correo inválido").or(z.literal("")).optional().nullable(),
+  celular: z.string().max(15).optional().nullable(),
+  cargo: z.string().max(100).optional().nullable(),
+  sueldo: z.union([z.number(), z.string(), z.instanceof(Prisma.Decimal)]).optional().nullable().transform(val =>
+    (val === "" || val == null) ? null : new Prisma.Decimal(String(val))
+  ),
+  horario: z.enum(["Mañana", "Tarde", "Mañana y Tarde"]).optional().nullable().transform(toDBHorario),
+  estado: z.enum(["Activo", "Inactivo"]).optional().nullable(),
+  id_usuario: z.number().optional().nullable(),
+});
+
 // GET /api/empleados?q=
 r.get("/", auth, requirePerm("empleado:list"), async (req, res) => {
   const q = String(req.query.q || "");
   const where = q
     ? {
-        OR: [
-          { codigo: { contains: q } },
-          { nombres: { contains: q } },
-          { apellidos: { contains: q } },
-          { dni: { contains: q } },
-          { correo: { contains: q } },
-          { celular: { contains: q } },
-          { cargo: { contains: q } },
-        ],
-      }
+      OR: [
+        { codigo: { contains: q } },
+        { nombres: { contains: q } },
+        { apellidos: { contains: q } },
+        { dni: { contains: q } },
+        { correo: { contains: q } },
+        { celular: { contains: q } },
+        { cargo: { contains: q } },
+      ],
+    }
     : undefined;
 
   const rows = await prisma.empleados.findMany({
@@ -55,72 +71,59 @@ r.get("/", auth, requirePerm("empleado:list"), async (req, res) => {
 
 // POST /api/empleados
 r.post("/", auth, requirePerm("empleado:create"), async (req, res) => {
-  const body = req.body as any;
+  try {
+    const validatedData = EmpleadoSchema.parse(req.body);
 
-  // Generar código EMP###
-  const count = await prisma.empleados.count();
-  const codigo = `EMP${String(count + 1).padStart(3, "0")}`;
+    // Generar código EMP###
+    const count = await prisma.empleados.count();
+    const codigo = `EMP${String(count + 1).padStart(3, "0")}`;
 
-  const sueldo =
-    body.sueldo === "" || body.sueldo == null
-      ? undefined
-      : new Prisma.Decimal(String(body.sueldo));
+    const created = await prisma.empleados.create({
+      data: {
+        ...validatedData,
+        codigo,
+        horario: validatedData.horario as any,
+        sueldo: validatedData.sueldo as any,
+      },
+    });
 
-  const created = await prisma.empleados.create({
-    data: {
-      codigo,
-      nombres: body.nombres,
-      apellidos: body.apellidos,
-      dni: body.dni || null,
-      correo: body.correo || null,
-      celular: body.celular || null,
-      cargo: body.cargo || null,
-      sueldo,
-      horario: toDBHorario(body.horario) as any, // Ma_ana | Tarde | Ma_ana_y_Tarde
-      estado: body.estado || "Activo",
-      id_usuario: body.id_usuario ?? null,
-    },
-  });
-
-  // devolver horario “bonito”
-  res.status(201).json({
-    ...created,
-    horario: fromDBHorario(created.horario as any),
-  });
+    res.status(201).json({
+      ...created,
+      horario: fromDBHorario(created.horario as any),
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: "VALIDATION_ERROR", details: error.issues });
+    }
+    console.error("Error creating empleado:", error);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
 });
 
 // PUT /api/empleados/:id
 r.put("/:id", auth, requirePerm("empleado:update"), async (req, res) => {
-  const id = Number(req.params.id);
-  const body = req.body as any;
+  try {
+    const validatedData = EmpleadoSchema.partial().parse(req.body);
 
-  const data: any = {};
+    const updated = await prisma.empleados.update({
+      where: { id_empleado: Number(req.params.id) },
+      data: {
+        ...validatedData,
+        horario: "horario" in req.body ? toDBHorario(req.body.horario) : undefined,
+      } as any,
+    });
 
-  if ("nombres" in body) data.nombres = body.nombres;
-  if ("apellidos" in body) data.apellidos = body.apellidos;
-  if ("dni" in body) data.dni = body.dni ?? null;
-  if ("correo" in body) data.correo = body.correo ?? null;
-  if ("celular" in body) data.celular = body.celular ?? null;
-  if ("cargo" in body) data.cargo = body.cargo ?? null;
-  if ("estado" in body) data.estado = body.estado ?? "Activo";
-  if ("horario" in body) data.horario = toDBHorario(body.horario) as any;
-  if ("sueldo" in body) {
-    data.sueldo =
-      body.sueldo === "" || body.sueldo == null
-        ? null
-        : new Prisma.Decimal(String(body.sueldo));
+    res.json({
+      ...updated,
+      horario: fromDBHorario(updated.horario as any),
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: "VALIDATION_ERROR", details: error.issues });
+    }
+    console.error("Error updating empleado:", error);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
-  if ("id_usuario" in body) data.id_usuario = body.id_usuario ?? null;
-
-  const updated = await prisma.empleados.update({
-    where: { id_empleado: id },
-    data,
-  });
-
-  res.json({
-    ...updated,
-    horario: fromDBHorario(updated.horario as any),
-  });
 });
 
 // DELETE /api/empleados/:id
@@ -132,3 +135,4 @@ r.delete("/:id", auth, requirePerm("empleado:delete"), async (req, res) => {
 });
 
 export default r;
+

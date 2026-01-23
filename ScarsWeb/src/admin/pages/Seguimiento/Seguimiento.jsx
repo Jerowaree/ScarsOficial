@@ -6,7 +6,7 @@ import { listClientes } from "@/features/clientes/api";
 /* === CONFIG === */
 const PROCESOS = [
   "Recepción del vehículo",
-  "Diagnóstico técnico", 
+  "Diagnóstico técnico",
   "Evaluación y presupuesto",
   "Aprobación del cliente",
   "En espera de suministro",
@@ -61,7 +61,7 @@ const normalizeEstado = (value) => {
 
 const normalizeTipo = (value) => {
   const v = String(value || "");
-  if (v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
+  if (v === "Automovil" || v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
   return v === "Moto" ? "Moto" : v;
 };
 
@@ -81,32 +81,32 @@ const highlight = (text, q) => {
 export default function Seguimiento() {
   const [vista, setVista] = useState("activos");
   const [ordenDesc, setOrdenDesc] = useState(true);
-  
+
   // Data stores
   const [clientesStore, setClientesStore] = useState([]);
   const [serviciosStore, setServiciosStore] = useState([]); // activos desde backend
-  
+
   // Tablas
   const [activos, setActivos] = useState([]);
   const [concluidos, setConcluidos] = useState([]);
-  
+
   const [busqueda, setBusqueda] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  
+
   // Columnas opcionales
   const [colsActivos, setColsActivos] = useState(["tipo", "servicios", "proceso", "fecha", "detalles"]);
   const [colsConcluidos, setColsConcluidos] = useState(["placa", "tipo", "fecha", "servicios", "observaciones"]);
-  
+
   // Modal states
   const [showModalNuevo, setShowModalNuevo] = useState(false);
   const [showModalEditarActivo, setShowModalEditarActivo] = useState(null);
   const [modalAviso, setModalAviso] = useState(null);
   const [toastMsg, setToastMsg] = useState(null);
-  
+
   // Picker Cliente
   const [clienteQuery, setClienteQuery] = useState("");
   const [selectedCliente, setSelectedCliente] = useState(null);
-  
+
   const showToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 1600);
@@ -165,7 +165,7 @@ export default function Seguimiento() {
           tipo: normalizeTipo(r.tipo),
           servicios: [], // no viene en el GET; se podría cargar detalle aparte
           proceso: normalizeProceso(r.proceso || PROCESOS[0]),
-          fecha: r.fecha?.slice(0,10) || "",
+          fecha: r.fecha?.slice(0, 10) || "",
           detalles: r.observaciones || "",
           estado: normalizeEstado(r.estado || "En curso"),
           codigoCliente: "",
@@ -188,8 +188,8 @@ export default function Seguimiento() {
           const d = detalles.find(x => x.id === r.id);
           return d ? { ...r, servicios: d.ids } : r;
         }));
-      } catch {}
-    } catch {}
+      } catch { }
+    } catch { }
   }, []);
 
   const loadConcluidos = useCallback(async () => {
@@ -212,7 +212,7 @@ export default function Seguimiento() {
           placa: r.placa,
           dueno: r.cliente_nombre,
           tipo: normalizeTipo(r.tipo),
-          fecha: r.fecha?.slice(0,10) || "",
+          fecha: r.fecha?.slice(0, 10) || "",
           servicios,
           observaciones: r.observaciones || "",
         };
@@ -277,7 +277,7 @@ export default function Seguimiento() {
           : new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
       );
   }, [activos, busqueda, ordenDesc]);
-  
+
   const concluidosFiltrados = useMemo(() => {
     const q = busqueda.toLowerCase();
     return [...concluidos]
@@ -333,7 +333,7 @@ export default function Seguimiento() {
         serviciosIds: nuevo.servicios,
         observaciones: nuevo.detalles || "",
       };
-      
+
       const res = await fetch(`${API_URL}/servicios/activos`, {
         method: 'POST',
         headers: {
@@ -353,7 +353,7 @@ export default function Seguimiento() {
             const text = await res.text();
             message = text || message;
           }
-        } catch {}
+        } catch { }
         throw new Error(message);
       }
       const created = await res.json();
@@ -415,11 +415,11 @@ export default function Seguimiento() {
         </div>
 
         <div className="actions">
-          <input 
-            type="text" 
-            placeholder="Buscar..." 
-            value={busqueda} 
-            onChange={(e) => setBusqueda(e.target.value)} 
+          <input
+            type="text"
+            placeholder="Buscar..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
           />
           <button type="button" className="btn-filter" onClick={() => setShowFilters(true)}>
             <Filter size={18} /> Filtros
@@ -490,7 +490,7 @@ export default function Seguimiento() {
                         </select>
                         <button
                           className="inline-edit"
-                        onClick={async () => {
+                          onClick={async () => {
                             try {
                               const token = localStorage.getItem('token');
                               const row = activos.find(x => x.seguimiento === s.seguimiento) || s;
@@ -510,7 +510,7 @@ export default function Seguimiento() {
                               });
                               if (!res.ok) {
                                 let msg = `Error ${res.status}`;
-                                try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch {}
+                                try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { }
                                 // rollback
                                 setActivos(prevSnapshot);
                                 throw new Error(msg);
@@ -539,7 +539,7 @@ export default function Seguimiento() {
                             });
                             if (res.status !== 204) {
                               let msg = `Error ${res.status}`;
-                              try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch {}
+                              try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { }
                               throw new Error(msg);
                             }
                             setActivos(prev => prev.filter(x => x.seguimiento !== s.seguimiento));
@@ -603,7 +603,7 @@ export default function Seguimiento() {
               <h3>Nuevo Servicio</h3>
               <button onClick={() => setShowModalNuevo(false)}><X /></button>
             </div>
-            
+
             <div className="modal-content">
               <div className="form-grid">
                 <div className="form-group">
@@ -645,8 +645,8 @@ export default function Seguimiento() {
                   <label>Vehículo</label>
                   <div className="field-inline two">
                     <input type="text" value={nuevo.placa} readOnly placeholder="Placa" />
-                    <select 
-                      value={nuevo.tipo} 
+                    <select
+                      value={nuevo.tipo}
                       onChange={(e) => setNuevo(prev => ({ ...prev, tipo: e.target.value }))}
                       className="select-tipo"
                     >

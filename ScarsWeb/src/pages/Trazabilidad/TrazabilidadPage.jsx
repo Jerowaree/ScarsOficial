@@ -62,7 +62,7 @@ export default function TrazabilidadPage() {
 
   const normalizeTipo = (value) => {
     const v = String(value || "");
-    if (v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
+    if (v === "Automovil" || v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
     return v === "Moto" ? "Moto" : v.replace(/[\-_]+/g, " ");
   };
   const cleanPart = (v) => {
@@ -108,16 +108,16 @@ export default function TrazabilidadPage() {
   // Transformar respuesta del backend al formato esperado por el frontend
   const transformSeguimiento = (data) => {
     if (!data) return null;
-    
+
     const procesoActual = data.proceso || "Recepción del vehículo";
-    const procesoIndex = PROCESOS.findIndex(p => 
+    const procesoIndex = PROCESOS.findIndex(p =>
       p.toLowerCase().replace(/[\sáéíóúñ]/g, '') === procesoActual.toLowerCase().replace(/[\sáéíóúñ_]/g, '')
     );
-    
+
     const etapas = PROCESOS.map((proceso, index) => {
       const isCompletado = index < procesoIndex;
       const isEnProceso = index === procesoIndex;
-      
+
       return {
         nombre: proceso,
         descripcion: isEnProceso ? "Proceso actual en curso" : isCompletado ? "Completado" : "Pendiente",
@@ -156,7 +156,7 @@ export default function TrazabilidadPage() {
 
     setLoading(true);
     setError(null);
-    
+
     try {
       const data = await getSeguimientoByCode(codigo.trim());
       const transformed = transformSeguimiento(data);
@@ -185,7 +185,7 @@ export default function TrazabilidadPage() {
               <span>Tiempo Real</span>
             </h1>
             <p className="traz-hero-subtitle">
-              Monitorea el progreso de tu vehículo las 24 horas del día, 
+              Monitorea el progreso de tu vehículo las 24 horas del día,
               los 7 días de la semana desde cualquier lugar.
             </p>
             <div className="traz-hero-stats">
@@ -263,7 +263,7 @@ export default function TrazabilidadPage() {
               <h3>Estado del Vehículo</h3>
               <div className="traz-tracking-code">Código: {codigo}</div>
             </div>
-            
+
             <div className="traz-tracking-info">
               <div className="traz-info-grid">
                 <div className="traz-info-item">
@@ -282,12 +282,13 @@ export default function TrazabilidadPage() {
                 <div className="traz-info-item">
                   <span className="traz-info-label">Fecha Ingreso</span>
                   <span className="traz-info-value">
-                    {resultado.fechaIngreso 
-                      ? new Date(resultado.fechaIngreso).toLocaleDateString('es-PE', { 
-                          day: '2-digit', 
-                          month: '2-digit', 
-                          year: 'numeric' 
-                        })
+                    {resultado.fechaIngreso
+                      ? new Date(resultado.fechaIngreso).toLocaleDateString('es-PE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        timeZone: 'UTC'
+                      })
                       : '—'}
                   </span>
                 </div>
@@ -301,12 +302,11 @@ export default function TrazabilidadPage() {
             {/* Timeline Visual */}
             <div className="traz-timeline">
               {resultado.etapas?.map((etapa, index) => (
-                <div 
-                  key={index} 
-                  className={`traz-timeline-step ${
-                    etapa.completado ? 'completed' : 
+                <div
+                  key={index}
+                  className={`traz-timeline-step ${etapa.completado ? 'completed' :
                     etapa.enProceso ? 'active' : 'pending'
-                  }`}
+                    }`}
                 >
                   <div className="traz-step-icon">
                     <span>{etapa.icono || '🔧'}</span>
@@ -316,7 +316,7 @@ export default function TrazabilidadPage() {
                     <p>{etapa.descripcion}</p>
                     <span className="traz-step-date">
                       {etapa.nombre === 'Recepción del vehículo'
-                        ? (etapa.fechaCompletado ? new Date(etapa.fechaCompletado).toLocaleString() : '—')
+                        ? (etapa.fechaCompletado ? new Date(etapa.fechaCompletado).toLocaleString('es-PE', { timeZone: 'UTC' }) : '—')
                         : (etapa.enProceso ? 'En progreso' : (etapa.completado ? 'Completado' : 'Pendiente'))
                       }
                     </span>

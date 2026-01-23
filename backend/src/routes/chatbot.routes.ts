@@ -1,8 +1,16 @@
 // src/routes/chatbot.routes.ts
 import { Router } from "express";
 import OpenAI from "openai";
+import { rateLimit } from "express-rate-limit";
 
 const r = Router();
+
+// Limitador específico para el chatbot (evitar consumo excesivo de tokens)
+const chatLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hora
+  max: 15, // Máximo 15 mensajes por hora por IP
+  message: { error: "Límite de mensajes alcanzado. Intenta en una hora." }
+});
 
 // Inicializar cliente de OpenAI (validar que exista la key)
 let openai: OpenAI | null = null;
@@ -42,37 +50,37 @@ Información del negocio:
 // Respuestas simuladas para modo de prueba (sin API key)
 const getMockResponse = (message: string): string => {
   const msg = message.toLowerCase();
-  
+
   if (msg.includes("hola") || msg.includes("buenos días") || msg.includes("buenas tardes")) {
     return "¡Hola! 👋 Bienvenido a SCARS. Estoy aquí para ayudarte con información sobre nuestros servicios automotrices, seguimiento de servicios o cualquier consulta que tengas. ¿En qué puedo asistirte?";
   }
-  
+
   if (msg.includes("servicio") || msg.includes("servicios")) {
     return "En SCARS ofrecemos servicios de pintura automotriz, reparación y mantenimiento de vehículos. ¿Hay algún servicio específico sobre el que te gustaría saber más?";
   }
-  
+
   if (msg.includes("precio") || msg.includes("costo") || msg.includes("cuanto")) {
     return "Los precios varían según el tipo de servicio y el vehículo. Te recomiendo contactarnos directamente para obtener un presupuesto personalizado. ¿Te gustaría que te ayude con algo más?";
   }
-  
+
   if (msg.includes("seguimiento") || msg.includes("código") || msg.includes("codigo")) {
     return "Para consultar el seguimiento de tu servicio, necesitas el código de seguimiento que te proporcionamos. Puedes ingresarlo en la sección 'Seguimiento' de nuestra página web. ¿Tienes tu código a mano?";
   }
-  
+
   if (msg.includes("horario") || msg.includes("horarios") || msg.includes("abierto")) {
     return "Para conocer nuestros horarios de atención, te sugiero contactarnos directamente. Estaremos encantados de atenderte. ¿Hay algo más en lo que pueda ayudarte?";
   }
-  
+
   if (msg.includes("contacto") || msg.includes("teléfono") || msg.includes("telefono")) {
     return "Para contactarnos, puedes usar el formulario de contacto en nuestra página web o visitarnos directamente. ¿Necesitas ayuda con algo más?";
   }
-  
+
   // Respuesta genérica
   return "Entiendo tu consulta. En SCARS nos especializamos en servicios automotrices como pintura, reparación y mantenimiento. Si necesitas información más específica, te recomiendo contactarnos directamente. ¿Hay algo más en lo que pueda ayudarte?";
 };
 
 // Endpoint público para chat (sin autenticación)
-r.post("/chat/public", async (req, res) => {
+r.post("/chat/public", chatLimiter, async (req, res) => {
   try {
     const { message, conversationHistory = [] } = req.body;
 
@@ -106,7 +114,7 @@ r.post("/chat/public", async (req, res) => {
       console.log("⚠️  [Chatbot] Modo de prueba activado (sin API key)");
       // Simular delay de red
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       const response = getMockResponse(message);
       return res.json({
         response,
@@ -137,7 +145,7 @@ r.post("/chat/public", async (req, res) => {
     });
   } catch (error: any) {
     console.error("Error en OpenAI:", error);
-    
+
     // Manejo de errores específicos
     if (error.status === 401) {
       return res.status(500).json({
@@ -145,7 +153,7 @@ r.post("/chat/public", async (req, res) => {
         message: "API key inválida",
       });
     }
-    
+
     if (error.status === 429) {
       return res.status(429).json({
         error: "Demasiadas solicitudes",

@@ -22,18 +22,53 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "CREDENCIALES" });
     }
 
+    // Check for active block
+    const block = await prisma.login_bloqueos.findUnique({
+      where: { id_usuario: user.id_usuario }
+    });
+
+    if (block && block.bloqueado_hasta > new Date()) {
+      return res.status(403).json({ error: "CUENTA_BLOQUEADA", hasta: block.bloqueado_hasta });
+    }
+
     const ok = await bcrypt.compare(contrasena, user.contrasena);
 
+    // Record attempt
     await prisma.login_intentos.create({
       data: {
-        id_usuario: user?.id_usuario ?? null,
+        id_usuario: user.id_usuario,
         correo_intento: correo,
         exitoso: ok,
+        ip: req.ip,
+        user_agent: req.headers["user-agent"]
       },
     });
 
     if (!ok) {
+      // Handle lockout logic
+      const lastAttempts = await prisma.login_intentos.findMany({
+        where: { id_usuario: user.id_usuario, exitoso: false },
+        orderBy: { creado_en: "desc" },
+        take: 5
+      });
+
+      if (lastAttempts.length >= 5) {
+        const now = new Date();
+        const blockUntil = new Date(now.getTime() + 15 * 60 * 1000); // 15 mins block
+        await prisma.login_bloqueos.upsert({
+          where: { id_usuario: user.id_usuario },
+          update: { bloqueado_hasta: blockUntil },
+          create: { id_usuario: user.id_usuario, bloqueado_hasta: blockUntil }
+        });
+        return res.status(403).json({ error: "CUENTA_BLOQUEADA_POR_INTENTOS" });
+      }
+
       return res.status(401).json({ error: "CREDENCIALES" });
+    }
+
+    // Login successful - Clear block if exists
+    if (block) {
+      await prisma.login_bloqueos.delete({ where: { id_usuario: user.id_usuario } });
     }
     const userRoles = await prisma.usuario_roles.findMany({
       where: { id_usuario: user.id_usuario },
