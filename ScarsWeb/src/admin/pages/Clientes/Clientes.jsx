@@ -87,26 +87,8 @@ export default function Clientes() {
     try {
       setLoading(true);
       const data = await listClientes();
-      console.log("=== DATOS RECIBIDOS DEL BACKEND ===");
-      console.log("Clientes data:", data);
-      if (data && data.length > 0) {
-        console.log("Primer cliente completo:", JSON.stringify(data[0], null, 2));
-        console.log("¿Tiene vehículo?", data[0].vehiculo ? "SÍ" : "NO");
-        if (data[0].vehiculo) {
-          console.log("Datos del vehículo:", data[0].vehiculo);
-        }
-        // Verificar todos los clientes
-        data.forEach((cliente, index) => {
-          console.log(`Cliente ${index + 1} (${cliente.nombres}):`, cliente.vehiculo ? "CON vehículo" : "SIN vehículo");
-          if (cliente.vehiculo) {
-            console.log(`  - Placa: ${cliente.vehiculo.placa}`);
-            console.log(`  - Tipo: ${cliente.vehiculo.tipo}`);
-          }
-        });
-      }
       setClientes(data || []);
     } catch (error) {
-      console.error("Error loading clientes:", error);
       setClientes([]);
     } finally {
       setLoading(false);
@@ -174,7 +156,7 @@ export default function Clientes() {
 
     // Validación básica
     if (!formData.nombres || !formData.apellidos) {
-      alert("Los campos Nombres y Apellidos son obligatorios");
+      setModalAviso("Los campos Nombres y Apellidos son obligatorios");
       return;
     }
 
@@ -240,40 +222,30 @@ export default function Clientes() {
       if (editingId) {
         // Modo edición - actualizar cliente y vehículo
         await updateClienteWithVehiculo(editingId, payload);
-        alert("Cliente y vehículo actualizados correctamente");
+        setModalAviso("Cliente y vehículo actualizados correctamente");
       } else {
         // Modo creación - usar estructura completa
-        const result = await createClienteWithVehiculo(payload);
-        console.log("Cliente creado correctamente:", result);
-        alert("Cliente creado correctamente");
+        await createClienteWithVehiculo(payload);
+        setModalAviso("Cliente creado correctamente");
       }
 
       await loadClientes();
       resetForm();
     } catch (error) {
-      console.error("Error al guardar cliente:", error);
-
       // Manejar errores de validación de Zod
       if (error.response?.data?.error === "VALIDATION_ERROR") {
         const details = error.response.data.details;
         const messages = details.map(d => `${d.path.join('.')}: ${d.message}`).join("\n");
-        alert("Error de validación:\n" + messages);
+        setModalAviso("Error de validación:\n" + messages);
       } else if (error.response?.data?.error === "DUPLICATE_ERROR") {
-        alert("Dato duplicado: " + error.response.data.message);
+        setModalAviso("Dato duplicado: " + error.response.data.message);
       } else {
-        alert("Error al procesar la solicitud: " + (error.response?.data?.message || error.message));
+        setModalAviso("Error al procesar la solicitud: " + (error.response?.data?.message || error.message));
       }
     }
   };
 
   const handleEdit = (cliente) => {
-    console.log("=== EDITANDO CLIENTE ===");
-    console.log("Cliente seleccionado:", JSON.stringify(cliente, null, 2));
-    console.log("¿Tiene vehículo?", cliente.vehiculo ? "SÍ" : "NO");
-    if (cliente.vehiculo) {
-      console.log("Datos del vehículo:", cliente.vehiculo);
-    }
-
     setFormData({
       codigo: cliente.codigo || "",
       nombres: cliente.nombres || "",
@@ -291,15 +263,6 @@ export default function Clientes() {
       vehiculo_ano: cliente.vehiculo?.anio || "", // Cambié 'ano' por 'anio'
       vehiculo_color: cliente.vehiculo?.color || "",
     });
-
-    console.log("=== DATOS DEL FORMULARIO DESPUÉS DE SETEAR ===");
-    console.log("vehiculo_placa:", cliente.vehiculo?.placa || "");
-    console.log("vehiculo_tipo:", (cliente.vehiculo?.tipo === "Automovil" || cliente.vehiculo?.tipo === "Autom_vil") ? "Automóvil" : "Moto");
-    console.log("vehiculo_marca:", cliente.vehiculo?.marca || "");
-    console.log("vehiculo_modelo:", cliente.vehiculo?.modelo || "");
-    console.log("vehiculo_ano:", cliente.vehiculo?.anio || "");
-    console.log("vehiculo_color:", cliente.vehiculo?.color || "");
-
     setEditingId(cliente.id_cliente);
     setShowForm(true); // Mostrar formulario para editar
   };
@@ -311,10 +274,7 @@ export default function Clientes() {
       await deleteCliente(deletingId);
       await loadClientes();
       setDeletingId(null);
-      // Opcional: mostrar toast de éxito
-      // toast.success("Cliente eliminado correctamente");
     } catch (error) {
-      console.error("Error deleting cliente:", error);
       const msg = error.response?.data?.message || "Error al eliminar cliente";
       setModalAviso(msg); // Usamos setModalAviso para mostrar el error al usuario
       setDeletingId(null); // Cerramos el modal de confirmación
@@ -649,18 +609,15 @@ export default function Clientes() {
                   <td>{cliente.correo}</td>
                   <td>{mapGeneroFromDB(cliente.genero)}</td>
                   <td>
-                    {(() => {
-                      console.log(`Renderizando vehículo para cliente ${cliente.nombres}:`, cliente.vehiculo);
-                      return cliente.vehiculo ? (
-                        <div className="vehiculo-info">
-                          <CarFront size={16} />
-                          <span>{cliente.vehiculo.placa}</span>
-                          <small>{(cliente.vehiculo.tipo === "Automovil" || cliente.vehiculo.tipo === "Autom_vil") ? "Automóvil" : "Moto"}</small>
-                        </div>
-                      ) : (
-                        <span className="no-vehiculo">Sin vehículo</span>
-                      );
-                    })()}
+                    {cliente.vehiculo ? (
+                      <div className="vehiculo-info">
+                        <CarFront size={16} />
+                        <span>{cliente.vehiculo.placa}</span>
+                        <small>{(cliente.vehiculo.tipo === "Automovil" || cliente.vehiculo.tipo === "Autom_vil") ? "Automóvil" : "Moto"}</small>
+                      </div>
+                    ) : (
+                      <span className="no-vehiculo">Sin vehículo</span>
+                    )}
                   </td>
                   <td>
                     <div className="action-buttons">

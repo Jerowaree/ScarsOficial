@@ -16,9 +16,19 @@ import empleadosRoutes from "./routes/empleados.routes";
 import seguimientoRoutes from "./routes/seguimiento.routes";
 import chatbotRoutes from "./routes/chatbot.routes";
 import almacenRoutes from "./routes/almacen.routes";
+import usuariosRoutes from "./routes/usuarios.routes";
 
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
+import { Prisma } from "@prisma/client";
+
+// Global JSON serialization fix for BigInt and Decimal
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+};
+(Prisma.Decimal.prototype as any).toJSON = function () {
+  return this.toString();
+};
 
 const app = express();
 
@@ -70,6 +80,7 @@ app.use("/api/empleados", empleadosRoutes);
 app.use("/api/seguimiento", seguimientoRoutes);
 app.use("/api/chatbot", chatbotRoutes);
 app.use("/api/almacen", almacenRoutes);
+app.use("/api/usuarios", usuariosRoutes);
 
 app.listen(process.env.PORT || 4000, () =>
   console.log(`API on :${process.env.PORT || 4000}`)

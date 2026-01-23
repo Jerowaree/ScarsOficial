@@ -9,6 +9,7 @@ export const ENDPOINTS = {
   solicitudes: "/solicitudes",
   seguimiento: "/servicios/activos",
   perfil: "/perfil",
+  usuarios: "/usuarios",
 
   // ✅ Este es el endpoint real del catálogo
   servicios: "/servicios/catalogo",

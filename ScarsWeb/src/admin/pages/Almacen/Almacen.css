@@ -425,8 +425,8 @@
 }
 
 .modal {
-    background: linear-gradient(135deg, rgba(18, 30, 75, 0.95) 0%, rgba(18, 30, 75, 0.98) 100%);
-    border: 1px solid rgba(226, 28, 91, 0.3);
+    background: #0f172a;
+    border: 1px solid #E21C5B;
     border-radius: 16px;
     max-width: 600px;
     width: 90%;
@@ -447,11 +447,12 @@
     margin: 0;
     color: #E21C5B;
     font-size: 1.5rem;
+    font-weight: 800;
 }
 
 .modal-header p {
     margin: 0.5rem 0 0;
-    color: rgba(255, 255, 255, 0.7);
+    color: #e2e8f0;
 }
 
 .modal-header button {
@@ -491,18 +492,18 @@
 
 .form-group label {
     margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 500;
+    color: #E21C5B;
+    font-weight: 600;
     font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group textarea {
     padding: 0.85rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 2px solid rgba(226, 28, 91, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(226, 28, 91, 0.3);
     border-radius: 10px;
-    color: white;
+    color: #fff;
     font-size: 1rem;
     transition: all 0.2s;
 }
@@ -511,8 +512,8 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #E21C5B;
-    background: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 0 0 3px rgba(226, 28, 91, 0.15);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(226, 28, 91, 0.2);
 }
 
 .modal-actions {

@@ -22,8 +22,6 @@ export default function Almacen() {
             });
             const data = await res.json();
             setItems(Array.isArray(data) ? data : []);
-        } catch (error) {
-            console.error("Error fetching items:", error);
         } finally {
             setLoading(false);
         }
@@ -54,7 +52,7 @@ export default function Almacen() {
                 fetchItems();
             }
         } catch (error) {
-            console.error("Error saving item:", error);
+            // Silenciar error según solicitud
         }
     };
 
@@ -87,12 +85,9 @@ export default function Almacen() {
                 setShowMovModal(null);
                 setMovData({ cantidad: 0, precio_unit: 0, observacion: "" });
                 fetchItems();
-            } else {
-                const err = await res.json();
-                alert(err.message || "Error al registrar movimiento");
             }
         } catch (error) {
-            console.error("Error recording movement:", error);
+            // Silenciar error según solicitud
         }
     };
 

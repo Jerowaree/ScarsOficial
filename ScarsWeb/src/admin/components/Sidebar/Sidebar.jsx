@@ -13,6 +13,8 @@ import {
   UserCircle,
   Menu,
   X,
+  Package,
+  Shield,
 } from "lucide-react";
 import logo from "@/assets/images/LogoScarsrosa.png";
 import "./Sidebar.css";
@@ -100,6 +102,16 @@ export default function Sidebar() {
             <li>
               <Link to="/admin/dashboard/servicios">
                 <Settings2 size={18} /> Servicios
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/dashboard/almacen">
+                <Package size={18} /> Almacén
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin/dashboard/usuarios">
+                <Shield size={18} /> Administradores
               </Link>
             </li>
           </ul>
