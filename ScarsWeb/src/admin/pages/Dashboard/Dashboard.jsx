@@ -33,26 +33,23 @@ export default function Dashboard() {
   const [vehiculos, setVehiculos] = useState([]);
   const [serviciosActivos, setServiciosActivos] = useState([]);
   const [serviciosConcluidos, setServiciosConcluidos] = useState([]);
-  const [solicitudes, setSolicitudes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const cargar = async () => {
     try {
       setRefreshing(true);
-      const [clientesData, vehiculosRes, activosRes, concluidosRes, solicitudesRes] = await Promise.all([
+      const [clientesData, vehiculosRes, activosRes, concluidosRes] = await Promise.all([
         listClientes(),
         api.get(ENDPOINTS.vehiculos),
         api.get(ENDPOINTS.seguimiento),
-        api.get('/servicios/concluidos').catch(() => ({ data: [] })),
-        api.get(ENDPOINTS.solicitudes)
+        api.get('/servicios/concluidos').catch(() => ({ data: [] }))
       ]);
 
       setClientes(Array.isArray(clientesData) ? clientesData : []);
       setVehiculos(Array.isArray(vehiculosRes.data) ? vehiculosRes.data : []);
       setServiciosActivos(Array.isArray(activosRes.data) ? activosRes.data : []);
       setServiciosConcluidos(Array.isArray(concluidosRes.data) ? concluidosRes.data : []);
-      setSolicitudes(Array.isArray(solicitudesRes.data) ? solicitudesRes.data : []);
     } catch (error) {
       console.error("Error cargando datos del dashboard:", error);
     } finally {

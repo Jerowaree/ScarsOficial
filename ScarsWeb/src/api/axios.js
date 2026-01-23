@@ -1,20 +1,17 @@
 import axios from "axios";
-import { getToken, clearSession } from "@/auth/utils/session";
+import { clearSession } from "@/auth/utils/session";
 
+/**
+ * Cliente Axios configurado para usar cookies httpOnly
+ * withCredentials: true permite enviar y recibir cookies automáticamente
+ */
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000/api",
-  withCredentials: false,
+  withCredentials: true, // ✅ Enviar cookies automáticamente
   timeout: 15000,
 });
 
-// ✅ Inserta el token automáticamente
-api.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-// ✅ Si el token expira → limpia sesión
+// ✅ Si el token expira (401) → limpia sesión local
 api.interceptors.response.use(
   (res) => res,
   (err) => {

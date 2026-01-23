@@ -1,23 +1,21 @@
 import { useEffect, useState } from "react";
 
 export function useSession() {
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [name, setName] = useState(localStorage.getItem("userName"));
-  const [role, setRole] = useState(localStorage.getItem("role"));
+  // El token ya no está en localStorage (httpOnly cookie)
+  // Usamos sessionStorage solo para datos de UI (no críticos)
+  const [name, setName] = useState(sessionStorage.getItem("userName"));
+  const [role, setRole] = useState(sessionStorage.getItem("userRole"));
 
   useEffect(() => {
     const update = () => {
-      setToken(localStorage.getItem("token"));
-      setName(localStorage.getItem("userName"));
-      setRole(localStorage.getItem("role"));
+      setName(sessionStorage.getItem("userName"));
+      setRole(sessionStorage.getItem("userRole"));
     };
     window.addEventListener("session-updated", update);
-    window.addEventListener("storage", update);
     return () => {
       window.removeEventListener("session-updated", update);
-      window.removeEventListener("storage", update);
     };
   }, []);
 
-  return { token, name, role, isAuth: !!token };
+  return { name, role, isAuth: !!name };
 }

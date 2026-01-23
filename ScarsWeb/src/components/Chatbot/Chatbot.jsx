@@ -28,7 +28,7 @@ export default function Chatbot() {
         },
       ]);
     }
-  }, [isOpen]);
+  }, [isOpen, messages.length]);
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
@@ -59,9 +59,9 @@ export default function Chatbot() {
       ]);
     } catch (error) {
       console.error("Error al enviar mensaje:", error);
-      
+
       let errorMessage = "Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta nuevamente.";
-      
+
       if (error.response?.status === 429) {
         errorMessage = "Demasiadas solicitudes. Por favor, espera un momento e intenta nuevamente.";
       } else if (error.response?.status === 503) {

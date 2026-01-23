@@ -56,41 +56,39 @@ export default function Servicios() {
         estado: "Activo",
     });
 
-   const fetchServicios = async () => {
-  setLoading(true);
-  try {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}/servicios/catalogo`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error del servidor:", errorData);
-      throw new Error(`Error ${response.status}: ${errorData.message || 'Error al cargar servicios'}`);
-    }
-    
-    const data = await response.json();
-    setRows(data);
-  } catch (error) {
-    console.error("Error en fetchServicios:", error);
-    toast(error.message, "err");
-    // Datos de respaldo en caso de error
-    const defaultData = [
-      { id_servicio: 1, nombre: "Cambio de aceite", descripcion: "Cambio de aceite y filtro", precio: 50.00, estado: "Activo" },
-      { id_servicio: 2, nombre: "Revisión de frenos", descripcion: "Inspección completa del sistema de frenos", precio: 80.00, estado: "Activo" },
-    ];
-    setRows(defaultData);
-  } finally {
-    setLoading(false);
-  }
-};
+    const fetchServicios = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_URL}/servicios/catalogo`, {
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Error del servidor:", errorData);
+                throw new Error(`Error ${response.status}: ${errorData.message || 'Error al cargar servicios'}`);
+            }
+
+            const data = await response.json();
+            setRows(data);
+        } catch (error) {
+            console.error("Error en fetchServicios:", error);
+            toast(error.message, "err");
+            // Datos de respaldo en caso de error
+            const defaultData = [
+                { id_servicio: 1, nombre: "Cambio de aceite", descripcion: "Cambio de aceite y filtro", precio: 50.00, estado: "Activo" },
+                { id_servicio: 2, nombre: "Revisión de frenos", descripcion: "Inspección completa del sistema de frenos", precio: 80.00, estado: "Activo" },
+            ];
+            setRows(defaultData);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         fetchServicios();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const toggleColumn = (col) => {
@@ -136,9 +134,9 @@ export default function Servicios() {
 
             const response = await fetch(`${API_URL}/servicios/catalogo`, {
                 method: "POST",
+                credentials: 'include',
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(payload),
             });
@@ -165,6 +163,7 @@ export default function Servicios() {
         try {
             const response = await fetch(`${API_URL}/api/servicios/${id}`, {
                 method: "DELETE",
+                credentials: "include"
             });
 
             if (!response.ok) {
@@ -211,43 +210,43 @@ export default function Servicios() {
             <div className="table-wrapper">
                 <table className="servicios-table">
                     <thead>
-                    <tr>
-                        {visibleCols.map((col) => (
-                            <th key={col}>{labelFor(col)}</th>
-                        ))}
-                        <th className="acciones-col">Acciones</th>
-                    </tr>
+                        <tr>
+                            {visibleCols.map((col) => (
+                                <th key={col}>{labelFor(col)}</th>
+                            ))}
+                            <th className="acciones-col">Acciones</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {loading ? (
-                        <tr><td colSpan={visibleCols.length + 1}>Cargando…</td></tr>
-                    ) : filtered.length ? (
-                        filtered.map((row) => (
-                            <tr key={row.id_servicio}>
-                                {visibleCols.map((col) => {
-                                    const val = row[col] ?? "";
-                                    let displayVal = val;
-                                    if (col === "precio") {
-                                        displayVal = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(val);
-                                    }
-                                    return (
-                                        <td key={col} className="cell">
-                                            <div className="cell-view">
-                                                <span>{displayVal}</span>
-                                            </div>
-                                        </td>
-                                    );
-                                })}
-                                <td className="acciones">
-                                    <button className="btn-danger" onClick={() => setConfirmDelete(row.id_servicio)}>
-                                        <Trash2 size={16} /> Eliminar
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr><td colSpan={visibleCols.length + 1}>Sin resultados</td></tr>
-                    )}
+                        {loading ? (
+                            <tr><td colSpan={visibleCols.length + 1}>Cargando…</td></tr>
+                        ) : filtered.length ? (
+                            filtered.map((row) => (
+                                <tr key={row.id_servicio}>
+                                    {visibleCols.map((col) => {
+                                        const val = row[col] ?? "";
+                                        let displayVal = val;
+                                        if (col === "precio") {
+                                            displayVal = new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(val);
+                                        }
+                                        return (
+                                            <td key={col} className="cell">
+                                                <div className="cell-view">
+                                                    <span>{displayVal}</span>
+                                                </div>
+                                            </td>
+                                        );
+                                    })}
+                                    <td className="acciones">
+                                        <button className="btn-danger" onClick={() => setConfirmDelete(row.id_servicio)}>
+                                            <Trash2 size={16} /> Eliminar
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr><td colSpan={visibleCols.length + 1}>Sin resultados</td></tr>
+                        )}
                     </tbody>
                 </table>
             </div>

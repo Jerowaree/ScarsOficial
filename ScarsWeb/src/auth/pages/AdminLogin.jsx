@@ -26,8 +26,9 @@ export default function AdminLogin() {
       const data = await login({ correo: email, contrasena: password });
       const role = data.roles?.[0] || "admin";
 
+      // Ya no guardamos access_token (está en cookie httpOnly)
+      // Solo guardamos info del usuario
       saveSession({
-        access_token: data.access_token,
         role,
         name: data.name,
         email: data.correo,

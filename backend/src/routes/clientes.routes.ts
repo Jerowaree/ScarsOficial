@@ -131,8 +131,19 @@ router.put("/:id", auth, requirePerm("cliente:update"), async (req, res) => {
 });
 
 router.delete("/:id", auth, requirePerm("cliente:delete"), async (req, res) => {
-  await prisma.clientes.delete({ where: { id_cliente: Number(req.params.id) } });
-  res.status(204).end();
+  try {
+    await prisma.clientes.delete({ where: { id_cliente: Number(req.params.id) } });
+    res.status(204).end();
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return res.status(400).json({
+        error: "FK_CONSTRAINT",
+        message: "No se puede eliminar el cliente porque tiene vehículos o historial de servicios asociado."
+      });
+    }
+    console.error("Error deleting cliente:", error);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR", message: "Error interno al eliminar cliente" });
+  }
 });
 
 export default router;

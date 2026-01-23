@@ -83,6 +83,7 @@ export default function Vehiculos() {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetForm = () => {
@@ -155,7 +156,8 @@ export default function Vehiculos() {
       setDeletingId(null);
     } catch (error) {
       console.error("Error deleting vehiculo:", error);
-      show("Error al eliminar vehículo", "err");
+      const msg = error.response?.data?.message || "Error al eliminar vehículo";
+      show(msg, "err");
     }
   };
 

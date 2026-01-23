@@ -9,7 +9,6 @@ export default function Header() {
   const navRef = useRef(null);
   const linkRefs = useRef({});
   const [active, setActive] = useState("inicio");
-  const [carLeft, setCarLeft] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 920);
   const { pathname } = useLocation();
@@ -28,7 +27,7 @@ export default function Header() {
       setIsMobileMenuOpen(false);
       return;
     }
-    
+
     if (pathname === "/") {
       const el = document.getElementById(item.id);
       if (el) {
@@ -38,7 +37,7 @@ export default function Header() {
       setIsMobileMenuOpen(false);
       return;
     }
-    
+
     navigate({ pathname: "/", hash: `#${item.id}` });
     setIsMobileMenuOpen(false);
   };
@@ -106,19 +105,7 @@ export default function Header() {
     };
   }, [pathname]);
 
-  useEffect(() => {
-    if (!isDesktop || pathname !== "/") {
-      setCarLeft(0);
-      return;
-    }
-    
-    const nav = navRef.current;
-    const el = linkRefs.current[active];
-    if (!nav || !el) return;
-    const navRect = nav.getBoundingClientRect();
-    const r = el.getBoundingClientRect();
-    setCarLeft(r.left + r.width / 2 - navRect.left);
-  }, [active, pathname, isDesktop]);
+
 
   return (
     <>
@@ -133,7 +120,7 @@ export default function Header() {
             <img src={logo} alt="SCARS - Taller Mecánico Especializado en Pintura Automotriz" width="120" height="42" />
           </div>
 
-          <button 
+          <button
             className="mobile-menu-toggle"
             onClick={toggleMobileMenu}
             aria-label="Abrir menú de navegación"
@@ -170,7 +157,7 @@ export default function Header() {
       </header>
 
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="mobile-overlay"
           onClick={() => setIsMobileMenuOpen(false)}
         />

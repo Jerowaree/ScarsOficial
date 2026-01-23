@@ -22,7 +22,7 @@ const formatDateTime = (dateInput) => {
     const minutes = String(date.getMinutes()).padStart(2, "0");
 
     return `${day}/${month}/${year} ${hours}:${minutes}`;
-  } catch (error) {
+  } catch {
     return "Fecha inválida";
   }
 };
@@ -40,7 +40,7 @@ export default function SolicitudesPage() {
       const response = await api.get(ENDPOINTS.solicitudes);
       // Ordenamos las solicitudes por fecha, de la más reciente a la más antigua
       // Usar creado_en en lugar de fecha_creacion según el schema
-      const sortedData = (Array.isArray(response.data) ? response.data : []).sort((a, b) => 
+      const sortedData = (Array.isArray(response.data) ? response.data : []).sort((a, b) =>
         new Date(b.creado_en || b.fecha_creacion || 0) - new Date(a.creado_en || a.fecha_creacion || 0)
       );
       setSolicitudes(sortedData);
@@ -76,11 +76,11 @@ export default function SolicitudesPage() {
       <div className="solicitudes-header">
         <h1>Bandeja de Solicitudes</h1>
         <div className="actions">
-          <input 
-            type="text" 
-            placeholder="Buscar por nombre, correo, modelo..." 
-            value={search} 
-            onChange={(e) => setSearch(e.target.value)} 
+          <input
+            type="text"
+            placeholder="Buscar por nombre, correo, modelo..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <Search size={18} />
         </div>
@@ -91,7 +91,7 @@ export default function SolicitudesPage() {
           Cargando solicitudes...
         </div>
       )}
-      
+
       {error && (
         <div className="error-state">
           {error}

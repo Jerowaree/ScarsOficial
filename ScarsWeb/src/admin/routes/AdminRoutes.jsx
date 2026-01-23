@@ -8,6 +8,7 @@ import SolicitudesPage from "@/admin/pages/Solicitudes/Solicitudes";
 import Seguimiento from "@/admin/pages/Seguimiento/Seguimiento";
 import Servicios from "@/admin/pages/Servicios/Servicios";
 import Perfil from "@/admin/pages/Perfil/Perfil";
+import Almacen from "@/admin/pages/Almacen/Almacen";
 import Sidebar from "@/admin/components/Sidebar/Sidebar";
 import ProtectedRoute from "@/auth/components/ProtectedRoute";
 import "./DashboardLayout.css";
@@ -43,6 +44,7 @@ export default function AdminRoutes() {
         <Route path="seguimiento" element={<Seguimiento />} />
         <Route path="servicios" element={<Servicios />} />
         <Route path="perfil" element={<Perfil />} />
+        <Route path="almacen" element={<Almacen />} />
       </Route>
 
       {/* Redirección */}

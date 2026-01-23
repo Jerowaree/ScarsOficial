@@ -30,10 +30,10 @@ const SEO_CONFIG = {
 
 export function useSEO(page = "home", customMeta = {}) {
   const { pathname } = useLocation();
-  const config = SEO_CONFIG[page] || SEO_CONFIG.home;
-  const meta = { ...config, ...customMeta };
-
   useEffect(() => {
+    const config = SEO_CONFIG[page] || SEO_CONFIG.home;
+    const meta = { ...config, ...customMeta };
+
     // Actualizar título
     document.title = meta.title;
 
@@ -61,32 +61,32 @@ export function useSEO(page = "home", customMeta = {}) {
 
     // Structured Data (JSON-LD)
     updateStructuredData(meta, pathname);
-  }, [pathname, meta]);
+  }, [pathname, page, customMeta]);
 }
 
 function updateMetaTag(name, content, attribute = "name") {
   if (!content) return;
 
   let tag = document.querySelector(`meta[${attribute}="${name}"]`);
-  
+
   if (!tag) {
     tag = document.createElement("meta");
     tag.setAttribute(attribute, name);
     document.head.appendChild(tag);
   }
-  
+
   tag.setAttribute("content", content);
 }
 
 function updateCanonical(url) {
   let link = document.querySelector("link[rel='canonical']");
-  
+
   if (!link) {
     link = document.createElement("link");
     link.setAttribute("rel", "canonical");
     document.head.appendChild(link);
   }
-  
+
   link.setAttribute("href", url);
 }
 

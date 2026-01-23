@@ -2,14 +2,7 @@
 import api from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 
-// Map horario UI <-> DB
-const toDBHorario = (h) => {
-  if (!h) return undefined;
-  if (h === "Mañana") return "Ma_ana";
-  if (h === "Mañana y Tarde") return "Ma_ana_y_Tarde";
-  if (h === "Tarde") return "Tarde";
-  return undefined;
-};
+
 const fromDBHorario = (h) => {
   if (h === "Ma_ana") return "Mañana";
   if (h === "Ma_ana_y_Tarde") return "Mañana y Tarde";
@@ -30,7 +23,7 @@ export async function listEmpleados(q) {
 // 🔹 Crear
 export async function createEmpleado(data) {
   const payload = { ...data };
-  if ("horario" in payload) payload.horario = toDBHorario(payload.horario);
+  // payload.horario se envía tal cual ("Mañana", etc.) para que pase validación Zod
   if ("sueldo" in payload) {
     payload.sueldo = payload.sueldo === "" ? null : payload.sueldo;
   }
@@ -42,7 +35,7 @@ export async function createEmpleado(data) {
 // 🔹 Actualizar
 export async function updateEmpleado(id, data) {
   const payload = { ...data };
-  if ("horario" in payload) payload.horario = toDBHorario(payload.horario);
+  // payload.horario se envía tal cual
   if ("sueldo" in payload) {
     payload.sueldo = payload.sueldo === "" ? null : payload.sueldo;
   }

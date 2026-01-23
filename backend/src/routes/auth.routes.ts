@@ -2,6 +2,7 @@ import { Router } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { prisma } from "../db/prisma";
+import { auth } from "../middlewares/auth";
 
 const router = Router();
 
@@ -96,8 +97,16 @@ router.post("/login", async (req, res) => {
       { expiresIn: "2h" }
     );
 
+    // Enviar token en cookie httpOnly (protección contra XSS)
+    res.cookie('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 2 * 60 * 60 * 1000
+    });
+
     return res.json({
-      access_token: token,
+      success: true,
       name: user.nombre_usuario,
       correo: user.correo,
       roles,
@@ -108,6 +117,22 @@ router.post("/login", async (req, res) => {
     console.error("Error en login:", err);
     return res.status(500).json({ error: "Error interno del servidor" });
   }
+});
+
+// Logout - Limpiar cookie
+router.post("/logout", (req, res) => {
+  res.clearCookie('auth_token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict'
+  });
+  return res.json({ success: true, message: "Sesión cerrada" });
+});
+
+// Verify - Verificar si la cookie es válida
+router.get("/verify", auth, (req, res) => {
+  // Si llegamos aquí, el middleware auth validó la cookie
+  return res.json({ authenticated: true, user: (req as any).user });
 });
 
 export default router;

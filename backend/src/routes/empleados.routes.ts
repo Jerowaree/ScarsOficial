@@ -128,10 +128,21 @@ r.put("/:id", auth, requirePerm("empleado:update"), async (req, res) => {
 
 // DELETE /api/empleados/:id
 r.delete("/:id", auth, requirePerm("empleado:delete"), async (req, res) => {
-  await prisma.empleados.delete({
-    where: { id_empleado: Number(req.params.id) },
-  });
-  res.status(204).end();
+  try {
+    await prisma.empleados.delete({
+      where: { id_empleado: Number(req.params.id) },
+    });
+    res.status(204).end();
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return res.status(400).json({
+        error: "FK_CONSTRAINT",
+        message: "No se puede eliminar el empleado porque tiene servicios o registros asociados."
+      });
+    }
+    console.error("Error deleting empleado:", error);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
 });
 
 export default r;

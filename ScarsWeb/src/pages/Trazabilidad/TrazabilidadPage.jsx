@@ -7,7 +7,7 @@ import { useSEO } from "../../hooks/useSEO";
 import g1 from "../../assets/galeria/PoloScars1.png";
 import g5 from "../../assets/galeria/GorraScars.jpg";
 import g3 from "../../assets/galeria/polo2.jpg";
-import g4 from "../../assets/galeria/g4.jpg";
+import g4 from "../../assets/galeria/fotitoscars.png";
 import g2 from "../../assets/galeria/chompabuzo1.jpg";
 import g6 from "../../assets/galeria/LlaveroScars1.png";
 
@@ -54,19 +54,22 @@ const MERCHANDISING_DATA = [
 export default function TrazabilidadPage() {
   useSEO("trazabilidad");
   const IMGS = useMemo(() => [g1, g2, g3, g4, g5, g6], []);
-  const [playing, setPlaying] = useState(true);
+  // const [playing, setPlaying] = useState(true); // Unused
   const [codigo, setCodigo] = useState("");
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /* eslint-disable no-unused-vars */
   const normalizeTipo = (value) => {
     const v = String(value || "");
-    if (v === "Automovil" || v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
-    return v === "Moto" ? "Moto" : v.replace(/[\-_]+/g, " ");
+    if (v === "Automovil" || v === "Autom_vil" || /autom[-_]?vil/i.test(v)) return "Automóvil";
+    return v === "Moto" ? "Moto" : v.replace(/[-_]+/g, " ");
   };
+  /* eslint-enable no-unused-vars */
+
   const cleanPart = (v) => {
-    const s = String(v || "").replace(/[\-_]+/g, " ").trim();
+    const s = String(v || "").replace(/[-_]+/g, " ").trim();
     if (!s || s.toLowerCase() === "no especificado") return "";
     return s;
   };
@@ -98,11 +101,11 @@ export default function TrazabilidadPage() {
 
   // Normalizar estado
   const normalizeEstado = (value) => {
-    const s = String(value || "").replace(/[\-_]+/g, " ").trim().toLowerCase();
+    const s = String(value || "").replace(/[-_]+/g, " ").trim().toLowerCase();
     if (s === "en curso" || s === "en_curso") return "En curso";
     if (s === "finalizado") return "Finalizado";
     if (s === "cancelado") return "Cancelado";
-    return String(value || "").replace(/[\-_]+/g, " ") || "En curso";
+    return String(value || "").replace(/[-_]+/g, " ") || "En curso";
   };
 
   // Transformar respuesta del backend al formato esperado por el frontend

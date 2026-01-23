@@ -8,10 +8,14 @@ export type JWTPayload = {
 };
 
 export function auth(req: Request, res: Response, next: NextFunction) {
-  const hdr = req.headers.authorization;
-  if (!hdr?.startsWith("Bearer ")) return res.status(401).json({ error: "NO_AUTH" });
+  // Leer token desde cookie httpOnly
+  const token = req.cookies?.auth_token;
+
+  if (!token) {
+    return res.status(401).json({ error: "NO_AUTH" });
+  }
+
   try {
-    const token = hdr.slice(7);
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     (req as any).user = payload;
     next();

@@ -2,6 +2,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import path from "path";
 import authRoutes from "./routes/auth.routes";
 import clientesRoutes from "./routes/clientes.routes";
@@ -14,6 +15,7 @@ import auditoriaRoutes from "./routes/auditoria.routes";
 import empleadosRoutes from "./routes/empleados.routes";
 import seguimientoRoutes from "./routes/seguimiento.routes";
 import chatbotRoutes from "./routes/chatbot.routes";
+import almacenRoutes from "./routes/almacen.routes";
 
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
@@ -21,9 +23,16 @@ import { rateLimit } from "express-rate-limit";
 const app = express();
 
 // 1. Restricted CORS (Debe ir primero para manejar preflight OPTIONS)
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [
+    process.env.FRONTEND_URL || "https://scars.vercel.app",
+    "https://www.scars.com.pe"
+  ]
+  : ["http://localhost:5173", "http://localhost:3000"];
+
 app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3000"], // Tu frontend
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   credentials: true
 }));
 
@@ -44,6 +53,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.json());
+app.use(cookieParser()); // Middleware para parsear cookies
 app.use("/uploads", express.static(path.resolve(process.env.UPLOAD_DIR || "./uploads")));
 
 app.use("/api/auth", authRoutes);
@@ -57,6 +67,7 @@ app.use("/api/auditoria", auditoriaRoutes);
 app.use("/api/empleados", empleadosRoutes);
 app.use("/api/seguimiento", seguimientoRoutes);
 app.use("/api/chatbot", chatbotRoutes);
+app.use("/api/almacen", almacenRoutes);
 
 app.listen(process.env.PORT || 4000, () =>
   console.log(`API on :${process.env.PORT || 4000}`)

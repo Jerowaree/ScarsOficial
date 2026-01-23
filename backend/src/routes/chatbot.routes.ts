@@ -144,26 +144,30 @@ r.post("/chat/public", chatLimiter, async (req, res) => {
       usage: completion.usage,
     });
   } catch (error: any) {
-    console.error("Error en OpenAI:", error);
+    console.error("❌ Error en OpenAI:", error);
 
-    // Manejo de errores específicos
-    if (error.status === 401) {
-      return res.status(500).json({
-        error: "Error de autenticación con OpenAI",
-        message: "API key inválida",
-      });
+    // Fallback: Si falla la API, usar respuestas simuladas para que el usuario no vea un error feo
+    console.log("⚠️ Usando respuesta de respaldo (fallback) debido al error");
+
+    // Intentar obtener una respuesta simulada basada en el mensaje original
+    // Si no se puede, usar un mensaje genérico de error amigable
+    let fallbackResponse = "Lo siento, estoy teniendo problemas momentáneos de conexión. Por favor, intenta de nuevo en unos segundos o contáctanos por teléfono.";
+
+    try {
+      const { message } = req.body;
+      if (message) {
+        fallbackResponse = getMockResponse(message);
+      }
+    } catch (e) {
+      // Ignorar error al generar mock
     }
 
-    if (error.status === 429) {
-      return res.status(429).json({
-        error: "Demasiadas solicitudes",
-        message: "Por favor, intenta más tarde",
-      });
-    }
-
-    res.status(500).json({
-      error: "Error al procesar la solicitud",
-      message: error.message || "Error desconocido",
+    // Retornar 200 con la respuesta de fallback para que el chat continúe
+    return res.json({
+      response: fallbackResponse,
+      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+      fallback: true, // Indicador de que fue un fallback
+      error_details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 });

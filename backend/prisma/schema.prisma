@@ -228,6 +228,7 @@ model usuarios {
   servicios_activos_servicios_activos_updated_byTousuarios servicios_activos[] @relation("servicios_activos_updated_byTousuarios")
   sesiones                                                 sesiones[]
   usuario_roles                                            usuario_roles[]
+  almacen_movimientos                                      almacen_movimientos[]
 }
 
 model vehiculos {
@@ -245,6 +246,36 @@ model vehiculos {
   clientes             clientes               @relation(fields: [id_cliente], references: [id_cliente], onUpdate: Restrict, map: "vehiculos_ibfk_1")
 
   @@index([id_cliente], map: "id_cliente")
+}
+
+model almacen_items {
+  id_item             Int                   @id @default(autoincrement())
+  nombre              String                @db.VarChar(150)
+  descripcion         String?               @db.Text
+  categoria           String?               @db.VarChar(100)
+  stock_actual        Decimal               @default(0) @db.Decimal(10, 2)
+  stock_minimo        Decimal               @default(0) @db.Decimal(10, 2)
+  unidad_medida       String                @default("unidades") @db.VarChar(50)
+  precio_promedio     Decimal?              @db.Decimal(10, 2)
+  creado_en           DateTime?             @default(now()) @db.DateTime(0)
+  actualizado_en      DateTime?             @default(now()) @db.DateTime(0)
+  almacen_movimientos almacen_movimientos[]
+}
+
+model almacen_movimientos {
+  id_movimiento Int              @id @default(autoincrement())
+  id_item       Int
+  tipo          almacen_mov_tipo
+  cantidad      Decimal          @db.Decimal(10, 2)
+  precio_unit   Decimal?         @db.Decimal(10, 2)
+  observacion   String?          @db.Text
+  id_usuario    Int?
+  creado_en     DateTime?        @default(now()) @db.DateTime(0)
+  almacen_items almacen_items    @relation(fields: [id_item], references: [id_item], onUpdate: Restrict, map: "almacen_movimientos_ibfk_1")
+  usuarios      usuarios?        @relation(fields: [id_usuario], references: [id_usuario], onDelete: Restrict, onUpdate: Restrict, map: "almacen_movimientos_ibfk_2")
+
+  @@index([id_item], map: "id_item")
+  @@index([id_usuario], map: "id_usuario")
 }
 
 enum auditoria_accion {
@@ -330,4 +361,9 @@ enum servicios_activos_estado {
   En_curso   @map("En curso")
   Finalizado
   Cancelado
+}
+
+enum almacen_mov_tipo {
+  ENTRADA
+  SALIDA
 }

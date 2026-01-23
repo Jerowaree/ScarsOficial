@@ -28,7 +28,7 @@ export default function Sidebar() {
 
   const handleLogout = () => {
     clearSession(); // 
-    navigate("/admin/login", { replace: true }); 
+    navigate("/admin/login", { replace: true });
   };
 
   // 🔒 Cierra menús al cambiar de ruta

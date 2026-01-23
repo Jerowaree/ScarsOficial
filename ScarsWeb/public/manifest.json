@@ -1,0 +1,24 @@
+{
+    "name": "SCARS - Taller Mecánico",
+    "short_name": "SCARS",
+    "description": "Taller mecánico especializado en sector automotriz y reparación de vehículos en Piura",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a192f",
+    "theme_color": "#E21C5B",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/logo_scars.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/logo_scars.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

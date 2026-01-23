@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Filter, X, Search, Edit, Check, XCircle, Trash2, Plus, CarFront } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Filter, X, Search, Edit, Trash2, Plus, CarFront } from "lucide-react";
 import "./Clientes.css";
 
 import {
   listClientes,
   createClienteWithVehiculo,
-  updateCliente,
   updateClienteWithVehiculo,
   deleteCliente,
 } from "@/features/clientes/api";
@@ -54,7 +53,8 @@ export default function Clientes() {
   const [showFilters, setShowFilters] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
-  const [showForm, setShowForm] = useState(false); // Nuevo estado
+  const [showForm, setShowForm] = useState(false);
+  const [modalAviso, setModalAviso] = useState(null); // Estado para mensajes de error/aviso
 
   // Form state
   const [formData, setFormData] = useState({
@@ -304,14 +304,20 @@ export default function Clientes() {
     setShowForm(true); // Mostrar formulario para editar
   };
 
+  /* ===== DELETE ===== */
   const handleDelete = async () => {
     if (!deletingId) return;
     try {
       await deleteCliente(deletingId);
       await loadClientes();
       setDeletingId(null);
+      // Opcional: mostrar toast de éxito
+      // toast.success("Cliente eliminado correctamente");
     } catch (error) {
       console.error("Error deleting cliente:", error);
+      const msg = error.response?.data?.message || "Error al eliminar cliente";
+      setModalAviso(msg); // Usamos setModalAviso para mostrar el error al usuario
+      setDeletingId(null); // Cerramos el modal de confirmación
     }
   };
 
@@ -703,6 +709,24 @@ export default function Clientes() {
                 onClick={handleDelete}
               >
                 Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error/Info Modal */}
+      {modalAviso && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Aviso</h3>
+            <p className="modal-message">{modalAviso}</p>
+            <div className="modal-actions">
+              <button
+                className="btn-primary"
+                onClick={() => setModalAviso(null)}
+              >
+                Entendido
               </button>
             </div>
           </div>

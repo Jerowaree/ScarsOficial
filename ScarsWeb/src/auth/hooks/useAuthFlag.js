@@ -1,17 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
+
+/**
+ * Hook para verificar si el usuario está autenticado
+ * Ahora verifica haciendo una petición al backend que valida la cookie httpOnly
+ */
 export function useAuthFlag() {
-  const [hasToken, setHasToken] = useState(!!localStorage.getItem("token"));
+  const [isAuth, setIsAuth] = useState(null); // null = cargando, true/false = resultado
+
 
   useEffect(() => {
-    const update = () => setHasToken(!!localStorage.getItem("token"));
-    window.addEventListener("session-updated", update);
-    window.addEventListener("storage", update); // para otros tabs
+    const checkAuth = async () => {
+      try {
+        // Hacer una petición simple al backend para verificar la cookie
+        const res = await fetch(`${API_URL}/auth/verify`, {
+          credentials: "include", // Enviar cookies
+        });
+
+        setIsAuth(res.ok);
+      } catch {
+        setIsAuth(false);
+      }
+    };
+
+    checkAuth();
+
+    // Escuchar eventos de cambio de sesión
+    const handleSessionUpdate = () => checkAuth();
+    window.addEventListener("session-updated", handleSessionUpdate);
+
     return () => {
-      window.removeEventListener("session-updated", update);
-      window.removeEventListener("storage", update);
+      window.removeEventListener("session-updated", handleSessionUpdate);
     };
   }, []);
 
-  return hasToken;
+  return isAuth; // Retorna null mientras carga, luego true/false
 }

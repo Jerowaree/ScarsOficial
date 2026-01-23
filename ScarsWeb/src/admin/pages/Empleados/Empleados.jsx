@@ -101,6 +101,7 @@ export default function Empleados() {
       }
     })();
     return () => { ignore = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleColumn = (col) => {
@@ -175,7 +176,10 @@ export default function Empleados() {
     } catch (e) {
       if (e?.response?.status === 401) toast("No autenticado.", "err");
       else if (e?.response?.status === 403) toast("Sin permiso (empleado:delete).", "err");
-      else toast("No se pudo eliminar el empleado.", "err");
+      else {
+        const msg = e.response?.data?.message || "No se pudo eliminar el empleado.";
+        toast(msg, "err");
+      }
     }
   };
 

@@ -4,46 +4,54 @@
 	max-width: 700px;
 	background: var(--surface);
 	border-radius: 18px;
-	box-shadow: 0 4px 18px rgba(0,0,0,.07);
+	box-shadow: 0 4px 18px rgba(0, 0, 0, .07);
 	padding: 32px 28px;
 }
+
 .traz-faq-title {
 	color: var(--primary);
 	font-size: 1.5em;
 	font-weight: 900;
 	margin-bottom: 18px;
 	text-align: center;
-	margin-top: 2em;
+	margin-top: 4em;
+	padding-top: 1.5em;
 }
+
 .traz-faq-list {
 	list-style: none;
 	padding: 0;
 	margin: 0;
 }
+
 .traz-faq-list li {
 	margin-bottom: 22px;
 	padding-bottom: 12px;
 	border-bottom: 1px solid var(--border);
 }
+
 .traz-faq-list li:last-child {
 	border-bottom: none;
 }
+
 .traz-faq-list strong {
 	color: var(--navy);
 	font-weight: 700;
 	display: block;
 	margin-bottom: 6px;
 }
+
 .traz-faq-list p {
 	color: var(--muted);
 	font-size: 1em;
 	margin: 0;
 }
+
 /* ===== SISTEMA DE SEGUIMIENTO VISUAL ===== */
 .traz-tracking-container {
 	background: var(--surface);
 	border-radius: 20px;
-	box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	padding: 32px;
 	margin-top: 24px;
 	border: 1px solid var(--border);
@@ -55,6 +63,7 @@
 		opacity: 0;
 		transform: translateY(20px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateY(0);
@@ -193,7 +202,7 @@
 	font-size: 14px;
 	font-weight: 700;
 	z-index: 2;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .traz-timeline-step.completed .traz-step-icon {
@@ -213,10 +222,13 @@
 }
 
 @keyframes pulse {
-	0%, 100% {
+
+	0%,
+	100% {
 		transform: scale(1);
 		box-shadow: 0 2px 8px rgba(226, 28, 91, 0.3);
 	}
+
 	50% {
 		transform: scale(1.1);
 		box-shadow: 0 4px 16px rgba(226, 28, 91, 0.4);
@@ -260,6 +272,7 @@
 .traz-timeline-step.pending .traz-step-content h4 {
 	color: var(--muted);
 }
+
 /* Estilos para la página de Trazabilidad - SCARS */
 
 .traz-page {
@@ -283,7 +296,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: 
+	background:
 		radial-gradient(circle at 20% 80%, rgba(226, 28, 91, 0.1) 0%, transparent 50%),
 		radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
 	pointer-events: none;
@@ -365,7 +378,7 @@
 	background: #1a1a1a;
 	border-radius: 30px;
 	padding: 20px;
-	box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 	position: relative;
 }
 
@@ -434,8 +447,9 @@
 
 .traz-header {
 	padding: 60px 0 40px 0;
-	
+
 }
+
 .traz-title {
 	position: relative;
 	margin: 0;
@@ -455,7 +469,7 @@
 	justify-content: flex-start;
 	background: var(--surface);
 	border-radius: 16px;
-	box-shadow: 0 4px 18px rgba(0,0,0,.07);
+	box-shadow: 0 4px 18px rgba(0, 0, 0, .07);
 	padding: 24px 18px;
 	border: 1px solid var(--border);
 	margin-bottom: 8px;
@@ -471,6 +485,7 @@
 	text-align: left;
 	padding: 0 4px;
 }
+
 .traz-form {
 	display: flex;
 	flex-wrap: wrap;
@@ -478,6 +493,7 @@
 	align-items: flex-end;
 	justify-content: flex-start;
 }
+
 .traz-input {
 	padding: 14px 18px;
 	border-radius: 14px;
@@ -490,14 +506,17 @@
 	box-shadow: none;
 	transition: border-color .15s;
 }
+
 .traz-input::placeholder {
 	color: var(--muted);
 	font-weight: 600;
 }
+
 .traz-input:focus {
 	outline: none;
-	box-shadow: 0 0 0 4px rgba(226,28,91,0.10);
+	box-shadow: 0 0 0 4px rgba(226, 28, 91, 0.10);
 }
+
 .traz-btn {
 	padding: 14px 28px;
 	border-radius: 14px;
@@ -524,7 +543,7 @@
 
 .traz-btn:focus {
 	outline: none;
-	box-shadow: 0 0 0 4px rgba(199,21,77,0.12);
+	box-shadow: 0 0 0 4px rgba(199, 21, 77, 0.12);
 }
 
 .traz-btn:disabled {
@@ -532,6 +551,7 @@
 	cursor: not-allowed;
 	color: #9ca3af;
 }
+
 .traz-feedback {
 	color: var(--navy);
 	font-size: 16px;
@@ -556,11 +576,13 @@
 	padding: 60px 0 80px;
 	margin-top: 40px;
 }
+
 .merch-header {
 	text-align: center;
 	margin-bottom: 50px;
 	padding: 0 16px;
 }
+
 .merch-title {
 	position: relative;
 	margin: 0 0 16px 0;
@@ -569,6 +591,7 @@
 	letter-spacing: .6px;
 	font-size: clamp(28px, 3.2vw, 42px);
 }
+
 .merch-underline {
 	position: absolute;
 	left: 12%;
@@ -579,13 +602,15 @@
 	border-radius: 999px;
 	display: block;
 }
+
 .merch-subtitle {
 	color: var(--muted);
 	font-size: 18px;
 	font-weight: 500;
 	margin: 0;
-	
+
 }
+
 .merch-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -594,28 +619,33 @@
 	margin: 0 auto;
 	padding: 0 16px;
 }
+
 .merch-card {
 	margin-top: 2em;
 	background: var(--surface);
 	border-radius: 20px;
 	overflow: hidden;
-	box-shadow: 0 8px 25px rgba(0,0,0,.08);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, .08);
 	transition: all 0.3s ease;
 	border: 1px solid var(--border);
 }
+
 .merch-image-container {
 	position: relative;
 	height: 220px;
 	overflow: hidden;
 }
+
 .merch-image {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 }
+
 .merch-info {
 	padding: 24px;
 }
+
 .merch-name {
 	color: var(--navy);
 	font-size: 20px;
@@ -623,6 +653,7 @@
 	margin: 0 0 8px 0;
 	letter-spacing: 0.3px;
 }
+
 .merch-description {
 	color: var(--muted);
 	font-size: 14px;
@@ -635,44 +666,47 @@
 	.traz-hero {
 		padding: 60px 0;
 	}
-	
+
 	.traz-hero-content {
 		grid-template-columns: 1fr;
 		gap: 40px;
 		text-align: center;
 	}
-	
+
 	.traz-hero-stats {
 		justify-content: center;
 		gap: 30px;
 	}
-	
+
 	.traz-phone-mockup {
 		width: 240px;
 		height: 420px;
 	}
-	
+
 	.traz-info-grid {
 		grid-template-columns: 1fr;
 		gap: 16px;
 	}
-	
+
 	.traz-tracking-header {
 		flex-direction: column;
 		gap: 16px;
 		text-align: center;
 	}
-	
+
 	.merch-grid {
 		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 24px;
 	}
+
 	.merch-section {
 		padding: 40px 0 60px;
 	}
+
 	.merch-header {
 		margin-bottom: 40px;
 	}
+
 	.traz-seguimiento {
 		padding: 24px 12px 16px 12px;
 	}

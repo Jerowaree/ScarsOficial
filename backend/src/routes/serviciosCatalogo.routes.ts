@@ -2,6 +2,7 @@ import { Router } from "express";
 import { prisma } from "../db/prisma";
 import { auth } from "../middlewares/auth";
 import { requirePerm } from "../middlewares/requirePerm";
+import { Prisma } from "@prisma/client";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -39,7 +40,7 @@ router.post("/", auth, requirePerm("servicio.catalogo:manage"), upload.single("m
   const codigo = `SERV${String(count + 1).padStart(3, "0")}`;
 
   const created = await prisma.servicios_catalogo.create({
-    data: { nombre, descripcion, estado, precio:parseFloat(precio) || 0, },
+    data: { nombre, descripcion, estado, precio: parseFloat(precio) || 0, },
   });
   res.status(201).json(created);
 });
@@ -65,8 +66,19 @@ router.put("/:id", auth, requirePerm("servicio.catalogo:manage"), async (req, re
 
 /* Eliminar (permiso manage) */
 router.delete("/:id", auth, requirePerm("servicio.catalogo:manage"), async (req, res) => {
-  await prisma.servicios_catalogo.delete({ where: { id_servicio: Number(req.params.id) } });
-  res.status(204).end();
+  try {
+    await prisma.servicios_catalogo.delete({ where: { id_servicio: Number(req.params.id) } });
+    res.status(204).end();
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2003") {
+      return res.status(400).json({
+        error: "FK_CONSTRAINT",
+        message: "No se puede eliminar este servicio del catálogo porque ha sido utilizado en órdenes de servicio."
+      });
+    }
+    console.error("Error deleting servicio catalogo:", error);
+    res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
 });
 
 export default router;

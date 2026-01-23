@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { Filter, Plus, Trash2, X, Clock, Edit, ArrowUpDown, Search } from "lucide-react";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import { Filter, Plus, Trash2, X, Search } from "lucide-react";
 import "./Seguimiento.css";
 import { listClientes } from "@/features/clientes/api";
 
@@ -43,7 +43,7 @@ const stripDiacritics = (s) =>
     .toLowerCase();
 
 const normalizeProceso = (value) => {
-  const target = stripDiacritics(String(value).replace(/[\-_]+/g, " ").trim());
+  const target = stripDiacritics(String(value).replace(/[-_]+/g, " ").trim());
   for (const p of PROCESOS) {
     if (stripDiacritics(p) === target) return p;
   }
@@ -51,7 +51,7 @@ const normalizeProceso = (value) => {
 };
 
 const normalizeEstado = (value) => {
-  const raw = String(value || "").replace(/[\-_]+/g, " ").trim();
+  const raw = String(value || "").replace(/[-_]+/g, " ").trim();
   const s = raw.toLowerCase();
   if (s === "en curso") return "En curso";
   if (s === "finalizado") return "Finalizado";
@@ -61,26 +61,15 @@ const normalizeEstado = (value) => {
 
 const normalizeTipo = (value) => {
   const v = String(value || "");
-  if (v === "Automovil" || v === "Autom_vil" || /autom[\-_]?vil/i.test(v)) return "Automóvil";
+  if (v === "Automovil" || v === "Autom_vil" || /autom[-_]?vil/i.test(v)) return "Automóvil";
   return v === "Moto" ? "Moto" : v;
 };
 
-const highlight = (text, q) => {
-  if (!q) return text;
-  const idx = text.toLowerCase().indexOf(q.toLowerCase());
-  if (idx === -1) return text;
-  return (
-    <>
-      {text.slice(0, idx)}
-      <mark className="mark">{text.slice(idx, idx + q.length)}</mark>
-      {text.slice(idx + q.length)}
-    </>
-  );
-};
+
 
 export default function Seguimiento() {
   const [vista, setVista] = useState("activos");
-  const [ordenDesc, setOrdenDesc] = useState(true);
+  const [ordenDesc] = useState(true);
 
   // Data stores
   const [clientesStore, setClientesStore] = useState([]);
@@ -91,15 +80,14 @@ export default function Seguimiento() {
   const [concluidos, setConcluidos] = useState([]);
 
   const [busqueda, setBusqueda] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
+  // const [showFilters, setShowFilters] = useState(false); // Unused
 
   // Columnas opcionales
-  const [colsActivos, setColsActivos] = useState(["tipo", "servicios", "proceso", "fecha", "detalles"]);
-  const [colsConcluidos, setColsConcluidos] = useState(["placa", "tipo", "fecha", "servicios", "observaciones"]);
+  const [colsActivos] = useState(["tipo", "servicios", "proceso", "fecha", "detalles"]);
+  const [colsConcluidos] = useState(["placa", "tipo", "fecha", "servicios", "observaciones"]);
 
   // Modal states
   const [showModalNuevo, setShowModalNuevo] = useState(false);
-  const [showModalEditarActivo, setShowModalEditarActivo] = useState(null);
   const [modalAviso, setModalAviso] = useState(null);
   const [toastMsg, setToastMsg] = useState(null);
 
@@ -137,12 +125,9 @@ export default function Seguimiento() {
       }
       // Cargar servicios catálogo activos
       try {
-        const token = localStorage.getItem('token');
         const res = await fetch(`${API_URL}/servicios/catalogo`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          credentials: "include",
+          headers: { 'Content-Type': 'application/json' }
         });
         const data = await res.json().catch(() => []);
         const activos = Array.isArray(data) ? data.filter(s => (s.estado || '').toLowerCase() === 'activo') : [];
@@ -152,9 +137,8 @@ export default function Seguimiento() {
       }
       // Cargar servicios activos (para acciones con ID)
       try {
-        const token = localStorage.getItem('token');
         const res = await fetch(`${API_URL}/servicios/activos`, {
-          headers: { 'Authorization': `Bearer ${token}` }
+          credentials: "include"
         });
         const rows = await res.json().catch(() => []);
         const mapped = Array.isArray(rows) ? rows.map((r) => ({
@@ -175,12 +159,12 @@ export default function Seguimiento() {
         const detalles = await Promise.all(mapped.map(async (row) => {
           try {
             const detRes = await fetch(`${API_URL}/servicios/activos/${row.id}/detalle`, {
-              headers: { 'Authorization': `Bearer ${token}` }
+              credentials: "include"
             });
             const det = await detRes.json().catch(() => []);
             const ids = Array.isArray(det) ? det.map(d => d.id_servicio) : [];
             return { id: row.id, ids };
-          } catch {
+          } catch { /* ignore */
             return { id: row.id, ids: [] };
           }
         }));
@@ -188,15 +172,14 @@ export default function Seguimiento() {
           const d = detalles.find(x => x.id === r.id);
           return d ? { ...r, servicios: d.ids } : r;
         }));
-      } catch { }
-    } catch { }
+      } catch { /* ignore */ }
+    } catch { /* ignore */ }
   }, []);
 
   const loadConcluidos = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
       const res = await fetch(`${API_URL}/servicios/concluidos`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+        credentials: "include"
       });
       const rows = await res.json().catch(() => []);
       const mapped = Array.isArray(rows) ? rows.map((r) => {
@@ -250,11 +233,7 @@ export default function Seguimiento() {
     );
   }, [clienteQuery, clientesStore]);
 
-  // Vehículo del cliente (API retorna uno opcional en c.vehiculo)
-  const vehiculoSeleccionado = useMemo(() => {
-    if (!selectedCliente) return null;
-    return selectedCliente.vehiculo || null;
-  }, [selectedCliente]);
+
 
   const activosFiltrados = useMemo(() => {
     const q = busqueda.toLowerCase();
@@ -276,7 +255,7 @@ export default function Seguimiento() {
           ? new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
           : new Date(a.fecha).getTime() - new Date(b.fecha).getTime()
       );
-  }, [activos, busqueda, ordenDesc]);
+  }, [activos, busqueda, ordenDesc, serviciosById]);
 
   const concluidosFiltrados = useMemo(() => {
     const q = busqueda.toLowerCase();
@@ -324,7 +303,6 @@ export default function Seguimiento() {
       return;
     }
     try {
-      const token = localStorage.getItem('token');
       const payload = {
         codigoCliente: String(nuevo.codigoCliente || ""),
         placa: nuevo.placa,
@@ -336,10 +314,8 @@ export default function Seguimiento() {
 
       const res = await fetch(`${API_URL}/servicios/activos`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json; charset=utf-8'
-        },
+        credentials: "include",
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       if (!res.ok) {
@@ -353,7 +329,7 @@ export default function Seguimiento() {
             const text = await res.text();
             message = text || message;
           }
-        } catch { }
+        } catch { /* ignore */ }
         throw new Error(message);
       }
       const created = await res.json();
@@ -421,9 +397,7 @@ export default function Seguimiento() {
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
-          <button type="button" className="btn-filter" onClick={() => setShowFilters(true)}>
-            <Filter size={18} /> Filtros
-          </button>
+
           {vista === "activos" && (
             <button type="button" className="btn-add" onClick={() => setShowModalNuevo(true)}>
               <Plus size={18} /> Nuevo
@@ -492,7 +466,6 @@ export default function Seguimiento() {
                           className="inline-edit"
                           onClick={async () => {
                             try {
-                              const token = localStorage.getItem('token');
                               const row = activos.find(x => x.seguimiento === s.seguimiento) || s;
                               if (!row?.id) throw new Error('ID no disponible');
                               // Optimistic update
@@ -502,15 +475,13 @@ export default function Seguimiento() {
                               setActivos(prev => prev.map(x => x.id === row.id ? { ...x, proceso: nuevoProceso, estado: nuevoEstado } : x));
                               const res = await fetch(`${API_URL}/servicios/activos/${row.id}/proceso`, {
                                 method: 'PATCH',
-                                headers: {
-                                  'Authorization': `Bearer ${token}`,
-                                  'Content-Type': 'application/json; charset=utf-8'
-                                },
+                                credentials: "include",
+                                headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ proceso: normalizeProceso(row.proceso), observaciones: row.detalles })
                               });
                               if (!res.ok) {
                                 let msg = `Error ${res.status}`;
-                                try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { }
+                                try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { /* ignore */ }
                                 // rollback
                                 setActivos(prevSnapshot);
                                 throw new Error(msg);
@@ -530,16 +501,15 @@ export default function Seguimiento() {
                         className="btn-danger"
                         onClick={async () => {
                           try {
-                            const token = localStorage.getItem('token');
                             const row = activos.find(x => x.seguimiento === s.seguimiento) || s;
                             if (!row?.id) throw new Error('ID no disponible');
                             const res = await fetch(`${API_URL}/servicios/activos/${row.id}`, {
                               method: 'DELETE',
-                              headers: { 'Authorization': `Bearer ${token}` }
+                              credentials: "include"
                             });
                             if (res.status !== 204) {
                               let msg = `Error ${res.status}`;
-                              try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { }
+                              try { const j = await res.json(); msg = j?.error || j?.message || msg; } catch { /* ignore */ }
                               throw new Error(msg);
                             }
                             setActivos(prev => prev.filter(x => x.seguimiento !== s.seguimiento));
@@ -606,10 +576,10 @@ export default function Seguimiento() {
 
             <div className="modal-content">
               <div className="form-grid">
-                <div className="form-group">
+                <div className="form-group full">
                   <label>Cliente *</label>
                   {!selectedCliente ? (
-                    <div>
+                    <div style={{ position: 'relative' }}>
                       <input
                         type="text"
                         placeholder="Buscar por nombre, correo o código..."
@@ -636,7 +606,7 @@ export default function Seguimiento() {
                 <div className="form-group">
                   <label>N° Seguimiento</label>
                   <div className="field-inline">
-                    <input type="text" value={nuevo.seguimiento} readOnly placeholder="Se generará automáticamente" />
+                    <input className="input-sm" type="text" value={nuevo.seguimiento} readOnly placeholder="Se generará automáticamente" />
                     <button className="btn-secondary" onClick={generarSeguimiento}>Generar</button>
                   </div>
                 </div>
@@ -658,7 +628,7 @@ export default function Seguimiento() {
 
                 <div className="form-group">
                   <label>Fecha *</label>
-                  <input
+                  <input className="input-sm"
                     type="date"
                     value={nuevo.fecha}
                     onChange={(e) => setNuevo(prev => ({ ...prev, fecha: e.target.value }))}

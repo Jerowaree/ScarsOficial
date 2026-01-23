@@ -4,10 +4,10 @@ import * as bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 // Contraseña plana del administrador por defecto
-const PLAIN_PASSWORD = '123456'; 
+const PLAIN_PASSWORD = '123456';
 const ADMIN_EMAIL = 'admin@scars.com';
-const ADMIN_ROL_NAME = 'ADMIN'; 
-const SALT_ROUNDS = 10; 
+const ADMIN_ROL_NAME = 'ADMIN';
+const SALT_ROUNDS = 10;
 
 async function main() {
   console.log('Iniciando Seeding de datos iniciales...');
@@ -31,7 +31,7 @@ async function main() {
   await prisma.rol_permisos.deleteMany({
     where: { id_rol: rolAdmin.id_rol }
   });
-  
+
   // Eliminar permisos que no se usan
   await prisma.permisos.deleteMany({
     where: {
@@ -44,6 +44,7 @@ async function main() {
           'solicitud:list', 'solicitud:create', 'solicitud:update',
           'auditoria:view',
           'empleado:list', 'empleado:create', 'empleado:update', 'empleado:delete',
+          'almacen:list', 'almacen:create', 'almacen:update',
           'ADMIN_FULL_ACCESS'
         ]
       }
@@ -72,6 +73,9 @@ async function main() {
     'empleado:create',
     'empleado:update',
     'empleado:delete',
+    'almacen:list',
+    'almacen:create',
+    'almacen:update',
     'ADMIN_FULL_ACCESS'
   ];
 
@@ -92,7 +96,7 @@ async function main() {
   // 4. Asignar todos los permisos al rol de Administrador
   for (const permiso of permisosCreados) {
     await prisma.rol_permisos.upsert({
-      where: { 
+      where: {
         id_rol_id_permiso: {
           id_rol: rolAdmin.id_rol,
           id_permiso: permiso.id_permiso,
@@ -111,8 +115,8 @@ async function main() {
   const adminUser = await prisma.usuarios.upsert({
     where: { correo: ADMIN_EMAIL },
     update: {
-        contrasena: hashedPassword, // Solo actualiza el hash si el usuario ya existe
-        estado: 'activo',
+      contrasena: hashedPassword, // Solo actualiza el hash si el usuario ya existe
+      estado: 'activo',
     },
     create: {
       nombre_usuario: 'Administrador Principal',
@@ -127,11 +131,11 @@ async function main() {
   // 6. Asignar el Rol de Administrador al Usuario (usando la clave compuesta)
   // La clave compuesta es @@id([id_usuario, id_rol]) en tu schema.
   await prisma.usuario_roles.upsert({
-    where: { 
-        id_usuario_id_rol: { // Esta sintaxis mapea la clave compuesta de la tabla
-            id_usuario: adminUser.id_usuario,
-            id_rol: rolAdmin.id_rol,
-        }
+    where: {
+      id_usuario_id_rol: { // Esta sintaxis mapea la clave compuesta de la tabla
+        id_usuario: adminUser.id_usuario,
+        id_rol: rolAdmin.id_rol,
+      }
     },
     update: {}, // No necesitamos actualizar nada si ya existe
     create: {
@@ -146,7 +150,6 @@ async function main() {
 main()
   .catch(async (e) => {
     console.error('❌ Error durante el seeding:', e)
-    process.exit(1)
   })
   .finally(async () => {
     await prisma.$disconnect()
