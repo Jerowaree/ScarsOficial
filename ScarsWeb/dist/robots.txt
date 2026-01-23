@@ -1,0 +1,12 @@
+# SCARS - Taller Mecánico
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://scars.com.pe/sitemap.xml
+
+# Crawl-delay para bots
+Crawl-delay: 1

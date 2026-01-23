@@ -29,16 +29,32 @@ r.get("/", auth_1.auth, (0, requirePerm_1.requirePerm)("solicitud:list"), async 
     });
     res.json(rows);
 });
-// Crear solicitud
-r.post("/", auth_1.auth, (0, requirePerm_1.requirePerm)("solicitud:create"), async (req, res) => {
-    const body = req.body;
-    // genera código tipo SOL###
-    const count = await prisma_1.prisma.solicitudes.count();
-    const codigo = `SOL${String(count + 1).padStart(3, "0")}`;
-    const created = await prisma_1.prisma.solicitudes.create({
-        data: { ...body, codigo }
-    });
-    res.status(201).json(created);
+// Crear solicitud (público, no requiere auth)
+r.post("/crear", async (req, res) => {
+    try {
+        const { nombre, correo, modelo, anio, numero, mensaje, detalle } = req.body;
+        // Validar campos requeridos según el schema
+        if (!nombre || !correo || !numero) {
+            return res.status(400).json({ error: "nombre, correo y numero (teléfono) son requeridos" });
+        }
+        const created = await prisma_1.prisma.solicitudes.create({
+            data: {
+                nombre,
+                correo,
+                modelo: modelo || null,
+                anio: anio ? Number(anio) : null,
+                numero,
+                mensaje: mensaje || detalle || null,
+                detalle: detalle || mensaje || null,
+            },
+        });
+        res.status(201).json(created);
+    }
+    catch (error) {
+        console.error("Error al crear solicitud:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        res.status(500).json({ error: "Error al crear solicitud", details: errorMessage });
+    }
 });
 // Editar solicitud (cliente, dni, numero, servicio_solicitado, detalle, estado)
 r.patch("/:id", auth_1.auth, (0, requirePerm_1.requirePerm)("solicitud:update"), async (req, res) => {

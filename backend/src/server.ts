@@ -26,7 +26,9 @@ const app = express();
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? [
     process.env.FRONTEND_URL || "https://scars.vercel.app",
-    "https://www.scars.com.pe"
+    "https://www.scars.com.pe",
+    // Allow preview deployments
+    /^https:\/\/scars.*\.vercel\.app$/
   ]
   : ["http://localhost:5173", "http://localhost:3000"];
 
