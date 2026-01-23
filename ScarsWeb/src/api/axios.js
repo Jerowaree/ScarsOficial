@@ -5,8 +5,20 @@ import { clearSession } from "@/auth/utils/session";
  * Cliente Axios configurado para usar cookies httpOnly
  * withCredentials: true permite enviar y recibir cookies automáticamente
  */
+const getBaseURL = () => {
+  const url = import.meta.env.VITE_API_URL;
+  if (!url) return "http://localhost:4000/api";
+
+  // Si no empieza con http, es probable que se haya configurado mal en Vercel
+  // y el navegador lo trate como ruta relativa. Forzamos https.
+  if (!url.startsWith("http") && !url.includes("localhost")) {
+    return `https://${url}`;
+  }
+  return url;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000/api",
+  baseURL: getBaseURL(),
   withCredentials: true, // ✅ Enviar cookies automáticamente
   timeout: 15000,
 });
