@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useSEO } from "./hooks/useSEO";
 
 import Header from "./components/header/header.jsx";
-import Footer from "./components/footer/Footer.jsx";
+import Footer from "./components/footer/footer.jsx";
 import Chatbot from "./components/Chatbot/Chatbot.jsx";
 
 import Hero from "./components/Hero/Hero.jsx";
@@ -34,7 +34,7 @@ function Layout() {
 function Home() {
   const { hash } = useLocation();
   useSEO("home");
-  
+
   useEffect(() => {
     if (!hash) return;
     const id = hash.slice(1);
