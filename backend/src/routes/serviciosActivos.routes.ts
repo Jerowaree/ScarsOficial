@@ -31,7 +31,7 @@ const PROCESOS_ENUM_IDS: servicios_activos_proceso[] = [
   'Entrega_del_veh_culo',
   'Cierre_del_servicio',
 ];
-const norm = (s: string) => String(s||"")
+const norm = (s: string) => String(s || "")
   .normalize('NFD')
   .replace(/[\u0300-\u036f]/g, '')
   .replace(/[\-_]+/g, ' ')
@@ -39,7 +39,7 @@ const norm = (s: string) => String(s||"")
   .toLowerCase();
 const toProcesoEnum = (input: string): servicios_activos_proceso => {
   const t = norm(input);
-  for (let i=0; i<PROCESOS_LABELS.length; i++) {
+  for (let i = 0; i < PROCESOS_LABELS.length; i++) {
     if (norm(PROCESOS_LABELS[i]) === t) return PROCESOS_ENUM_IDS[i];
   }
   // Permitir que ya venga en enum id
@@ -79,7 +79,7 @@ r.get("/:id/detalle", auth, requirePerm("servicio.activo:list"), async (req, res
 r.post("/", auth, requirePerm("servicio.activo:create"), async (req, res) => {
   const { codigoCliente, placa, tipo: tipoFrontend, fecha, serviciosIds, observaciones } = req.body as any;
 
-  const cliente = await prisma.clientes.findUnique({ where: { codigo: codigoCliente }});
+  const cliente = await prisma.clientes.findUnique({ where: { codigo: codigoCliente } });
   if (!cliente) return res.status(400).json({ error: "CLIENTE_NO_EXISTE" });
 
   const vehiculo = await prisma.vehiculos.findFirst({
@@ -102,7 +102,7 @@ r.post("/", auth, requirePerm("servicio.activo:create"), async (req, res) => {
   if (!fechaDate) return res.status(400).json({ error: "FECHA_INVALIDA" });
 
   // Usar tipo del frontend si se proporciona, sino del vehículo
-  const tipoFinal = tipoFrontend === "Automóvil" ? "Autom_vil" : tipoFrontend === "Moto" ? "Moto" : vehiculo.tipo;
+  const tipoFinal = tipoFrontend === "Automóvil" ? "Automovil" : tipoFrontend === "Moto" ? "Moto" : vehiculo.tipo;
 
   const activo = await prisma.servicios_activos.create({
     data: {
@@ -144,17 +144,17 @@ r.patch("/:id/proceso", auth, requirePerm("servicio.activo:update"), async (req,
   const enumValue = toProcesoEnum(proceso);
   const fin = enumValue === 'Cierre_del_servicio';
 
- const updated = await prisma.servicios_activos.update({
-  where: {
-    id_servicio_activo: Number(id)
-  },
-  data: {
-    proceso: enumValue,
-    estado: fin ? 'Finalizado' : 'En_curso',
-    observaciones: observaciones ?? null,
-    updated_by: (req as any).user?.uid
-  }
-});
+  const updated = await prisma.servicios_activos.update({
+    where: {
+      id_servicio_activo: Number(id)
+    },
+    data: {
+      proceso: enumValue,
+      estado: fin ? 'Finalizado' : 'En_curso',
+      observaciones: observaciones ?? null,
+      updated_by: (req as any).user?.uid
+    }
+  });
 
   if (fin) {
     // 1) ids de servicios del detalle
@@ -182,8 +182,8 @@ r.patch("/:id/proceso", auth, requirePerm("servicio.activo:update"), async (req,
         observaciones: updated.observaciones ?? undefined,
       }
     });
-    await prisma.detalle_servicio_activo.deleteMany({ where: { id_servicio_activo: id }});
-    await prisma.servicios_activos.delete({ where: { id_servicio_activo: id }});
+    await prisma.detalle_servicio_activo.deleteMany({ where: { id_servicio_activo: id } });
+    await prisma.servicios_activos.delete({ where: { id_servicio_activo: id } });
   }
 
   res.json({ ok: true });

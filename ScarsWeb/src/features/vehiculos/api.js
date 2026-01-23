@@ -3,13 +3,13 @@ import api from "@/api/axios";
 import { ENDPOINTS } from "@/api/endpoints";
 
 // helpers de mapeo entre UI <-> DB
-const toDBTipo = (t) => (t === "Automóvil" ? "Autom_vil" : "Moto");
-const fromDBTipo = (t) => (t === "Autom_vil" ? "Automóvil" : "Moto");
+const toDBTipo = (t) => (t === "Automóvil" ? "Automovil" : "Moto");
+const fromDBTipo = (t) => (t === "Automovil" ? "Automóvil" : "Moto");
 
 /** 🔹 Listar vehículos (q opcional) */
 export async function listVehiculos(q) {
   const res = await api.get(ENDPOINTS.vehiculos, { params: { q } });
-  // Backend devuelve tipo como Autom_vil | Moto → mapear a "Automóvil" | "Moto"
+  // Backend devuelve tipo como Automovil | Moto → mapear a "Automóvil" | "Moto"
   return res.data.map((v) => ({
     id_vehiculo: v.id_vehiculo,
     id_cliente: v.id_cliente,
@@ -18,7 +18,7 @@ export async function listVehiculos(q) {
     marca: v.marca ?? null,
     modelo: v.modelo ?? null,
     color: v.color ?? null,
-    ano: v.anio ?? null, // Mapear anio -> ano para el frontend
+    anio: v.anio ?? null,
     observaciones: v.observaciones ?? null,
   }));
 }
@@ -27,7 +27,7 @@ export async function listVehiculos(q) {
 export async function createVehiculo(data) {
   const payload = {
     ...data,
-    anio: data.ano === "" ? null : (data.ano != null ? Number(data.ano) : null), // Mapear ano -> anio para el backend
+    anio: data.anio === "" ? null : (data.anio != null ? Number(data.anio) : null),
     tipo: toDBTipo(data.tipo),
   };
   const res = await api.post(ENDPOINTS.vehiculos, payload);
@@ -40,7 +40,7 @@ export async function createVehiculo(data) {
     marca: v.marca ?? null,
     modelo: v.modelo ?? null,
     color: v.color ?? null,
-    ano: v.anio ?? null, // Mapear anio -> ano para el frontend
+    anio: v.anio ?? null,
     observaciones: v.observaciones ?? null,
   };
 }
@@ -49,9 +49,8 @@ export async function createVehiculo(data) {
 export async function updateVehiculo(id, data) {
   const send = { ...data };
   if (send.tipo) send.tipo = toDBTipo(send.tipo);
-  if ("ano" in send) {
-    send.anio = send.ano === "" ? null : (send.ano != null ? Number(send.ano) : null); // Mapear ano -> anio
-    delete send.ano; // Eliminar el campo incorrecto
+  if ("anio" in send) {
+    send.anio = send.anio === "" ? null : (send.anio != null ? Number(send.anio) : null);
   }
   const res = await api.put(`${ENDPOINTS.vehiculos}/${id}`, send);
   const v = res.data;
@@ -63,7 +62,7 @@ export async function updateVehiculo(id, data) {
     marca: v.marca ?? null,
     modelo: v.modelo ?? null,
     color: v.color ?? null,
-    ano: v.anio ?? null, // Mapear anio -> ano para el frontend
+    anio: v.anio ?? null,
     observaciones: v.observaciones ?? null,
   };
 }

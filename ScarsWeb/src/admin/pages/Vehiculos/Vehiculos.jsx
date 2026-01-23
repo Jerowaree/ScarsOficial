@@ -52,7 +52,7 @@ export default function Vehiculos() {
     tipo: "Automóvil",
     marca: "",
     modelo: "",
-    ano: "",
+    anio: "",
     color: "",
     id_cliente: "",
   });
@@ -91,7 +91,7 @@ export default function Vehiculos() {
       tipo: "Automóvil",
       marca: "",
       modelo: "",
-      ano: "",
+      anio: "",
       color: "",
       id_cliente: "",
     });
@@ -114,7 +114,6 @@ export default function Vehiculos() {
     try {
       const payload = {
         ...formData,
-        tipo: formData.tipo === "Automóvil" ? "Autom_vil" : "Moto",
       };
 
       if (editingId) {
@@ -124,7 +123,7 @@ export default function Vehiculos() {
         await createVehiculo(payload);
         show("Vehículo creado correctamente", "ok");
       }
-      
+
       await loadData();
       resetForm();
     } catch (error) {
@@ -136,10 +135,10 @@ export default function Vehiculos() {
   const handleEdit = (vehiculo) => {
     setFormData({
       placa: vehiculo.placa || "",
-      tipo: vehiculo.tipo === "Autom_vil" ? "Automóvil" : "Moto",
+      tipo: vehiculo.tipo || "Automóvil",
       marca: vehiculo.marca || "",
       modelo: vehiculo.modelo || "",
-      ano: vehiculo.ano || "",
+      anio: vehiculo.anio || "",
       color: vehiculo.color || "",
       id_cliente: vehiculo.id_cliente || "",
     });
@@ -164,15 +163,13 @@ export default function Vehiculos() {
   const filteredVehiculos = useMemo(() => {
     return vehiculos.filter(vehiculo => {
       const searchLower = search.toLowerCase();
-      const matchesSearch = !search || 
+      const matchesSearch = !search ||
         vehiculo.placa?.toLowerCase().includes(searchLower) ||
         vehiculo.marca?.toLowerCase().includes(searchLower) ||
         vehiculo.modelo?.toLowerCase().includes(searchLower) ||
         vehiculo.color?.toLowerCase().includes(searchLower);
 
-      const matchesTipo = !filters.tipo ||
-        (filters.tipo === "Automóvil" && vehiculo.tipo === "Autom_vil") ||
-        (filters.tipo === "Moto" && vehiculo.tipo === "Moto");
+      const matchesTipo = !filters.tipo || vehiculo.tipo === filters.tipo;
 
       const matchesCliente = filters.tieneCliente === "" ||
         (filters.tieneCliente === "si" && vehiculo.id_cliente) ||
@@ -190,7 +187,7 @@ export default function Vehiculos() {
   return (
     <div className="vehiculos-container">
       {toastNode}
-      
+
       <div className="vehiculos-header">
         <h1>Gestión de Vehículos</h1>
         <button className="btn-primary" onClick={showNewForm}>
@@ -210,7 +207,7 @@ export default function Vehiculos() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <button 
+        <button
           className={`btn-filter ${showFilters ? 'active' : ''}`}
           onClick={() => setShowFilters(!showFilters)}
         >
@@ -223,8 +220,8 @@ export default function Vehiculos() {
         <div className="filters-panel">
           <div className="filter-group">
             <label>Tipo:</label>
-            <select 
-              value={filters.tipo} 
+            <select
+              value={filters.tipo}
               onChange={(e) => setFilters(prev => ({ ...prev, tipo: e.target.value }))}
             >
               <option value="">Todos</option>
@@ -234,8 +231,8 @@ export default function Vehiculos() {
           </div>
           <div className="filter-group">
             <label>Asignado a cliente:</label>
-            <select 
-              value={filters.tieneCliente} 
+            <select
+              value={filters.tieneCliente}
               onChange={(e) => setFilters(prev => ({ ...prev, tieneCliente: e.target.value }))}
             >
               <option value="">Todos</option>
@@ -255,7 +252,7 @@ export default function Vehiculos() {
               <X size={20} />
             </button>
           </div>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-row">
@@ -310,8 +307,8 @@ export default function Vehiculos() {
                   <label>Año:</label>
                   <input
                     type="text"
-                    name="ano"
-                    value={formData.ano}
+                    name="anio"
+                    value={formData.anio}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -379,21 +376,21 @@ export default function Vehiculos() {
               {filteredVehiculos.map(vehiculo => (
                 <tr key={vehiculo.id_vehiculo}>
                   <td className="placa-cell">{vehiculo.placa}</td>
-                  <td>{vehiculo.tipo === "Autom_vil" ? "Automóvil" : "Moto"}</td>
+                  <td>{vehiculo.tipo}</td>
                   <td>{vehiculo.marca}</td>
                   <td>{vehiculo.modelo}</td>
-                  <td>{vehiculo.ano}</td>
+                  <td>{vehiculo.anio}</td>
                   <td>{vehiculo.color}</td>
                   <td>{getClienteNombre(vehiculo.id_cliente)}</td>
                   <td>
                     <div className="action-buttons">
-                      <button 
+                      <button
                         className="btn-edit"
                         onClick={() => handleEdit(vehiculo)}
                       >
                         <Edit size={16} />
                       </button>
-                      <button 
+                      <button
                         className="btn-delete"
                         onClick={() => setDeletingId(vehiculo.id_vehiculo)}
                       >
@@ -406,7 +403,7 @@ export default function Vehiculos() {
             </tbody>
           </table>
         )}
-        
+
         {!loading && filteredVehiculos.length === 0 && (
           <div className="no-data">
             No se encontraron vehículos
@@ -421,13 +418,13 @@ export default function Vehiculos() {
             <h3>Confirmar Eliminación</h3>
             <p>¿Está seguro que desea eliminar este vehículo? Esta acción no se puede deshacer.</p>
             <div className="modal-actions">
-              <button 
+              <button
                 className="btn-secondary"
                 onClick={() => setDeletingId(null)}
               >
                 Cancelar
               </button>
-              <button 
+              <button
                 className="btn-danger"
                 onClick={handleDelete}
               >

@@ -15,8 +15,34 @@ import empleadosRoutes from "./routes/empleados.routes";
 import seguimientoRoutes from "./routes/seguimiento.routes";
 import chatbotRoutes from "./routes/chatbot.routes";
 
+import helmet from "helmet";
+import { rateLimit } from "express-rate-limit";
+
 const app = express();
-app.use(cors());
+
+// 1. Restricted CORS (Debe ir primero para manejar preflight OPTIONS)
+app.use(cors({
+  origin: ["http://localhost:5173", "http://localhost:3000"], // Tu frontend
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
+
+// 2. Security Headers
+app.use(helmet());
+
+// 3. Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 500, // Increased limit for development/hot-reloading
+  message: {
+    status: 429,
+    message: "Demasiadas peticiones desde esta IP, por favor intente de nuevo más tarde."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
+
 app.use(express.json());
 app.use("/uploads", express.static(path.resolve(process.env.UPLOAD_DIR || "./uploads")));
 
@@ -35,4 +61,3 @@ app.use("/api/chatbot", chatbotRoutes);
 app.listen(process.env.PORT || 4000, () =>
   console.log(`API on :${process.env.PORT || 4000}`)
 );
-  

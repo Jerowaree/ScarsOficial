@@ -20,7 +20,7 @@ const mapGeneroToDB = (g) =>
 const mapGeneroFromDB = (g) =>
   !g ? "" : g === "No_especificado" ? "No especificado" : g;
 
-const vehTipoUItoDB = (t) => (t === "Automóvil" ? "Autom_vil" : "Moto");
+const vehTipoUItoDB = (t) => (t === "Automóvil" ? "Automovil" : "Moto");
 
 /** yyyy-mm-dd desde Date/ISO/"" */
 const toInputDate = (v) => {
@@ -171,17 +171,17 @@ export default function Clientes() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validación básica
     if (!formData.nombres || !formData.apellidos) {
       alert("Los campos Nombres y Apellidos son obligatorios");
       return;
     }
-    
+
     try {
       // Separar datos del cliente y del vehículo
-      const fechaNacimiento = formData.fecha_nacimiento ? 
-        new Date(formData.fecha_nacimiento + 'T00:00:00.000Z').toISOString() : 
+      const fechaNacimiento = formData.fecha_nacimiento ?
+        new Date(formData.fecha_nacimiento + 'T00:00:00.000Z').toISOString() :
         null;
 
       console.log("Fecha original:", formData.fecha_nacimiento);
@@ -202,11 +202,11 @@ export default function Clientes() {
       };
 
       // Verificar si hay datos del vehículo
-      const hasVehicleData = formData.vehiculo_placa || 
-                            formData.vehiculo_marca || 
-                            formData.vehiculo_modelo || 
-                            formData.vehiculo_ano || 
-                            formData.vehiculo_color;
+      const hasVehicleData = formData.vehiculo_placa ||
+        formData.vehiculo_marca ||
+        formData.vehiculo_modelo ||
+        formData.vehiculo_ano ||
+        formData.vehiculo_color;
 
       const vehiculoData = hasVehicleData ? {
         placa: formData.vehiculo_placa || null,
@@ -225,7 +225,7 @@ export default function Clientes() {
       console.log("vehiculo_ano:", formData.vehiculo_ano);
       console.log("vehiculo_color:", formData.vehiculo_color);
       console.log("hasVehicleData:", hasVehicleData);
-      
+
       console.log("=== VEHICULO DATA CONSTRUIDO ===");
       console.log("vehiculoData:", vehiculoData);
 
@@ -239,47 +239,30 @@ export default function Clientes() {
 
       if (editingId) {
         // Modo edición - actualizar cliente y vehículo
-        try {
-          console.log("Actualizando cliente con vehículo...");
-          await updateClienteWithVehiculo(editingId, payload);
-          console.log("Cliente y vehículo actualizados correctamente");
-          alert("Cliente y vehículo actualizados correctamente");
-        } catch (apiError) {
-          console.warn("API no disponible, simulando actualización:", apiError);
-          alert("Cliente actualizado correctamente (modo demo)");
-        }
+        await updateClienteWithVehiculo(editingId, payload);
+        alert("Cliente y vehículo actualizados correctamente");
       } else {
         // Modo creación - usar estructura completa
-        try {
-          const result = await createClienteWithVehiculo(payload);
-          console.log("Cliente creado correctamente:", result);
-          alert("Cliente creado correctamente");
-        } catch (apiError) {
-          console.warn("API no disponible, simulando creación:", apiError);
-          // Simular creación local
-          const newClient = {
-            id_cliente: Date.now(),
-            ...clienteData,
-            vehiculo: vehiculoData
-          };
-          setClientes(prev => [...prev, newClient]);
-          alert("Cliente creado correctamente (modo demo)");
-        }
+        const result = await createClienteWithVehiculo(payload);
+        console.log("Cliente creado correctamente:", result);
+        alert("Cliente creado correctamente");
       }
-      
-      // Intentar recargar datos del servidor, si falla usar datos locales
-      try {
-        console.log("Recargando datos después de guardar...");
-        await loadClientes();
-        console.log("Datos recargados exitosamente");
-      } catch (loadError) {
-        console.warn("No se pudieron cargar los datos del servidor:", loadError);
-      }
-      
-      resetForm(); // Esto ocultará el formulario después de guardar
+
+      await loadClientes();
+      resetForm();
     } catch (error) {
-      console.error("Error completo:", error);
-      alert("Error inesperado: " + error.message);
+      console.error("Error al guardar cliente:", error);
+
+      // Manejar errores de validación de Zod
+      if (error.response?.data?.error === "VALIDATION_ERROR") {
+        const details = error.response.data.details;
+        const messages = details.map(d => `${d.path.join('.')}: ${d.message}`).join("\n");
+        alert("Error de validación:\n" + messages);
+      } else if (error.response?.data?.error === "DUPLICATE_ERROR") {
+        alert("Dato duplicado: " + error.response.data.message);
+      } else {
+        alert("Error al procesar la solicitud: " + (error.response?.data?.message || error.message));
+      }
     }
   };
 
@@ -302,7 +285,7 @@ export default function Clientes() {
       genero: mapGeneroFromDB(cliente.genero) || "No especificado",
       fecha_nacimiento: toInputDate(cliente.fecha_nacimiento) || "",
       vehiculo_placa: cliente.vehiculo?.placa || "",
-      vehiculo_tipo: cliente.vehiculo?.tipo === "Autom_vil" ? "Automóvil" : "Moto",
+      vehiculo_tipo: cliente.vehiculo?.tipo === "Automovil" || cliente.vehiculo?.tipo === "Autom_vil" ? "Automóvil" : "Moto",
       vehiculo_marca: cliente.vehiculo?.marca || "",
       vehiculo_modelo: cliente.vehiculo?.modelo || "",
       vehiculo_ano: cliente.vehiculo?.anio || "", // Cambié 'ano' por 'anio'
@@ -311,7 +294,7 @@ export default function Clientes() {
 
     console.log("=== DATOS DEL FORMULARIO DESPUÉS DE SETEAR ===");
     console.log("vehiculo_placa:", cliente.vehiculo?.placa || "");
-    console.log("vehiculo_tipo:", cliente.vehiculo?.tipo === "Autom_vil" ? "Automóvil" : "Moto");
+    console.log("vehiculo_tipo:", (cliente.vehiculo?.tipo === "Automovil" || cliente.vehiculo?.tipo === "Autom_vil") ? "Automóvil" : "Moto");
     console.log("vehiculo_marca:", cliente.vehiculo?.marca || "");
     console.log("vehiculo_modelo:", cliente.vehiculo?.modelo || "");
     console.log("vehiculo_ano:", cliente.vehiculo?.anio || "");
@@ -337,7 +320,7 @@ export default function Clientes() {
     return clientes.filter(cliente => {
       // Search filter
       const searchLower = search.toLowerCase();
-      const matchesSearch = !search || 
+      const matchesSearch = !search ||
         cliente.nombres?.toLowerCase().includes(searchLower) ||
         cliente.apellidos?.toLowerCase().includes(searchLower) ||
         cliente.dni?.toLowerCase().includes(searchLower) ||
@@ -345,12 +328,12 @@ export default function Clientes() {
         cliente.codigo?.toLowerCase().includes(searchLower);
 
       // Gender filter
-      const matchesGender = !filters.genero || 
+      const matchesGender = !filters.genero ||
         mapGeneroFromDB(cliente.genero) === filters.genero;
 
       // Vehicle type filter
       const matchesVehicleType = !filters.tipoVehiculo ||
-        (cliente.vehiculo?.tipo === "Autom_vil" && filters.tipoVehiculo === "Automóvil") ||
+        ((cliente.vehiculo?.tipo === "Automovil" || cliente.vehiculo?.tipo === "Autom_vil") && filters.tipoVehiculo === "Automóvil") ||
         (cliente.vehiculo?.tipo === "Moto" && filters.tipoVehiculo === "Moto");
 
       // Has vehicle filter
@@ -384,7 +367,7 @@ export default function Clientes() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <button 
+        <button
           className={`btn-filter ${showFilters ? 'active' : ''}`}
           onClick={() => setShowFilters(!showFilters)}
         >
@@ -397,8 +380,8 @@ export default function Clientes() {
         <div className="filters-panel">
           <div className="filter-group">
             <label>Género:</label>
-            <select 
-              value={filters.genero} 
+            <select
+              value={filters.genero}
               onChange={(e) => setFilters(prev => ({ ...prev, genero: e.target.value }))}
             >
               <option value="">Todos</option>
@@ -409,8 +392,8 @@ export default function Clientes() {
           </div>
           <div className="filter-group">
             <label>Tipo Vehículo:</label>
-            <select 
-              value={filters.tipoVehiculo} 
+            <select
+              value={filters.tipoVehiculo}
               onChange={(e) => setFilters(prev => ({ ...prev, tipoVehiculo: e.target.value }))}
             >
               <option value="">Todos</option>
@@ -421,8 +404,8 @@ export default function Clientes() {
           </div>
           <div className="filter-group">
             <label>Tiene Vehículo:</label>
-            <select 
-              value={filters.tieneVehiculo} 
+            <select
+              value={filters.tieneVehiculo}
               onChange={(e) => setFilters(prev => ({ ...prev, tieneVehiculo: e.target.value }))}
             >
               <option value="">Todos</option>
@@ -442,7 +425,7 @@ export default function Clientes() {
               <X size={20} />
             </button>
           </div>
-          
+
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
               <div className="form-section">
@@ -470,7 +453,7 @@ export default function Clientes() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="form-row">
                   <div className="form-group">
                     <label>Nombres:</label>
@@ -666,7 +649,7 @@ export default function Clientes() {
                         <div className="vehiculo-info">
                           <CarFront size={16} />
                           <span>{cliente.vehiculo.placa}</span>
-                          <small>{cliente.vehiculo.tipo === "Autom_vil" ? "Automóvil" : "Moto"}</small>
+                          <small>{(cliente.vehiculo.tipo === "Automovil" || cliente.vehiculo.tipo === "Autom_vil") ? "Automóvil" : "Moto"}</small>
                         </div>
                       ) : (
                         <span className="no-vehiculo">Sin vehículo</span>
@@ -675,13 +658,13 @@ export default function Clientes() {
                   </td>
                   <td>
                     <div className="action-buttons">
-                      <button 
+                      <button
                         className="btn-edit"
                         onClick={() => handleEdit(cliente)}
                       >
                         <Edit size={16} />
                       </button>
-                      <button 
+                      <button
                         className="btn-delete"
                         onClick={() => setDeletingId(cliente.id_cliente)}
                       >
@@ -694,7 +677,7 @@ export default function Clientes() {
             </tbody>
           </table>
         )}
-        
+
         {!loading && filteredClientes.length === 0 && (
           <div className="no-data">
             No se encontraron clientes
@@ -709,13 +692,13 @@ export default function Clientes() {
             <h3>Confirmar Eliminación</h3>
             <p>¿Está seguro que desea eliminar este cliente? Esta acción no se puede deshacer.</p>
             <div className="modal-actions">
-              <button 
+              <button
                 className="btn-secondary"
                 onClick={() => setDeletingId(null)}
               >
                 Cancelar
               </button>
-              <button 
+              <button
                 className="btn-danger"
                 onClick={handleDelete}
               >
