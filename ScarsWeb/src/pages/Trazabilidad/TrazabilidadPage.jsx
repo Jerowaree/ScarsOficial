@@ -9,7 +9,7 @@ import g5 from "../../assets/galeria/GorraScars.jpg";
 import g3 from "../../assets/galeria/polo2.jpg";
 import g4 from "../../assets/galeria/fotitoscars.png";
 import g2 from "../../assets/galeria/chompabuzo1.jpg";
-import g6 from "../../assets/galeria/LlaveroScars1.png";
+import g6 from "../../assets/galeria/Llaveroscars1.png";
 
 // Datos de merchandising (puedes reemplazar con imágenes reales)
 const MERCHANDISING_DATA = [
