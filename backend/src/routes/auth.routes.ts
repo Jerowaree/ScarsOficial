@@ -100,8 +100,8 @@ router.post("/login", async (req, res) => {
     // Enviar token en cookie httpOnly (protección contra XSS)
     res.cookie('auth_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true, // Siempre true para 'none'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' permite cross-site cookies
       maxAge: 2 * 60 * 60 * 1000
     });
 
@@ -123,8 +123,8 @@ router.post("/login", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.clearCookie('auth_token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict'
+    secure: true,
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   });
   return res.json({ success: true, message: "Sesión cerrada" });
 });
