@@ -1,12 +1,18 @@
 # SCARS - Taller Mecánico
+# https://scars.com.pe
 
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
+Disallow: /private/
+Disallow: /*?* # Bloquear parámetros de búsqueda innecesarios para evitar contenido duplicado
+
+# Host
+Host: https://scars.com.pe
 
 # Sitemap
 Sitemap: https://scars.com.pe/sitemap.xml
 
-# Crawl-delay para bots
+# Crawl-delay para bots que respetan esta directiva
 Crawl-delay: 1

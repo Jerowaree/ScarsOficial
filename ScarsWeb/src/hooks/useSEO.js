@@ -6,9 +6,9 @@ const DEFAULT_IMAGE = `${SITE_URL}/logo_scars.png`;
 
 const SEO_CONFIG = {
   home: {
-    title: "SCARS | Taller Mecánico Especializado en Pintura Automotriz | Piura",
-    description: "SCARS es un taller mecánico especializado en pintura automotriz, reparación y mantenimiento de vehículos en Piura. Servicios profesionales con años de experiencia.",
-    keywords: "taller mecánico, pintura automotriz, reparación de autos, mantenimiento vehicular, Piura, SCARS, taller automotriz",
+    title: "SCARS | Taller Mecánico Especializado en Sector Automotriz | Piura",
+    description: "SCARS es un taller mecánico especializado en sector automotriz, reparación y mantenimiento de vehículos en Piura. Servicios profesionales con años de experiencia.",
+    keywords: "taller mecánico, sector automotriz, reparación de autos, mantenimiento vehicular, Piura, SCARS, taller automotriz",
     image: DEFAULT_IMAGE,
     type: "website",
   },
@@ -21,7 +21,7 @@ const SEO_CONFIG = {
   },
   contacto: {
     title: "Contacto | SCARS Taller Mecánico - Piura",
-    description: "Contáctanos en SCARS. Estamos ubicados en Piura. Solicita tu presupuesto para servicios de pintura automotriz, reparación y mantenimiento.",
+    description: "Contáctanos en SCARS. Estamos ubicados en Piura. Solicita tu presupuesto para servicios de sector automotriz, reparación y mantenimiento.",
     keywords: "contacto SCARS, taller mecánico Piura, presupuesto, dirección, teléfono",
     image: DEFAULT_IMAGE,
     type: "website",
@@ -103,7 +103,7 @@ function updateStructuredData(meta, pathname) {
     "@type": "AutoRepair",
     "name": "SCARS",
     "alternateName": "SCARS Taller Mecánico",
-    "description": "Taller mecánico especializado en pintura automotriz, reparación y mantenimiento de vehículos",
+    "description": "Taller mecánico especializado en sector automotriz, reparación y mantenimiento de vehículos",
     "url": SITE_URL,
     "logo": `${SITE_URL}/logo_scars.png`,
     "image": meta.image,
@@ -118,7 +118,7 @@ function updateStructuredData(meta, pathname) {
       "name": "Piura"
     },
     "serviceType": [
-      "Pintura Automotriz",
+      "Sector Automotriz",
       "Reparación de Vehículos",
       "Mantenimiento Automotriz"
     ],
