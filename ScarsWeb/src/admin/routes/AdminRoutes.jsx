@@ -9,6 +9,7 @@ import Seguimiento from "@/admin/pages/Seguimiento/Seguimiento";
 import Servicios from "@/admin/pages/Servicios/Servicios";
 import Perfil from "@/admin/pages/Perfil/Perfil";
 import Sidebar from "@/admin/components/Sidebar/Sidebar";
+import ProtectedRoute from "@/auth/components/ProtectedRoute";
 import "./DashboardLayout.css";
 
 function DashboardLayout() {
@@ -29,14 +30,18 @@ export default function AdminRoutes() {
       <Route path="login" element={<AdminLogin />} />
 
       {/* Layout principal */}
-      <Route path="dashboard" element={<DashboardLayout />}>
+      <Route path="dashboard" element={
+        <ProtectedRoute>
+          <DashboardLayout />
+        </ProtectedRoute>
+      }>
         <Route index element={<Dashboard />} />
         <Route path="clientes" element={<Clientes />} />
         <Route path="vehiculos" element={<Vehiculos />} />
         <Route path="empleados" element={<Empleados />} />
         <Route path="solicitudes" element={<SolicitudesPage />} />
         <Route path="seguimiento" element={<Seguimiento />} />
-        <Route path="servicios" element={<Servicios/>} />
+        <Route path="servicios" element={<Servicios />} />
         <Route path="perfil" element={<Perfil />} />
       </Route>
 
