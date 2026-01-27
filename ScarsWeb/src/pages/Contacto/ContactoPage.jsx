@@ -14,7 +14,7 @@ import toyota from "../../assets/galeria/toyota.svg";
 export default function ContactoPage() {
   useSEO("contacto");
 
-  const [state, handleSubmit] = useForm("xykwdwyz");
+  const [state, handleSubmit] = useForm("mqeqdojn");
 
   // Carrusel infinito verdadero con animación CSS
   const carruselRef = useRef(null);
