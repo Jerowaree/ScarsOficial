@@ -27,7 +27,7 @@ export default function Footer() {
           {/* Col 3: Contáctanos (separador rosa a la izquierda) */}
           <div className="footer-col footer-contact">
             <h4>CONTÁCTANOS</h4>
-            <a href="#" rel="noreferrer">scarsoficial@gmail.com</a><br />
+            <a href="#" rel="noreferrer">hola.scars@gmail.com</a><br />
             <a href="tel:956264937" rel="noreferrer">956 264 937</a>
           </div>
 
