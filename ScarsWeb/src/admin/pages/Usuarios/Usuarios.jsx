@@ -177,7 +177,7 @@ export default function Usuarios() {
                                     required
                                     value={formData.correo}
                                     onChange={(e) => setFormData({ ...formData, correo: e.target.value })}
-                                    placeholder="admin@scars.com.pe"
+                                    placeholder="admin@scarsperu.com"
                                 />
                             </div>
                             <div className="form-group">
