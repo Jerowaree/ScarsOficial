@@ -570,6 +570,15 @@
 	display: inline-block;
 }
 
+.traz-success {
+	color: #059669;
+	background-color: #ecfdf5;
+	padding: 12px 20px;
+	border-radius: 8px;
+	border: 1px solid #a7f3d0;
+	display: inline-block;
+}
+
 /* Sección de Merchandising */
 .merch-section {
 	background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);

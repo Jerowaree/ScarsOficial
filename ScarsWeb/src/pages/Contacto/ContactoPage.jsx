@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useForm, ValidationError } from '@formspree/react';
 import "./ContactoPage.css";
-import { enviarSolicitudContacto } from "../../features/contacto/api";
 import { useSEO } from "../../hooks/useSEO";
-
 
 // Importar logos de marcas de autos
 import chevrolet from "../../assets/galeria/chevrolet.png";
@@ -12,18 +11,14 @@ import nissan from "../../assets/galeria/nissan.jpg";
 import suzuki from "../../assets/galeria/suzuki.png";
 import toyota from "../../assets/galeria/toyota.svg";
 
-export default function ContactoPage(){
+export default function ContactoPage() {
   useSEO("contacto");
-  
-  const [form, setForm] = useState({
-    nombre: "", modelo: "", anio: "", correo: "", telefono: "", mensaje: ""
-  });
-  const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null);
+
+  const [state, handleSubmit] = useForm("xykwdwyz");
 
   // Carrusel infinito verdadero con animación CSS
   const carruselRef = useRef(null);
-  
+
   const images = [
     chevrolet,
     ford,
@@ -43,212 +38,160 @@ export default function ContactoPage(){
     }
   }, []);
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const req = ["nombre","modelo","anio","correo","telefono","mensaje"];
-    for (const k of req) {
-      if (!String(form[k]).trim()) {
-        showToast("Por favor, completa todos los campos marcados con *", 'error');
-        return;
-      }
-    }
-    setLoading(true);
-    try {
-      const datosParaEnviar = {
-        ...form,
-        tipo: 'Contacto General' // Clasificamos la solicitud
-      };
-      await enviarSolicitudContacto(datosParaEnviar);
-      showToast("¡Gracias! Hemos recibido tu solicitud. Nos pondremos en contacto contigo pronto.", 'success');
-      setForm({ nombre:"", modelo:"", anio:"", correo:"", telefono:"", mensaje:"" });
-    } catch (error) {
-      console.error("Error al enviar la solicitud de contacto:", error);
-      const errorMsg = error?.response?.data?.error || error?.message || "Hubo un error al enviar tu solicitud. Por favor, inténtalo de nuevo más tarde.";
-      showToast(errorMsg, 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (state.succeeded) {
+    return (
+      <div className="ct-success-view" style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'var(--navy)',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '20px'
+      }}>
+        <h1 style={{ fontSize: '3rem', marginBottom: '20px' }}>¡Gracias!</h1>
+        <p style={{ fontSize: '1.2rem', maxWidth: '600px' }}>
+          Hemos recibido tu solicitud. Nuestro equipo se pondrá en contacto contigo lo antes posible para atender tu consulta sobre tu vehículo.
+        </p>
+        <button
+          className="ct-btn"
+          style={{ marginTop: '30px' }}
+          onClick={() => window.location.reload()}
+        >
+          VOLVER AL FORMULARIO
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* Toast Notification */}
-      {toast && (
-        <div className={`ct-toast ct-toast-${toast.type}`}>
-          <div className="ct-toast-content">
-            <div className="ct-toast-icon">
-              {toast.type === 'success' ? '✓' : '✕'}
-            </div>
-            <div className="ct-toast-message">{toast.message}</div>
-          </div>
-          <button className="ct-toast-close" onClick={() => setToast(null)}>×</button>
-        </div>
-      )}
-
-    <section className="ct-page-hero">
-      <div className="ct-hero-content">
-        <div className="ct-title-section">
-          <h2>
-            <span>SOLICITA</span>
-            <span>INFORMACIÓN</span>
-          </h2>
-          <div className="ct-contact-circles ct-contact-circles-compact">
-            <div className="ct-contact-item">
-              <div className="ct-circle">
-                <span className="ct-icon">☎</span>
+      <section className="ct-page-hero">
+        <div className="ct-hero-content">
+          <div className="ct-title-section">
+            <h2>
+              <span>SOLICITA</span>
+              <span>INFORMACIÓN</span>
+            </h2>
+            <div className="ct-contact-circles ct-contact-circles-compact">
+              <div className="ct-contact-item">
+                <div className="ct-circle">
+                  <span className="ct-icon">☎</span>
+                </div>
+                <div className="ct-contact-info">
+                  <span className="ct-label">Teléfono:</span>
+                  <span className="ct-value">956 264 937</span>
+                </div>
               </div>
-              <div className="ct-contact-info">
-                <span className="ct-label">Teléfono:</span>
-                <span className="ct-value">913908280</span>
-              </div>
-            </div>
-            <div className="ct-contact-item">
-              <div className="ct-circle">
-                <span className="ct-icon">🗺️</span>
-              </div>
-              <div className="ct-contact-info">
-                <span className="ct-label">Ubicación:</span>
-                <span className="ct-value">AA.HH. San Pedro, Calle de la Paz, Mz. 2</span>
+              <div className="ct-contact-item">
+                <div className="ct-circle">
+                  <span className="ct-icon">🗺️</span>
+                </div>
+                <div className="ct-contact-info">
+                  <span className="ct-label">Ubicación:</span>
+                  <span className="ct-value">AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22, Piura</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-    <section className="ct-page-carrusel">
-      <div className="ct-carrusel-container">
-        <div className="ct-carrusel-track" ref={carruselRef}>
-          {infiniteImages.map((image, index) => (
-            <div 
-              key={index} 
-              className="ct-carrusel-slide"
-            >
-              <img src={image} alt={`Logo de marca de auto`} className="ct-carrusel-img" />
-            </div>
-          ))}
-        </div>
+      </section>
 
-      </div>
-    </section>
-    <section className="ct-page">
-      <div className="container">
-        <h1 className="ct-title">
-          <span>NOS ENCANTARÍA AYUDARTE,</span>
-          <span>RESERVA AQUÍ</span>
-        </h1>
-        <form className="ct-form" id="contacto-form" onSubmit={onSubmit} noValidate>
-          {/* grid adaptable: 1 / 2 / 3 columnas */}
-          <div className="ct-grid">
-            <label className="ct-field">
-              <span>Nombre o Empresa *</span>
-              <input
-                name="nombre"
-                value={form.nombre}
-                onChange={onChange}
-                required
-                disabled={loading}
-              />
-            </label>
-
-            <label className="ct-field">
-              <span>Modelo *</span>
-              <input
-                name="modelo"
-                value={form.modelo}
-                onChange={onChange}
-                required
-                disabled={loading}
-              />
-            </label>
-
-            <label className="ct-field">
-              <span>Año *</span>
-              <input
-                name="anio"
-                inputMode="numeric"
-                pattern="\d{4}"
-                value={form.anio}
-                onChange={onChange}
-                required
-                disabled={loading}
-              />
-            </label>
-
-            <label className="ct-field">
-              <span>Correo *</span>
-              <input
-                type="email"
-                name="correo"
-                value={form.correo}
-                onChange={onChange}
-                required
-                disabled={loading}
-              />
-            </label>
-
-            <label className="ct-field">
-              <span>Teléfono *</span>
-              <input
-                type="tel"
-                name="telefono"
-                value={form.telefono}
-                onChange={onChange}
-                required
-                disabled={loading}
-              />
-            </label>
+      <section className="ct-page-carrusel">
+        <div className="ct-carrusel-container">
+          <div className="ct-carrusel-track" ref={carruselRef}>
+            {infiniteImages.map((image, index) => (
+              <div key={index} className="ct-carrusel-slide">
+                <img src={image} alt={`Logo de marca de auto`} className="ct-carrusel-img" />
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
 
-          <label className="ct-field ct-area">
-            <span>Describe tu consulta o problema *</span>
-            <textarea
-              name="mensaje"
-              rows={4}
-              value={form.mensaje}
-              onChange={onChange}
-              required
-              disabled={loading}
+      <section className="ct-page">
+        <div className="container">
+          <h1 className="ct-title">
+            <span>NOS ENCANTARÍA AYUDARTE,</span>
+            <span>RESERVA AQUÍ</span>
+          </h1>
+          <form className="ct-form" id="contacto-form" onSubmit={handleSubmit}>
+            <div className="ct-grid">
+              <label className="ct-field">
+                <span>Nombre o Empresa *</span>
+                <input name="nombre" required />
+                <ValidationError prefix="Nombre" field="nombre" errors={state.errors} className="field-error" />
+              </label>
+
+              <label className="ct-field">
+                <span>Modelo *</span>
+                <input name="modelo" required />
+                <ValidationError prefix="Modelo" field="modelo" errors={state.errors} className="field-error" />
+              </label>
+
+              <label className="ct-field">
+                <span>Año *</span>
+                <input name="anio" inputMode="numeric" pattern="\d{4}" required />
+                <ValidationError prefix="Año" field="anio" errors={state.errors} className="field-error" />
+              </label>
+
+              <label className="ct-field">
+                <span>Correo *</span>
+                <input type="email" name="correo" required />
+                <ValidationError prefix="Correo" field="correo" errors={state.errors} className="field-error" />
+              </label>
+
+              <label className="ct-field">
+                <span>Teléfono *</span>
+                <input type="tel" name="telefono" required />
+                <ValidationError prefix="Teléfono" field="telefono" errors={state.errors} className="field-error" />
+              </label>
+            </div>
+
+            <label className="ct-field ct-area">
+              <span>Describe tu consulta o problema *</span>
+              <textarea name="mensaje" rows={4} required />
+              <ValidationError prefix="Mensaje" field="mensaje" errors={state.errors} className="field-error" />
+            </label>
+
+            <div className="ct-actions">
+              <button type="submit" className="ct-btn" disabled={state.submitting}>
+                {state.submitting ? "ENVIANDO..." : "ENVIAR"}
+              </button>
+            </div>
+            {state.errors && state.errors.length > 0 && (
+              <p className="field-error" style={{ marginTop: '10px' }}>
+                Hubo un problema al enviar el formulario. Por favor verifica los datos.
+              </p>
+            )}
+          </form>
+        </div>
+      </section>
+
+      {/* Mapa de Ubicación */}
+      <section className="ct-map-section">
+        <div className="container">
+          <h2 className="ct-map-title">Encuéntranos</h2>
+          <div className="ct-map-container">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.399325932214!2d-80.64571362414243!3d-5.199761152428329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904a1b55193f0e87%3A0x2670ca185a554315!2sSCARS%20TALLER%20MEC%C3%81NICO%20E.I.R.L!5e0!3m2!1ses-419!2spe!4v1761345533126!5m2!1ses-419!2spe"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Ubicación de SCARS Taller Mecánico"
             />
-          </label>
-
-          <div className="ct-actions">
-            <button type="submit" className="ct-btn" disabled={loading}>
-              {loading ? "ENVIANDO..." : "ENVIAR"}
-            </button>
           </div>
-        </form>
-      </div>
-    </section>
-    
-    {/* Mapa de Ubicación */}
-    <section className="ct-map-section">
-      <div className="container">
-        <h2 className="ct-map-title">Encuéntranos</h2>
-        <div className="ct-map-container">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.399325932214!2d-80.64571362414243!3d-5.199761152428329!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904a1b55193f0e87%3A0x2670ca185a554315!2sSCARS%20TALLER%20MEC%C3%81NICO%20E.I.R.L!5e0!3m2!1ses-419!2spe!4v1761345533126!5m2!1ses-419!2spe"
-            width="100%" 
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Ubicación de SCARS Taller Mecánico"
-          />
+          <div className="ct-map-info">
+            <p><strong>Dirección:</strong> AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22, Piura</p>
+            <p><strong>Referencia:</strong> Cerca del mercado central, a 2 cuadras de la plaza principal</p>
+          </div>
         </div>
-        <div className="ct-map-info">
-          <p><strong>Dirección:</strong> AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22, Piura</p>
-          <p><strong>Referencia:</strong> Cerca del mercado central, a 2 cuadras de la plaza principal</p>
-        </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }

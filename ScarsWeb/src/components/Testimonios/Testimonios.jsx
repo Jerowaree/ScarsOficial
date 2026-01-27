@@ -4,60 +4,60 @@ import "./Testimonios.css";
 const TESTIMONIOS_DATA = [
   {
     id: 1,
-    nombre: "María González",
-    vehiculo: "Honda Civic 2020",
+    nombre: "Luigui Verano",
+
     servicio: "Mantenimiento General",
-    testimonio: "Excelente servicio, muy profesionales. Mi auto quedó como nuevo. Definitivamente volveré y los recomendaré a mis amigos.",
+    testimonio: "Me gustaría expresar mi más sincero agradecimiento por el excelente servicio y mantenimiento que le dieron al carro. La atención al detalle y la profesionalidad de su equipo son de destacar. ¡Muchas gracias por dejar el vehículo en perfectas condiciones! Los recomiendo ampliamente.",
     calificacion: 5,
     fecha: "Hace 2 semanas",
     foto: null
   },
   {
     id: 2,
-    nombre: "Carlos Mendoza",
-    vehiculo: "Toyota Corolla 2019",
+    nombre: "Edgard Carmona",
+
     servicio: "Reparación de Motor",
-    testimonio: "Tenían el problema diagnosticado en menos de una hora. El trabajo fue impecable y el precio justo. Muy recomendados.",
+    testimonio: "¡Los recomiendo, son excelentes! Envían fotos y videos durante el proceso. ¡Súper profesionales y amables! Muy agradecido y satisfecho, ¡encontré un taller de confianza!",
     calificacion: 5,
     fecha: "Hace 1 mes",
     foto: null
   },
   {
     id: 3,
-    nombre: "Ana Rodríguez",
-    vehiculo: "Nissan Sentra 2021",
+    nombre: "Pedro Beraún",
+
     servicio: "Cambio de Aceite y Filtros",
-    testimonio: "Servicio rápido y eficiente. El personal es muy amable y explica todo claramente. Mi auto funciona perfecto.",
+    testimonio: "Excelente servicio mi amigo! Totalmente satisfecho con el trabajo realizado!",
     calificacion: 5,
     fecha: "Hace 3 semanas",
     foto: null
   },
   {
     id: 4,
-    nombre: "Luis Herrera",
-    vehiculo: "Chevrolet Cruze 2018",
+    nombre: "Mario Castillo",
+
     servicio: "Reparación de Frenos",
-    testimonio: "Trabajo de calidad excepcional. Me dieron garantía y explicaron todo el proceso. Muy satisfecho con el resultado.",
+    testimonio: "Llevo tiempo confiando en el taller SCARS y puedo decir con total seguridad que ofrecen un mantenimiento de calidad superior. Se nota la experiencia: llevan muchos años en el rubro automotriz, y eso se refleja en cada detalle del servicio que brindan. Son profesionales, responsables y siempre están atentos a las necesidades del cliente.",
     calificacion: 5,
     fecha: "Hace 2 meses",
     foto: null
   },
   {
     id: 5,
-    nombre: "Patricia Silva",
-    vehiculo: "Ford Focus 2020",
+    nombre: "Manuel Inca",
+
     servicio: "Revisión Técnica",
-    testimonio: "Profesionales de verdad. Detectaron un problema que otros talleres no vieron. Gracias por su honestidad y calidad.",
+    testimonio: "Excelente servicio. Personal muy atento y a total disposición, me ayudaron a solucionar el problema de mi vehículo, 100% recomendado.",
     calificacion: 5,
     fecha: "Hace 1 semana",
     foto: null
   },
   {
     id: 6,
-    nombre: "Roberto Vega",
-    vehiculo: "Suzuki Swift 2019",
+    nombre: "Emma Ordinola",
+
     servicio: "Mantenimiento Preventivo",
-    testimonio: "El mejor taller de la ciudad. Precios justos, trabajo de calidad y atención personalizada. 100% recomendado.",
+    testimonio: "Excelente servicio, identificaron el problema de mi carro y le dieron rápida solución, además que revisaron a detalle las cosas en las que detectaban falla, y por último, le dieron su respectiva lavada. Recomendado al 100%",
     calificacion: 5,
     fecha: "Hace 4 semanas",
     foto: null
@@ -72,7 +72,7 @@ export default function Testimonios() {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => 
+      setCurrentIndex((prevIndex) =>
         prevIndex === TESTIMONIOS_DATA.length - 1 ? 0 : prevIndex + 1
       );
     }, 5000); // Cambia cada 5 segundos
@@ -121,25 +121,24 @@ export default function Testimonios() {
               <div className="testimonio-header">
                 <div className="testimonio-foto">
                   <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="12" fill="#fff"/>
-                    <circle cx="12" cy="9.5" r="4" fill="#d7dbe2"/>
-                    <ellipse cx="12" cy="17" rx="7" ry="4" fill="#d7dbe2"/>
+                    <circle cx="12" cy="12" r="12" fill="#fff" />
+                    <circle cx="12" cy="9.5" r="4" fill="#d7dbe2" />
+                    <ellipse cx="12" cy="17" rx="7" ry="4" fill="#d7dbe2" />
                   </svg>
                 </div>
                 <div className="testimonio-info">
                   <h3 className="testimonio-nombre">{currentTestimonio.nombre}</h3>
-                  <p className="testimonio-vehiculo">{currentTestimonio.vehiculo}</p>
                   <p className="testimonio-servicio">{currentTestimonio.servicio}</p>
                 </div>
                 <div className="testimonio-calificacion">
                   {renderStars(currentTestimonio.calificacion)}
                 </div>
               </div>
-              
+
               <blockquote className="testimonio-texto">
                 "{currentTestimonio.testimonio}"
               </blockquote>
-              
+
               <div className="testimonio-footer">
                 <span className="testimonio-fecha">{currentTestimonio.fecha}</span>
               </div>
@@ -147,13 +146,13 @@ export default function Testimonios() {
           </div>
 
           <div className="testimonios-controls">
-            <button 
+            <button
               className="testimonios-btn prev"
               onClick={prevTestimonio}
               aria-label="Testimonio anterior"
             >
               <svg viewBox="0 0 24 24" fill="none">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
@@ -168,31 +167,31 @@ export default function Testimonios() {
               ))}
             </div>
 
-            <button 
+            <button
               className="testimonios-btn next"
               onClick={nextTestimonio}
               aria-label="Siguiente testimonio"
             >
               <svg viewBox="0 0 24 24" fill="none">
-                <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
 
           <div className="testimonios-auto">
-            <button 
+            <button
               className={`auto-btn ${isAutoPlaying ? 'playing' : 'paused'}`}
               onClick={() => setIsAutoPlaying(!isAutoPlaying)}
               aria-label={isAutoPlaying ? "Pausar testimonios" : "Reproducir testimonios"}
             >
               {isAutoPlaying ? (
                 <svg viewBox="0 0 24 24" fill="none">
-                  <rect x="6" y="4" width="4" height="16" fill="currentColor"/>
-                  <rect x="14" y="4" width="4" height="16" fill="currentColor"/>
+                  <rect x="6" y="4" width="4" height="16" fill="currentColor" />
+                  <rect x="14" y="4" width="4" height="16" fill="currentColor" />
                 </svg>
               ) : (
                 <svg viewBox="0 0 24 24" fill="none">
-                  <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                  <polygon points="5,3 19,12 5,21" fill="currentColor" />
                 </svg>
               )}
             </button>

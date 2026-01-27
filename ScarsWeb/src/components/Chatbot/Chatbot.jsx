@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { X, Send, Bot, User } from "lucide-react";
-import publicApi from "@/api/publicAxios";
 import "./Chatbot.css";
 
 export default function Chatbot() {
@@ -30,53 +29,62 @@ export default function Chatbot() {
     }
   }, [isOpen, messages.length]);
 
+  // Respuestas predefinidas del frontend
+  const getBotResponse = (message) => {
+    const msg = message.toLowerCase();
+
+    if (msg.includes("donde") || msg.includes("ubicacion") || msg.includes("direccion") || msg.includes("ubicados")) {
+      return "Estamos ubicados en Piura: AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22. ¡Te esperamos!";
+    }
+
+    if (msg.includes("horario") || msg.includes("abierto") || msg.includes("atienden") || msg.includes("abren")) {
+      return "Nuestro horario es:\nLunes a Sábado: 8:30 a.m. – 6:30 p.m.\nDomingo: 8:30 a.m. – 1:00 p.m (Previo Agendamiento).";
+    }
+
+    if (msg.includes("telefono") || msg.includes("contacto") || msg.includes("celular") || msg.includes("llamar") || msg.includes("numero")) {
+      return "Puedes contactarnos al 956 264 937. ¡Estaremos encantados de atenderte!";
+    }
+
+    if (msg.includes("servicio") || msg.includes("hacen") || msg.includes("ofrecen")) {
+      return "Ofrecemos mantenimiento preventivo (Básico y Plus), afinamiento electrónico, mecánica general, servicios eléctricos y diagnóstico por escaneo con tecnología de alta gama.";
+    }
+
+    if (msg.includes("mantenimiento") || msg.includes("aceite") || msg.includes("revision")) {
+      return "Nuestro mantenimiento preventivo incluye cambio de aceite, filtros, revisión de bujías, niveles y escaneo. El servicio 'Plus' incluye lavado básico gratis.";
+    }
+
+    if (msg.includes("afinamiento") || msg.includes("inyectores") || msg.includes("limpieza")) {
+      return "Realizamos afinamiento electrónico completo con limpieza de inyectores (incluye orrines), prueba en banco, limpieza de sensores y prueba de ruta.";
+    }
+
+    if (msg.includes("seguimiento") || msg.includes("mi auto") || msg.includes("codigo")) {
+      return "La función de seguimiento en línea estará disponible próximamente en nuestra web. Por ahora, puedes consultarme por aquí o llamarnos al 956 264 937.";
+    }
+
+    if (msg.includes("hola") || msg.includes("buenos") || msg.includes("buenas")) {
+      return "¡Hola! 👋 Soy el asistente virtual de SCARS. ¿En qué puedo ayudarte hoy? Puedes preguntarme por nuestra ubicación, horarios, servicios o el estado de tu vehículo.";
+    }
+
+    return "Gracias por tu consulta. En SCARS nos especializamos en servicios automotrices de alta calidad en Piura. Para una respuesta más detallada o presupuesto, por favor contáctanos al 956 264 937.";
+  };
+
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
     const userMessage = { role: "user", content: input.trim() };
-    const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
-    try {
-      // Construir historial de conversación (sin el mensaje de sistema)
-      const conversationHistory = newMessages
-        .filter((msg) => msg.role !== "system")
-        .map((msg) => ({
-          role: msg.role,
-          content: msg.content,
-        }));
-
-      const response = await publicApi.post("/chatbot/chat/public", {
-        message: userMessage.content,
-        conversationHistory,
-      });
-
+    // Simular un pequeño delay para que se sienta natural
+    setTimeout(() => {
+      const botResponse = getBotResponse(userMessage.content);
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response.data.response },
+        { role: "assistant", content: botResponse },
       ]);
-    } catch (error) {
-      console.error("Error al enviar mensaje:", error);
-
-      let errorMessage = "Lo siento, hubo un error al procesar tu mensaje. Por favor, intenta nuevamente.";
-
-      if (error.response?.status === 429) {
-        errorMessage = "Demasiadas solicitudes. Por favor, espera un momento e intenta nuevamente.";
-      } else if (error.response?.status === 503) {
-        errorMessage = "El servicio de chatbot no está disponible en este momento. Por favor, contáctanos directamente.";
-      } else if (error.response?.data?.error) {
-        errorMessage = error.response.data.message || error.response.data.error;
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: errorMessage },
-      ]);
-    } finally {
       setLoading(false);
-    }
+    }, 600);
   };
 
   const handleKeyPress = (e) => {
