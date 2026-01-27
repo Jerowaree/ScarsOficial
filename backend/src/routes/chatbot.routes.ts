@@ -28,55 +28,83 @@ try {
 }
 
 // Sistema prompt para el chatbot de SCARS
-const SYSTEM_PROMPT = `Eres un asistente virtual amable y profesional de SCARS, un taller de servicios automotrices.
-Tu función es ayudar a los clientes con:
-- Información sobre servicios (pintura automotriz, reparación, mantenimiento)
-- Consultas sobre seguimiento de servicios
-- Respuestas generales sobre el taller
-- Recomendaciones básicas
+// Sistema prompt para el chatbot de SCARS
+const SYSTEM_PROMPT = `Eres un asistente virtual amable y profesional de SCARS, un taller de servicios automotrices en Piura con más de 30 años de experiencia.
+Tu función es ayudar a los clientes con información detallada sobre nuestros servicios y el taller.
 
-Sé amable, profesional y conciso. Responde en español, los clientes son de Perú.
-Si no sabes algo específico, sugiere contactar directamente al taller.
 Información del negocio:
 - Nombre: SCARS
-- Servicios: Pintura automotriz, reparación, mantenimiento de vehículos
-- Los clientes pueden consultar el seguimiento de sus servicios con un código de seguimiento
-- Mantén las respuestas breves y útiles (máximo 3-4 oraciones)
-- No digas que eres un chatbot, digas que eres un asistente virtual de SCARS
-- Solamente responde con la información que te proporciono, no inventes información.
-- Limitate a responder preguntas relacionadas con el taller de servicios automotrices.
+- Dirección: AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22, Piura.
+- Teléfono: 956 264 937 / 946 758 379
+- Horarios de atención: 
+  * Lunes a Sábado: 8:30 a.m. – 6:30 p.m.
+  * Domingo: 8:30 a.m. – 1:00 p.m.
+
+Servicios Principales:
+1. Mantenimiento Preventivo (Básico y Plus): Incluye cambio de aceite/filtro, revisión de niveles, bujías, escaneo profesional y pulverizado de motor. El servicio Plus incluye lavado básico gratis.
+2. Afinamiento Electrónico: Limpieza de obturador, sensores, prueba e inyectores, revisión sistema eléctrico y prueba de ruta.
+3. Servicios Eléctricos y Mecánica General: Reparación de motor, frenos y sistemas eléctricos.
+4. Diagnóstico Avanzado: Escaneo con tecnología Würth y Power Jet 260.
+
+Instrucciones de comportamiento:
+- Sé amable, profesional y conciso. Responde en español (localismo de Perú si es natural).
+- Si no sabes algo específico, sugiere contactar al 956 264 937.
+- No digas que eres un chatbot, indica que eres el asistente virtual de SCARS.
+- Limitate a temas del taller. No inventes precios exactos si no están aquí; sugiere un presupuesto personalizado.
+- Menciona que usamos herramientas de alta gama como Würth para mayor precisión.
 `;
 
 // Respuestas simuladas para modo de prueba (sin API key)
 const getMockResponse = (message: string): string => {
   const msg = message.toLowerCase();
 
-  if (msg.includes("hola") || msg.includes("buenos días") || msg.includes("buenas tardes")) {
-    return "¡Hola! 👋 Bienvenido a SCARS. Estoy aquí para ayudarte con información sobre nuestros servicios automotrices, seguimiento de servicios o cualquier consulta que tengas. ¿En qué puedo asistirte?";
+  // Ubicación
+  if (msg.includes("donde") || msg.includes("ubicacion") || msg.includes("direccion") || msg.includes("ubicados")) {
+    return "Estamos ubicados en Piura: AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22. ¡Te esperamos!";
   }
 
-  if (msg.includes("servicio") || msg.includes("servicios")) {
-    return "En SCARS ofrecemos servicios de pintura automotriz, reparación y mantenimiento de vehículos. ¿Hay algún servicio específico sobre el que te gustaría saber más?";
+  // Horario
+  if (msg.includes("horario") || msg.includes("abierto") || msg.includes("atienden") || msg.includes("abren")) {
+    return "Atendemos de Lunes a Sábado de 8:30 a.m. a 6:30 p.m. Los domingos abrimos de 8:30 a.m. a 1:00 p.m.";
   }
 
-  if (msg.includes("precio") || msg.includes("costo") || msg.includes("cuanto")) {
-    return "Los precios varían según el tipo de servicio y el vehículo. Te recomiendo contactarnos directamente para obtener un presupuesto personalizado. ¿Te gustaría que te ayude con algo más?";
+  // Contacto
+  if (msg.includes("telefono") || msg.includes("contacto") || msg.includes("celular") || msg.includes("llamar")) {
+    return "Puedes contactarnos al 956 264 937 o al 946 758 379. También puedes escribirnos a hola.scars@gmail.com.";
   }
 
-  if (msg.includes("seguimiento") || msg.includes("código") || msg.includes("codigo")) {
-    return "Para consultar el seguimiento de tu servicio, necesitas el código de seguimiento que te proporcionamos. Puedes ingresarlo en la sección 'Seguimiento' de nuestra página web. ¿Tienes tu código a mano?";
+  // Servicios Generales
+  if (msg.includes("servicio") || msg.includes("hacen") || msg.includes("ofrecen")) {
+    return "Ofrecemos mantenimiento preventivo (Básico y Plus), afinamiento electrónico, mecánica general, servicios eléctricos y diagnóstico por escaneo con tecnología de alta gama.";
   }
 
-  if (msg.includes("horario") || msg.includes("horarios") || msg.includes("abierto")) {
-    return "Para conocer nuestros horarios de atención, te sugiero contactarnos directamente. Estaremos encantados de atenderte. ¿Hay algo más en lo que pueda ayudarte?";
+  // Mantenimiento
+  if (msg.includes("mantenimiento") || msg.includes("aceite") || msg.includes("revision")) {
+    return "Nuestro mantenimiento preventivo incluye cambio de aceite, filtros, revisión de bujías, niveles y escaneo. Si eliges el mantenimiento 'Plus', ¡te incluimos un lavado básico gratis!";
   }
 
-  if (msg.includes("contacto") || msg.includes("teléfono") || msg.includes("telefono")) {
-    return "Para contactarnos, puedes usar el formulario de contacto en nuestra página web o visitarnos directamente. ¿Necesitas ayuda con algo más?";
+  // Afinamiento
+  if (msg.includes("afinamiento") || msg.includes("inyectores") || msg.includes("limpieza")) {
+    return "Realizamos afinamiento electrónico completo con limpieza de inyectores (incluye orrines), prueba en banco, limpieza de sensores y prueba de ruta para asegurar el mejor desempeño.";
+  }
+
+  // Tecnología / Herramientas
+  if (msg.includes("tecnologia") || msg.includes("herramientas") || msg.includes("escaner") || msg.includes("escaneo")) {
+    return "Contamos con tecnología de punta, incluyendo escáneres profesionales y herramientas Würth y Power Jet 260 para diagnósticos precisos.";
+  }
+
+  // Seguimiento
+  if (msg.includes("seguimiento") || msg.includes("mi auto") || msg.includes("codigo")) {
+    return "Para el seguimiento de tu vehículo, ingresa tu código de seguimiento en la sección correspondiente de nuestra web o consúltanos aquí mismo brindando tu código.";
+  }
+
+  // Saludo
+  if (msg.includes("hola") || msg.includes("buenos") || msg.includes("buenas")) {
+    return "¡Hola! 👋 Soy el asistente virtual de SCARS. ¿En qué puedo ayudarte hoy? Consultas sobre servicios, ubicación o el estado de tu vehículo?";
   }
 
   // Respuesta genérica
-  return "Entiendo tu consulta. En SCARS nos especializamos en servicios automotrices como pintura, reparación y mantenimiento. Si necesitas información más específica, te recomiendo contactarnos directamente. ¿Hay algo más en lo que pueda ayudarte?";
+  return "Gracias por tu consulta. En SCARS nos especializamos en servicios automotrices de alta calidad en Piura. Para una respuesta más detallada o presupuesto, por favor contáctanos al 956 264 937.";
 };
 
 // Endpoint público para chat (sin autenticación)

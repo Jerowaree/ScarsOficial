@@ -168,10 +168,9 @@ export default function TrazabilidadPage() {
       }
       setResultado(transformed);
     } catch (err) {
-      const errorMsg = err?.response?.data?.message || err?.message || "Error al consultar el código. Por favor, intente nuevamente.";
-      setError(errorMsg);
+      // Mostramos un mensaje amigable indicando que la función estará lista pronto
+      setError("¡Muy pronto podrás seguir el progreso de tu vehículo aquí mismo! 🚀 Por ahora, estamos afinando los últimos detalles. Si deseas una actualización inmediata, llámanos con gusto al 956 264 937.");
       setResultado(null);
-      console.error("Error al consultar seguimiento:", err);
     } finally {
       setLoading(false);
     }
@@ -193,7 +192,7 @@ export default function TrazabilidadPage() {
             </p>
             <div className="traz-hero-stats">
               <div className="traz-stat">
-                <span className="traz-stat-number">500+</span>
+                <span className="traz-stat-number">100+</span>
                 <span className="traz-stat-label">Vehículos Rastreados</span>
               </div>
               <div className="traz-stat">
@@ -201,7 +200,7 @@ export default function TrazabilidadPage() {
                 <span className="traz-stat-label">Disponibilidad</span>
               </div>
               <div className="traz-stat">
-                <span className="traz-stat-number">98%</span>
+                <span className="traz-stat-number">100%</span>
                 <span className="traz-stat-label">Precisión</span>
               </div>
             </div>
@@ -256,7 +255,7 @@ export default function TrazabilidadPage() {
           </button>
         </form>
         <div id="traz-feedback" className="traz-feedback" aria-live="polite">
-          {error && <span className="traz-error">{error}</span>}
+          {error && <span className="traz-success">{error}</span>}
         </div>
 
         {/* Sistema de seguimiento visual mejorado */}
