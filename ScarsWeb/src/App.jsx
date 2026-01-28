@@ -5,6 +5,7 @@ import { useSEO } from "./hooks/useSEO";
 import Header from "./components/header/header.jsx";
 import Footer from "./components/footer/footer.jsx";
 import Chatbot from "./components/Chatbot/Chatbot.jsx";
+import WpButton from "./components/wpbutton/wpbutton.jsx";
 
 import Hero from "./components/Hero/Hero.jsx";
 import Estadisticas from "./components/Estadisticas/Estadisticas.jsx";
@@ -19,6 +20,12 @@ import ContactoPage from "./pages/Contacto/ContactoPage.jsx";
 import AdminRoutes from "./admin/routes/AdminRoutes.jsx";
 
 function Layout() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname]);
+
   return (
     <>
       <Header />
@@ -26,6 +33,7 @@ function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <WpButton />
       <Chatbot />
     </>
   );

@@ -1,0 +1,38 @@
+.wpbutton {
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  text-decoration: none;
+}
+
+.wpbutton:hover {
+  transform: scale(1.08);
+  background: #1ebd5a;
+  box-shadow: 0 14px 35px rgba(37, 211, 102, 0.45);
+}
+
+.wpbutton:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .wpbutton {
+    bottom: 84px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+  }
+}

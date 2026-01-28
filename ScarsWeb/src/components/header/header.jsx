@@ -45,6 +45,11 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  const handleLogoClick = () => {
+    setIsMobileMenuOpen(false);
+    window.location.href = "/";
+  };
   useEffect(() => {
     const handleResize = () => {
       const desktop = window.innerWidth > 920;
@@ -113,7 +118,7 @@ export default function Header() {
         <div className="container header-row">
           <div
             className="brand"
-            onClick={() => navigate("/")}
+            onClick={handleLogoClick}
             role="button"
             aria-label="SCARS inicio"
           >
