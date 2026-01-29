@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || "https://www.scarsperu.com";
-const DEFAULT_IMAGE = `${SITE_URL}/logo_scars.png`;
+const DEFAULT_IMAGE = `${SITE_URL}/cropcirclescars.png`;
 
 const SEO_CONFIG = {
   home: {
