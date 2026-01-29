@@ -105,7 +105,7 @@ function updateStructuredData(meta, pathname) {
     "alternateName": "SCARS Taller Mecánico Piura",
     "description": "El mejor taller mecánico en Piura especializado en sector automotriz, reparación de motores, frenos, suspensión y mantenimiento preventivo.",
     "url": SITE_URL,
-    "logo": `${SITE_URL}/logo_scars.png`,
+    "logo": `${SITE_URL}/cropcirclescars.png`,
     "image": meta.image,
     "telephone": "+51956264937",
     "address": {
