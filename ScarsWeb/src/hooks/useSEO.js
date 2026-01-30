@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || "https://scars.com.pe";
-const DEFAULT_IMAGE = `${SITE_URL}/logo_scars.png`;
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://www.scarsperu.com";
+const DEFAULT_IMAGE = `${SITE_URL}/cropcirclescars.png`;
 
 const SEO_CONFIG = {
   home: {
@@ -97,30 +97,54 @@ function updateStructuredData(meta, pathname) {
     existingScript.remove();
   }
 
-  // Datos estructurados principales
+  // Datos estructurados principales (SEO Local Avanzado)
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
     "name": "SCARS",
-    "alternateName": "SCARS Taller Mecánico",
-    "description": "Taller mecánico especializado en sector automotriz, reparación y mantenimiento de vehículos",
+    "alternateName": "SCARS Taller Mecánico Piura",
+    "description": "El mejor taller mecánico en Piura especializado en sector automotriz, reparación de motores, frenos, suspensión y mantenimiento preventivo.",
     "url": SITE_URL,
-    "logo": `${SITE_URL}/logo_scars.png`,
+    "logo": `${SITE_URL}/cropcirclescars.png`,
     "image": meta.image,
+    "telephone": "+51956264937",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22",
       "addressLocality": "Piura",
       "addressRegion": "Piura",
       "addressCountry": "PE"
     },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": -5.199761,
+      "longitude": -80.645714
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "08:00",
+        "closes": "18:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "08:00",
+        "closes": "13:00"
+      }
+    ],
     "areaServed": {
       "@type": "City",
       "name": "Piura"
     },
     "serviceType": [
+      "Taller Mecánico",
       "Sector Automotriz",
-      "Reparación de Vehículos",
-      "Mantenimiento Automotriz"
+      "Reparación de Motores",
+      "Mantenimiento de Frenos",
+      "Suspensión y Dirección",
+      "Escaneo Electrónico"
     ],
     "priceRange": "$$"
   };
