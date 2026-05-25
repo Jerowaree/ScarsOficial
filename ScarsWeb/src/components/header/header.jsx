@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./header.css";
+import scarsMark from "../../assets/ScarsLogo.png";
 import logo from "../../assets/logo_scars.png";
 
 const HOME_SECTIONS = ["inicio", "servicios", "nosotros", "cita", "contacto"];
@@ -10,7 +11,6 @@ export default function Header() {
   const linkRefs = useRef({});
   const [active, setActive] = useState("inicio");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth > 920);
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
@@ -43,74 +43,88 @@ export default function Header() {
   };
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setIsMobileMenuOpen((prev) => !prev);
   };
 
   const handleLogoClick = () => {
     setIsMobileMenuOpen(false);
     window.location.href = "/";
   };
+
   useEffect(() => {
     const handleResize = () => {
-      const desktop = window.innerWidth > 920;
-      setIsDesktop(desktop);
-      if (desktop) {
-        setIsMobileMenuOpen(false); // Cerrar menú móvil en desktop
+      if (window.innerWidth > 920) {
+        setIsMobileMenuOpen(false);
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Cerrar menú al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (isMobileMenuOpen && !event.target.closest('.nav') && !event.target.closest('.mobile-menu-toggle')) {
+      if (
+        isMobileMenuOpen &&
+        !event.target.closest(".nav") &&
+        !event.target.closest(".mobile-menu-toggle")
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
 
     if (isMobileMenuOpen) {
-      document.addEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("click", handleClickOutside);
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("click", handleClickOutside);
+      document.body.style.overflow = "unset";
     };
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-    if (pathname === "/trazabilidad") { setActive("trazabilidad"); return; }
-    if (pathname === "/contacto") { setActive("contacto"); return; }
+    if (pathname === "/trazabilidad") {
+      setActive("trazabilidad");
+      return;
+    }
+    if (pathname === "/contacto") {
+      setActive("contacto");
+      return;
+    }
+
     const updateActive = () => {
       const headerH = document.querySelector(".site-header")?.offsetHeight || 86;
       const refY = headerH + 6;
-      let best = HOME_SECTIONS[0], bestDist = Infinity;
+      let best = HOME_SECTIONS[0];
+      let bestDist = Infinity;
+
       for (const id of HOME_SECTIONS) {
         const el = document.getElementById(id);
         if (!el) continue;
         const top = el.getBoundingClientRect().top;
-        const d = Math.abs(top - refY);
-        if (d < bestDist) { bestDist = d; best = id; }
+        const dist = Math.abs(top - refY);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = id;
+        }
       }
+
       setActive(best);
     };
 
     requestAnimationFrame(updateActive);
     window.addEventListener("scroll", updateActive, { passive: true });
     window.addEventListener("resize", updateActive);
+
     return () => {
       window.removeEventListener("scroll", updateActive);
       window.removeEventListener("resize", updateActive);
     };
   }, [pathname]);
-
-
 
   return (
     <>
@@ -122,23 +136,36 @@ export default function Header() {
             role="button"
             aria-label="SCARS inicio"
           >
-            <img src={logo} alt="SCARS - Taller Mecánico Especializado en Sector Automotriz" width="120" height="42" />
+            <img
+              src={scarsMark}
+              alt="Emblema SCARS"
+              className="brand-mark"
+              width="54"
+              height="54"
+            />
+            <img
+              src={logo}
+              alt="SCARS - Taller Mecanico Especializado en Sector Automotriz"
+              className="brand-wordmark"
+              width="120"
+              height="42"
+            />
           </div>
 
           <button
             className="mobile-menu-toggle"
             onClick={toggleMobileMenu}
-            aria-label="Abrir menú de navegación"
+            aria-label="Abrir menu de navegacion"
             aria-expanded={isMobileMenuOpen}
           >
-            <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>
+            <span className={`hamburger ${isMobileMenuOpen ? "active" : ""}`}>
               <span></span>
               <span></span>
               <span></span>
             </span>
           </button>
 
-          <nav className={`nav ${isMobileMenuOpen ? 'nav-open' : ''}`} ref={navRef}>
+          <nav className={`nav ${isMobileMenuOpen ? "nav-open" : ""}`} ref={navRef}>
             {links.map((l) => (
               <button
                 key={l.id}
@@ -151,7 +178,7 @@ export default function Header() {
             ))}
 
             <button
-              ref={(el) => (linkRefs.current["contacto"] = el)}
+              ref={(el) => (linkRefs.current.contacto = el)}
               className={`nav-cta ${active === "contacto" ? "active" : ""}`}
               onClick={() => navigate("/contacto")}
             >
