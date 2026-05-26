@@ -6,7 +6,7 @@
   
   <!-- Página Principal -->
   <url>
-    <loc>https://scars.com.pe/</loc>
+    <loc>https://www.scarsperu.com/</loc>
     <lastmod>2026-01-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
   
   <!-- Seguimiento -->
   <url>
-    <loc>https://scars.com.pe/trazabilidad</loc>
+    <loc>https://www.scarsperu.com/trazabilidad</loc>
     <lastmod>2026-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
   
   <!-- Contacto -->
   <url>
-    <loc>https://scars.com.pe/contacto</loc>
+    <loc>https://www.scarsperu.com/contacto</loc>
     <lastmod>2026-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
