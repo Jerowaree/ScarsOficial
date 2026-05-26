@@ -47,8 +47,9 @@
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   min-height: calc(100vh - var(--header-h));
+  padding-top: clamp(18px, 2.5vh, 28px);
   padding-left: clamp(46px, 4.4vw, 72px);
   padding-right: min(47vw, 760px);
 }
@@ -58,20 +59,20 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: min(100%, 720px);
-  max-width: 720px;
-  padding: 8px 0 18px;
-  transform: translateY(-8px);
+  justify-content: flex-start;
+  width: min(100%, 700px);
+  max-width: 700px;
+  padding: 2px 0 10px;
+  transform: none;
 }
 
 .hero__badge {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 8px;
-  min-height: 36px;
-  padding: 6px 15px 6px 13px;
+  margin-top: 2px;
+  min-height: 34px;
+  padding: 5px 14px 5px 12px;
   width: fit-content;
   max-width: max-content;
   border: 1px solid rgba(18, 30, 75, 0.08);
@@ -79,7 +80,7 @@
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 10px 28px rgba(18, 30, 75, 0.08);
   color: #343947;
-  font-size: 0.9rem;
+  font-size: 0.84rem;
   font-weight: 800;
   letter-spacing: 0.02em;
 }
@@ -88,8 +89,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   color: var(--primary);
 }
 
@@ -106,11 +107,11 @@
 }
 
 .hero__title {
-  margin: 16px 0 16px;
+  margin: 12px 0 12px;
   color: var(--navy);
-  font-size: clamp(2.45rem, 3.25vw, 3.95rem);
+  font-size: clamp(2.22rem, 3.04vw, 3.62rem);
   font-weight: 900;
-  line-height: 0.94;
+  line-height: 0.92;
   letter-spacing: -0.045em;
   text-transform: uppercase;
 }
@@ -126,14 +127,14 @@
 .hero__description {
   max-width: 590px;
   color: #3f4658;
-  font-size: clamp(0.92rem, 0.92vw, 1.04rem);
-  line-height: 1.5;
+  font-size: clamp(0.9rem, 0.9vw, 1.02rem);
+  line-height: 1.46;
 }
 
 .hero__highlights {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin-top: 24px;
+  margin-top: 20px;
   background: transparent;
   border-radius: 0;
 }
@@ -141,12 +142,12 @@
 .hero__highlight {
   display: grid;
   justify-items: center;
-  gap: 10px;
-  padding: 0 14px;
+  gap: 9px;
+  padding: 0 11px;
   text-align: center;
   color: #2f3548;
-  font-size: 0.8rem;
-  line-height: 1.36;
+  font-size: 0.79rem;
+  line-height: 1.32;
 }
 
 .hero__highlight + .hero__highlight {
@@ -155,8 +156,8 @@
 
 .hero__highlightIcon {
   display: inline-flex;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
 }
 
 .hero__highlightIcon--navy {
@@ -170,20 +171,20 @@
 .hero__actions {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-top: 34px;
+  gap: 12px;
+  margin-top: 26px;
 }
 
 .hero__cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  min-height: 52px;
-  padding: 13px 24px;
+  gap: 12px;
+  min-height: 50px;
+  padding: 12px 24px;
   border-radius: 18px;
   border: 1px solid transparent;
-  font-size: 0.92rem;
+  font-size: 0.89rem;
   font-weight: 900;
   letter-spacing: 0.01em;
   text-transform: uppercase;
@@ -192,8 +193,8 @@
 }
 
 .hero__cta svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   flex: 0 0 auto;
 }
 
@@ -223,17 +224,17 @@
 }
 
 .hero__brands {
-  margin-top: 42px;
-  max-width: 720px;
+  margin-top: 34px;
+  max-width: 700px;
 }
 
 .hero__brandsHeader {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 14px;
   color: #72798a;
-  font-size: 0.92rem;
+  font-size: 0.89rem;
   font-weight: 700;
   letter-spacing: 0.03em;
 }
@@ -247,21 +248,21 @@
 .hero__brandList {
   display: flex;
   align-items: center;
-  gap: 42px;
-  max-width: 700px;
+  gap: 34px;
+  max-width: 690px;
 }
 
 .hero__brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
+  min-height: 44px;
   flex: 0 0 auto;
 }
 
 .hero__brand img {
-  max-height: 44px;
-  max-width: 126px;
+  max-height: 38px;
+  max-width: 116px;
   width: auto;
   object-fit: contain;
   filter: grayscale(1) saturate(0) contrast(1.08);
@@ -273,7 +274,7 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(51vw, 790px);
+  width: min(49vw, 748px);
   min-height: calc(100vh - var(--header-h));
   overflow: hidden;
 }

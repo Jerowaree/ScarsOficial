@@ -10,21 +10,26 @@
 .header-row{
   display:flex; align-items:center; justify-content:space-between;
   height:var(--header-h);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: clamp(46px, 4.4vw, 72px);
+  padding-right: clamp(24px, 3vw, 52px);
 }
 .brand{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:14px;
   cursor:pointer;
 }
 .brand-mark{
-  width:48px;
-  height:48px;
+  width:72px;
+  height:72px;
   object-fit:contain;
   flex:0 0 auto;
 }
 .brand-wordmark{
-  height:42px;
+  height:44px;
   width:auto;
 }
 
@@ -129,13 +134,20 @@
 
 /* ===== NAVEGACIÓN MÓVIL ===== */
 @media (max-width: 920px) {
+  .header-row{
+    width: 100%;
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
   .brand{
     gap:10px;
   }
 
   .brand-mark{
-    width:40px;
-    height:40px;
+    width:48px;
+    height:48px;
   }
 
   .brand-wordmark{

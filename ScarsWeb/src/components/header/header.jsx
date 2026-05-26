@@ -129,7 +129,7 @@ export default function Header() {
   return (
     <>
       <header className="site-header">
-        <div className="container header-row">
+        <div className="header-row">
           <div
             className="brand"
             onClick={handleLogoClick}
@@ -140,15 +140,15 @@ export default function Header() {
               src={scarsMark}
               alt="Emblema SCARS"
               className="brand-mark"
-              width="54"
-              height="54"
+              width="72"
+              height="72"
             />
             <img
               src={logo}
               alt="SCARS - Taller Mecanico Especializado en Sector Automotriz"
               className="brand-wordmark"
-              width="120"
-              height="42"
+              width="126"
+              height="44"
             />
           </div>
 
