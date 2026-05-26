@@ -1,28 +1,40 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const SITE_URL = import.meta.env.VITE_SITE_URL || "https://www.scarsperu.com";
-const DEFAULT_IMAGE = `${SITE_URL}/cropcirclescars.png`;
+const SITE_URL = import.meta.env.VITE_SITE_URL || "https://scars.com.pe";
+const DEFAULT_IMAGE = `${SITE_URL}/ScarsLogo.png`;
+const BUSINESS_NAME = "SCARS Taller Mecanico E.I.R.L.";
+const BUSINESS_PHONE = "+51 956 264 937";
+const BUSINESS_EMAIL = "hola.scars@gmail.com";
+const BUSINESS_ADDRESS = "AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22, Piura, Peru";
+const BUSINESS_MAP =
+  "https://www.google.com/maps/place/SCARS+TALLER+MECANICO+E.I.R.L";
 
 const SEO_CONFIG = {
   home: {
-    title: "SCARS | Taller Mecánico Especializado en Sector Automotriz | Piura",
-    description: "SCARS es un taller mecánico especializado en sector automotriz, reparación y mantenimiento de vehículos en Piura. Servicios profesionales con años de experiencia.",
-    keywords: "taller mecánico, sector automotriz, reparación de autos, mantenimiento vehicular, Piura, SCARS, taller automotriz",
+    title: "Taller Mecanico en Piura | SCARS Taller Mecanico E.I.R.L.",
+    description:
+      "SCARS es un taller mecanico en Piura especializado en diagnostico, mantenimiento preventivo, reparacion general, alineacion, balanceo y cambio de aceite.",
+    keywords:
+      "taller mecanico en Piura, taller automotriz Piura, reparacion de autos Piura, mantenimiento preventivo, alineacion y balanceo, cambio de aceite, SCARS",
     image: DEFAULT_IMAGE,
     type: "website",
   },
   trazabilidad: {
-    title: "Seguimiento de Servicios | SCARS Taller Mecánico",
-    description: "Consulta el estado de tu servicio en SCARS. Ingresa tu código de seguimiento y mantente informado del progreso de tu vehículo.",
-    keywords: "seguimiento de servicio, estado de reparación, código de seguimiento, SCARS",
+    title: "Seguimiento de Servicios | SCARS Taller Mecanico Piura",
+    description:
+      "Consulta el estado de tu vehiculo en SCARS. Ingresa tu codigo de seguimiento y revisa el avance de tu servicio automotriz en Piura.",
+    keywords:
+      "seguimiento de servicios, seguimiento taller mecanico, estado de vehiculo, codigo de seguimiento, SCARS Piura",
     image: DEFAULT_IMAGE,
     type: "website",
   },
   contacto: {
-    title: "Contacto | SCARS Taller Mecánico - Piura",
-    description: "Contáctanos en SCARS. Estamos ubicados en Piura. Solicita tu presupuesto para servicios de sector automotriz, reparación y mantenimiento.",
-    keywords: "contacto SCARS, taller mecánico Piura, presupuesto, dirección, teléfono",
+    title: "Contacto y Cotizaciones | SCARS Taller Mecanico Piura",
+    description:
+      "Solicita informacion, cotizaciones o agenda tu servicio con SCARS Taller Mecanico en Piura. Atencion por telefono, WhatsApp y formulario web.",
+    keywords:
+      "contacto taller mecanico Piura, cotizacion automotriz Piura, WhatsApp SCARS, direccion taller SCARS",
     image: DEFAULT_IMAGE,
     type: "website",
   },
@@ -30,37 +42,36 @@ const SEO_CONFIG = {
 
 export function useSEO(page = "home", customMeta = {}) {
   const { pathname } = useLocation();
+
   useEffect(() => {
     const config = SEO_CONFIG[page] || SEO_CONFIG.home;
     const meta = { ...config, ...customMeta };
+    const pageUrl = `${SITE_URL}${pathname}`;
 
-    // Actualizar título
     document.title = meta.title;
 
-    // Meta description
+    updateMetaTag("title", meta.title);
     updateMetaTag("description", meta.description);
     updateMetaTag("keywords", meta.keywords);
+    updateMetaTag("robots", "index, follow, max-image-preview:large");
 
-    // Open Graph
     updateMetaTag("og:title", meta.title, "property");
     updateMetaTag("og:description", meta.description, "property");
     updateMetaTag("og:image", meta.image, "property");
-    updateMetaTag("og:url", `${SITE_URL}${pathname}`, "property");
+    updateMetaTag("og:image:alt", "Logo oficial de SCARS Taller Mecanico", "property");
+    updateMetaTag("og:url", pageUrl, "property");
     updateMetaTag("og:type", meta.type || "website", "property");
-    updateMetaTag("og:site_name", "SCARS - Taller Mecánico", "property");
+    updateMetaTag("og:site_name", BUSINESS_NAME, "property");
     updateMetaTag("og:locale", "es_PE", "property");
 
-    // Twitter Card
     updateMetaTag("twitter:card", "summary_large_image");
     updateMetaTag("twitter:title", meta.title);
     updateMetaTag("twitter:description", meta.description);
     updateMetaTag("twitter:image", meta.image);
+    updateMetaTag("twitter:image:alt", "Logo oficial de SCARS Taller Mecanico");
 
-    // Canonical URL
-    updateCanonical(`${SITE_URL}${pathname}`);
-
-    // Structured Data (JSON-LD)
-    updateStructuredData(meta, pathname);
+    updateCanonical(pageUrl);
+    updateStructuredData(meta, pathname, pageUrl);
   }, [pathname, page, customMeta]);
 }
 
@@ -68,7 +79,6 @@ function updateMetaTag(name, content, attribute = "name") {
   if (!content) return;
 
   let tag = document.querySelector(`meta[${attribute}="${name}"]`);
-
   if (!tag) {
     tag = document.createElement("meta");
     tag.setAttribute(attribute, name);
@@ -80,7 +90,6 @@ function updateMetaTag(name, content, attribute = "name") {
 
 function updateCanonical(url) {
   let link = document.querySelector("link[rel='canonical']");
-
   if (!link) {
     link = document.createElement("link");
     link.setAttribute("rel", "canonical");
@@ -90,112 +99,136 @@ function updateCanonical(url) {
   link.setAttribute("href", url);
 }
 
-function updateStructuredData(meta, pathname) {
-  // Eliminar structured data anterior
+function updateStructuredData(meta, pathname, pageUrl) {
   const existingScript = document.querySelector('script[type="application/ld+json"][data-seo]');
   if (existingScript) {
     existingScript.remove();
   }
 
-  // Datos estructurados principales (SEO Local Avanzado)
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "AutoRepair",
-    "name": "SCARS",
-    "alternateName": "SCARS Taller Mecánico Piura",
-    "description": "El mejor taller mecánico en Piura especializado en sector automotriz, reparación de motores, frenos, suspensión y mantenimiento preventivo.",
-    "url": SITE_URL,
-    "logo": `${SITE_URL}/cropcirclescars.png`,
-    "image": meta.image,
-    "telephone": "+51956264937",
-    "address": {
+    "@id": `${SITE_URL}/#organization`,
+    name: BUSINESS_NAME,
+    alternateName: "SCARS Taller Mecanico",
+    description:
+      "Taller mecanico en Piura especializado en diagnostico, mantenimiento preventivo y reparacion automotriz.",
+    url: SITE_URL,
+    logo: DEFAULT_IMAGE,
+    image: meta.image,
+    telephone: BUSINESS_PHONE,
+    email: BUSINESS_EMAIL,
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": "AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22",
-      "addressLocality": "Piura",
-      "addressRegion": "Piura",
-      "addressCountry": "PE"
+      streetAddress: "AA.HH. San Pedro, Calle de la Paz, Mz. 2, Lote 22",
+      addressLocality: "Piura",
+      addressRegion: "Piura",
+      addressCountry: "PE",
     },
-    "geo": {
+    geo: {
       "@type": "GeoCoordinates",
-      "latitude": -5.199761,
-      "longitude": -80.645714
+      latitude: -5.199761152428329,
+      longitude: -80.64571362414243,
     },
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        "opens": "08:00",
-        "closes": "18:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Saturday",
-        "opens": "08:00",
-        "closes": "13:00"
-      }
-    ],
-    "areaServed": {
+    areaServed: {
       "@type": "City",
-      "name": "Piura"
+      name: "Piura",
     },
-    "serviceType": [
-      "Taller Mecánico",
-      "Sector Automotriz",
-      "Reparación de Motores",
-      "Mantenimiento de Frenos",
-      "Suspensión y Dirección",
-      "Escaneo Electrónico"
+    hasMap: BUSINESS_MAP,
+    sameAs: [
+      "https://www.facebook.com/scarstallermecanico",
+      "https://www.instagram.com/scars_taller_mecanico/",
+      "https://wa.me/51956264937",
     ],
-    "priceRange": "$$"
+    priceRange: "$$",
+    serviceType: [
+      "Diagnostico automotriz",
+      "Mantenimiento preventivo",
+      "Reparacion general",
+      "Alineacion y balanceo",
+      "Cambio de aceite y filtros",
+    ],
   };
 
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "SCARS - Taller Mecánico",
-    "url": SITE_URL,
-    "potentialAction": {
+    "@id": `${SITE_URL}/#website`,
+    name: BUSINESS_NAME,
+    url: SITE_URL,
+    inLanguage: "es-PE",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+    potentialAction: {
       "@type": "SearchAction",
-      "target": {
+      target: {
         "@type": "EntryPoint",
-        "urlTemplate": `${SITE_URL}/trazabilidad?q={search_term_string}`
+        urlTemplate: `${SITE_URL}/trazabilidad?q={search_term_string}`,
       },
-      "query-input": "required name=search_term_string"
-    }
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: meta.title,
+    description: meta.description,
+    isPartOf: {
+      "@id": `${SITE_URL}/#website`,
+    },
+    about: {
+      "@id": `${SITE_URL}/#organization`,
+    },
+    primaryImageOfPage: {
+      "@type": "ImageObject",
+      url: meta.image,
+    },
+    inLanguage: "es-PE",
   };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
+    itemListElement: [
       {
         "@type": "ListItem",
-        "position": 1,
-        "name": "Inicio",
-        "item": SITE_URL
+        position: 1,
+        name: "Inicio",
+        item: SITE_URL,
       },
-      ...(pathname !== "/" ? [{
-        "@type": "ListItem",
-        "position": 2,
-        "name": getPageName(pathname),
-        "item": `${SITE_URL}${pathname}`
-      }] : [])
-    ]
+      ...(pathname !== "/"
+        ? [
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: getPageName(pathname),
+              item: pageUrl,
+            },
+          ]
+        : []),
+    ],
   };
 
-  // Crear script para structured data
   const script = document.createElement("script");
   script.type = "application/ld+json";
   script.setAttribute("data-seo", "true");
-  script.textContent = JSON.stringify([organizationSchema, websiteSchema, breadcrumbSchema]);
+  script.textContent = JSON.stringify([
+    organizationSchema,
+    websiteSchema,
+    webpageSchema,
+    breadcrumbSchema,
+  ]);
   document.head.appendChild(script);
 }
 
 function getPageName(pathname) {
   const names = {
-    "/trazabilidad": "Seguimiento",
-    "/contacto": "Contacto"
+    "/trazabilidad": "Seguimiento de Servicios",
+    "/contacto": "Contacto",
   };
   return names[pathname] || "Inicio";
 }
-
