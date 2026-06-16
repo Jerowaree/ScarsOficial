@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const SITE_URL = import.meta.env.VITE_SITE_URL || "https://scars.com.pe";
-const DEFAULT_IMAGE = `${SITE_URL}/ScarsLogo.png`;
+const IMAGE_VERSION = "2026-06-16";
+const DEFAULT_IMAGE = `${SITE_URL}/ScarsLogo.png?v=${IMAGE_VERSION}`;
 const BUSINESS_NAME = "SCARS Taller Mecanico E.I.R.L.";
 const BUSINESS_PHONE = "+51 956 264 937";
 const BUSINESS_EMAIL = "hola.scars@gmail.com";

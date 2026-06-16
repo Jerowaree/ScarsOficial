@@ -140,8 +140,8 @@ export default function Header() {
               src={scarsMark}
               alt="Emblema SCARS"
               className="brand-mark"
-              width="54"
-              height="54"
+              width="84"
+              height="64"
             />
             <img
               src={logo}

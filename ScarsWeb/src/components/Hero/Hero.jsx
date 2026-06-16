@@ -5,8 +5,11 @@ import heroPhoto from "../../assets/señorscars.png";
 import toyotaLogo from "../../assets/toyota.png";
 import nissanLogo from "../../assets/nIssan.png";
 import chevroletLogo from "../../assets/chevrolet.png";
+import hondaLogo from "../../assets/honda.png";
 import hyundaiLogo from "../../assets/hyundai.png";
+import jeepLogo from "../../assets/Jeep.png";
 import kiaLogo from "../../assets/kia.png";
+import suzukiLogo from "../../assets/suzuki.png";
 
 const HIGHLIGHTS = [
   {
@@ -55,15 +58,15 @@ const HIGHLIGHTS = [
     ),
   },
   {
-    title: "Alineaci\u00f3n y Balanceo",
+    title: "Revisi\u00f3n de Frenos",
     tone: "navy",
     icon: (
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <circle cx="12" cy="12" r="8.5" />
-        <circle cx="12" cy="12" r="3.5" />
-        <path d="M12 3.5v17" />
-        <path d="M8.1 4.5 15.9 19.5" />
-        <path d="M15.9 4.5 8.1 19.5" />
+        <circle cx="12" cy="12" r="2.5" />
+        <path d="M12 3.5a8.5 8.5 0 0 1 8.5 8.5" />
+        <path d="M18.5 15.5 21 18" />
+        <path d="M5.5 15.5 3 18" />
       </svg>
     ),
   },
@@ -85,8 +88,11 @@ const BRANDS = [
   { name: "Toyota", logo: toyotaLogo },
   { name: "Nissan", logo: nissanLogo },
   { name: "Chevrolet", logo: chevroletLogo },
+  { name: "Honda", logo: hondaLogo },
   { name: "Hyundai", logo: hyundaiLogo },
+  { name: "Jeep", logo: jeepLogo },
   { name: "Kia", logo: kiaLogo },
+  { name: "Suzuki", logo: suzukiLogo },
 ];
 
 export default function Hero() {

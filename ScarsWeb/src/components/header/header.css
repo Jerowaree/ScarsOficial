@@ -18,8 +18,8 @@
   cursor:pointer;
 }
 .brand-mark{
-  width:48px;
-  height:48px;
+  width:72px;
+  height:82px;
   object-fit:contain;
   flex:0 0 auto;
 }
@@ -134,8 +134,8 @@
   }
 
   .brand-mark{
-    width:40px;
-    height:40px;
+    width:44px;
+    height:44px;
   }
 
   .brand-wordmark{
