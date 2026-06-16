@@ -1,7 +1,9 @@
 import "./wpbutton.css";
 
 const WHATSAPP_NUMBER = "51956264937";
-const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}`;
+const WHATSAPP_MESSAGE =
+  "Hola, quisiera informacion sobre sus servicios y una cotizacion para mi vehiculo.";
+const WHATSAPP_LINK = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 export default function WpButton() {
   return (
